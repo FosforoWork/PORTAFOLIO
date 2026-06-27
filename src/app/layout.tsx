@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Instrument_Serif } from "next/font/google";
+import { LenisProvider } from "@/components/lenis-provider";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  weight: "400",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Portafolio | Ciencia de Datos, Analítica & RPA",
-  description: "Portafolio profesional de Ingeniería Industrial especializado en Analítica de Datos, Ciencia de Datos y Automatización de Procesos (RPA).",
+  title: "Portafolio | Ingeniería Industrial & Inteligencia de Datos",
+  description: "Portafolio profesional de Samuel Aguilera. Ingeniería de Procesos + Inteligencia de Datos.",
 };
 
 export default function RootLayout({
@@ -25,9 +27,13 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
+      className={`${inter.variable} ${instrumentSerif.variable}`}
     >
-      <body className="min-h-full bg-[#09090b] text-[#fafafa] flex flex-col">{children}</body>
+      <body className="min-h-screen bg-[var(--color-oatmeal)] text-[var(--color-charcoal)] font-sans flex flex-col antialiased">
+        <LenisProvider>
+          {children}
+        </LenisProvider>
+      </body>
     </html>
   );
 }
