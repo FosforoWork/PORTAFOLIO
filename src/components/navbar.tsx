@@ -2,154 +2,132 @@
 
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Volume2, VolumeX, Eye, EyeOff } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { useGameStore } from '@/store/game-store';
 
 interface NavLink {
   name: string;
   href: string;
+  id: string;
 }
 
 const NAV_LINKS: NavLink[] = [
-  { name: 'INICIO', href: '#hero' },
-  { name: 'NPC BIO', href: '#about' },
-  { name: 'QUESTS', href: '#projects' },
-  { name: 'SAVE', href: '#contact' },
+  { name: 'Inicio',    href: '#hero',     id: '01' },
+  { name: 'Sobre mí', href: '#about',    id: '02' },
+  { name: 'Proyectos',href: '#projects', id: '03' },
+  { name: 'Contacto', href: '#contact',  id: '04' },
 ];
-
 export function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled]         = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  // Game global state
-  const { 
-    soundEnabled, 
-    reducedMotion, 
-    xp, 
-    maxXp, 
-    level, 
-    toggleSound, 
-    toggleMotion,
-    playSfx 
-  } = useGameStore();
+  const [activeSection, setActiveSection]    = useState('hero');
 
+  const { playSfx } = useGameStore();
+
+  /* ── Scroll listeners ─────────────────────────────────── */
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  /* ── Active section tracker ───────────────────────────── */
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) setIsMobileMenuOpen(false);
-    };
+    const sections = ['hero', 'about', 'projects', 'contact'];
+    const observers: IntersectionObserver[] = [];
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
+        { threshold: 0.3 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach(o => o.disconnect());
+  }, []);
+
+  /* ── Mobile menu resize ───────────────────────────────── */
+  useEffect(() => {
+    const handleResize = () => { if (window.innerWidth >= 768) setIsMobileMenuOpen(false); };
     window.addEventListener('resize', handleResize, { passive: true });
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Play hover sound
-  const handleHover = () => {
-    playSfx('hover');
-  };
-
-  // Play click sound
-  const handleClick = () => {
-    playSfx('click');
-  };
-
-  const xpPercent = Math.min((xp / maxXp) * 100, 100);
+  const handleHover = () => playSfx('hover');
+  const handleClick = () => playSfx('click');
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 border-b ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#1e1b18]/90 backdrop-blur-md border-[var(--color-concrete)]/60 py-2'
-          : 'bg-[#1A1613]/40 border-transparent py-4'
+          ? 'bg-[var(--color-surface-1)]/95 backdrop-blur-md border-b border-[var(--color-surface-4)] py-3'
+          : 'bg-transparent border-b border-transparent py-5'
       }`}
     >
       <div className="max-w-5xl mx-auto px-6 flex justify-between items-center relative">
-        {/* HUD Logo */}
-        <a 
-          href="#hero" 
+
+        {/* ── Logo ──────────────────────────────────────────── */}
+        <a
+          href="#hero"
           onClick={handleClick}
           onMouseEnter={handleHover}
-          className="text-xs font-hud tracking-tighter text-[var(--color-rust)] flex items-center gap-1 hover:brightness-125 transition-all" 
+          className="flex items-center gap-3 group"
           aria-label="Ir al inicio"
         >
-          <span>SA.EXE</span>
-          <span className="animate-ping w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+          {/* Engineering mark */}
+          <span className="relative w-7 h-7 border border-[var(--color-orange)] rounded-sm flex items-center justify-center bg-[var(--color-surface-2)] group-hover:bg-[var(--color-orange)] transition-colors duration-200">
+            <span className="text-[9px] font-mono font-bold text-[var(--color-orange)] group-hover:text-white transition-colors">SA</span>
+          </span>
+          <span className="text-[11px] font-mono tracking-widest text-[var(--color-text-primary)] uppercase font-bold hidden sm:block">
+            Samuel Aguilera
+          </span>
+          {/* Available status */}
+          <span className="flex items-center gap-1.5 text-[8px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider hidden sm:flex">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
+            Disponible
+          </span>
         </a>
 
-        {/* Desktop Nav HUD */}
-        <nav aria-label="Navegación principal" className="hidden md:flex items-center gap-8">
-          <ul className="flex gap-6 list-none m-0 p-0">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  onClick={handleClick}
-                  onMouseEnter={handleHover}
-                  className="text-xs font-hud text-[var(--color-charcoal)]/80 hover:text-[var(--color-rust)] transition-colors relative group py-1"
-                >
-                  [{link.name}]
-                </a>
-              </li>
-            ))}
+        {/* ── Desktop Nav ───────────────────────────────────── */}
+        <nav aria-label="Navegación principal" className="hidden md:flex items-center">
+          <ul className="flex gap-1 list-none m-0 p-0">
+            {NAV_LINKS.map((link) => {
+              const isActive = activeSection === link.href.slice(1);
+              return (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={handleClick}
+                    onMouseEnter={handleHover}
+                    className={`relative group flex items-center gap-1.5 px-3 py-2 text-[10px] font-mono tracking-widest uppercase transition-all duration-200 rounded-sm ${
+                      isActive
+                        ? 'text-[var(--color-orange)] bg-[var(--color-orange-muted)]'
+                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-2)]'
+                    }`}
+                  >
+                    <span className="text-[var(--color-orange)]/40 text-[8px]">{link.id}</span>
+                    {link.name}
+                    {isActive && (
+                      <span className="absolute bottom-0 left-2 right-2 h-px bg-[var(--color-orange)] rounded-full" />
+                    )}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
-        {/* Status Indicators & Controls */}
-        <div className="flex items-center gap-4">
-          {/* Level Badge */}
-          <div className="flex items-center gap-1.5 bg-[#26201B] border border-[var(--color-concrete)] px-2 py-0.5 rounded text-[10px] font-hud text-[var(--color-accentGold)] select-none">
-            <span>LV</span>
-            <span className="font-bold">{level}</span>
-          </div>
-
-          {/* Sound Toggle */}
+        {/* ── Mobile menu toggle button ─────────────────────── */}
+        <div className="flex items-center gap-2">
           <button
-            onClick={() => {
-              toggleSound();
-            }}
-            onMouseEnter={handleHover}
-            className={`p-1.5 rounded border transition-all cursor-pointer ${
-              soundEnabled
-                ? 'bg-emerald-950/40 border-emerald-700 text-emerald-400 hover:bg-emerald-900/60'
-                : 'bg-zinc-900 border-zinc-700 text-zinc-500 hover:bg-zinc-800'
-            }`}
-            aria-label={soundEnabled ? 'Silenciar efectos de sonido' : 'Activar efectos de sonido'}
-          >
-            {soundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
-          </button>
-
-          {/* Motion Toggle */}
-          <button
-            onClick={() => {
-              handleClick();
-              toggleMotion();
-            }}
-            onMouseEnter={handleHover}
-            className={`p-1.5 rounded border transition-all cursor-pointer ${
-              !reducedMotion
-                ? 'bg-amber-950/40 border-amber-700 text-amber-400 hover:bg-amber-900/60'
-                : 'bg-zinc-900 border-zinc-700 text-zinc-500 hover:bg-zinc-800'
-            }`}
-            aria-label={!reducedMotion ? 'Activar movimiento reducido' : 'Desactivar movimiento reducido'}
-          >
-            {!reducedMotion ? <Eye size={14} /> : <EyeOff size={14} />}
-          </button>
-
-          {/* Mobile Nav Toggle */}
-          <button
-            className="md:hidden text-[var(--color-charcoal)] p-1 cursor-pointer"
-            onClick={() => {
-              handleClick();
-              setIsMobileMenuOpen((prev) => !prev);
-            }}
+            className="md:hidden p-2 text-[var(--color-text-primary)] hover:text-[var(--color-orange)] transition-colors cursor-pointer"
+            onClick={() => { handleClick(); setIsMobileMenuOpen(p => !p); }}
             onMouseEnter={handleHover}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
@@ -160,36 +138,26 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Nav Menu */}
+      {/* ── Mobile menu ───────────────────────────────────── */}
       {isMobileMenuOpen && (
         <nav id="mobile-menu" aria-label="Navegación móvil">
-          <ul className="md:hidden absolute top-full left-0 right-0 bg-[#1e1b18] border-b border-[var(--color-concrete)] py-4 px-6 flex flex-col gap-4 shadow-lg list-none m-0">
+          <ul className="md:hidden absolute top-full left-0 right-0 bg-[var(--color-surface-1)]/98 backdrop-blur-md border-b border-[var(--color-surface-4)] py-4 px-6 flex flex-col gap-1 list-none m-0">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="text-xs font-hud text-[var(--color-charcoal)] hover:text-[var(--color-rust)] transition-colors block py-1.5"
-                  onClick={() => {
-                    handleClick();
-                    setIsMobileMenuOpen(false);
-                  }}
+                  className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase text-[var(--color-text-secondary)] hover:text-[var(--color-orange)] transition-colors py-2.5 border-b border-[var(--color-surface-4)] last:border-0"
+                  onClick={() => { handleClick(); setIsMobileMenuOpen(false); }}
                   onMouseEnter={handleHover}
                 >
-                  [{link.name}]
+                  <span className="text-[var(--color-orange)]/50">{link.id}</span>
+                  {link.name}
                 </a>
               </li>
             ))}
           </ul>
         </nav>
       )}
-
-      {/* Experience HUD Bar (Scrolling indicator) */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#26201B] border-t border-[var(--color-concrete)]/20 overflow-hidden">
-        <div 
-          className="h-full bg-emerald-500 transition-all duration-100 ease-out" 
-          style={{ width: `${xpPercent}%` }}
-        />
-      </div>
     </header>
   );
 }

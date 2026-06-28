@@ -1,24 +1,26 @@
+'use client';
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FadeUp } from './fade-up';
-import { 
-  FileSpreadsheet, 
-  BarChart2, 
-  Database, 
-  Terminal, 
-  Code, 
-  Cpu, 
-  Globe, 
-  Award, 
-  Activity, 
+import {
+  FileSpreadsheet,
+  BarChart2,
+  Database,
+  Terminal,
+  Code,
+  Cpu,
+  Globe,
+  Award,
+  Activity,
   RefreshCw,
-  Info 
+  Info,
 } from 'lucide-react';
 
 interface Skill {
   name: string;
   category: 'Herramientas' | 'Programación' | 'Metodologías';
-  level: 'Avanzado' | 'Intermedio' | 'Básico' | 'Black Belt (En desarrollo)';
+  level: 'Avanzado' | 'Intermedio' | 'Básico' | 'Black Belt (Dev.)';
   levelPercent: number;
   description: string;
   projects: string[];
@@ -27,220 +29,219 @@ interface Skill {
 
 const skillsData: Skill[] = [
   {
-    name: "Excel",
-    category: "Herramientas",
-    level: "Avanzado",
+    name: 'Excel',
+    category: 'Herramientas',
+    level: 'Avanzado',
     levelPercent: 90,
-    description: "Macros avanzadas, planillas de costos industriales estructuradas y automatización de reportes operativos.",
-    projects: ["Estructuración de Costos Industriales", "Optimización de Tintas"],
-    icon: FileSpreadsheet
+    description:
+      'Macros avanzadas, planillas de costos industriales estructuradas y automatización de reportes operativos.',
+    projects: ['Estructuración de Costos', 'Optimización de Tintas'],
+    icon: FileSpreadsheet,
   },
   {
-    name: "Power BI",
-    category: "Herramientas",
-    level: "Básico",
+    name: 'Power BI',
+    category: 'Herramientas',
+    level: 'Básico',
     levelPercent: 50,
-    description: "Creación de reportes dinámicos, modelado de datos simple y visualización de indicadores operativos clave (KPIs).",
-    projects: ["Optimización de Tintas"],
-    icon: BarChart2
+    description:
+      'Reportes dinámicos, modelado de datos y visualización de indicadores operativos clave (KPIs).',
+    projects: ['Optimización de Tintas'],
+    icon: BarChart2,
   },
   {
-    name: "SQL",
-    category: "Herramientas",
-    level: "Básico",
+    name: 'SQL',
+    category: 'Herramientas',
+    level: 'Básico',
     levelPercent: 50,
-    description: "Escritura de consultas relacionales para la extracción, limpieza y manipulación de conjuntos de datos.",
-    projects: ["SST Manager"],
-    icon: Database
+    description:
+      'Consultas relacionales para extracción, limpieza y manipulación de conjuntos de datos.',
+    projects: ['SST Manager'],
+    icon: Database,
   },
   {
-    name: "Python",
-    category: "Programación",
-    level: "Intermedio",
+    name: 'Python',
+    category: 'Programación',
+    level: 'Intermedio',
     levelPercent: 75,
-    description: "Bibliotecas de datos (Numpy, Pandas), modelado matemático y simulación de procesos industriales complejos.",
-    projects: ["Gemelo Digital"],
-    icon: Terminal
+    description:
+      'NumPy, Pandas, modelado matemático y simulación de procesos industriales complejos.',
+    projects: ['Gemelo Digital'],
+    icon: Terminal,
   },
   {
-    name: "TypeScript",
-    category: "Programación",
-    level: "Básico",
+    name: 'TypeScript',
+    category: 'Programación',
+    level: 'Básico',
     levelPercent: 60,
-    description: "Desarrollo front-end tipado y estructuración de aplicaciones web robustas y escalables.",
-    projects: ["SST Manager", "Portafolio Personal"],
-    icon: Code
+    description:
+      'Desarrollo front-end tipado y estructuración de aplicaciones web robustas.',
+    projects: ['SST Manager', 'Portafolio'],
+    icon: Code,
   },
   {
-    name: "Node.js",
-    category: "Programación",
-    level: "Básico",
+    name: 'Node.js',
+    category: 'Programación',
+    level: 'Básico',
     levelPercent: 50,
-    description: "Configuración de entornos de ejecución back-end, scripts de automatización e integración de dependencias.",
-    projects: ["SST Manager"],
-    icon: Cpu
+    description:
+      'Entornos de ejecución back-end, scripts de automatización e integración de dependencias.',
+    projects: ['SST Manager'],
+    icon: Cpu,
   },
   {
-    name: "Next.js / React",
-    category: "Programación",
-    level: "Básico",
+    name: 'Next.js / React',
+    category: 'Programación',
+    level: 'Básico',
     levelPercent: 60,
-    description: "Desarrollo de aplicaciones SPA/SSR modulares con renderizado eficiente y experiencia de usuario moderna.",
-    projects: ["Portafolio Personal"],
-    icon: Globe
+    description:
+      'Aplicaciones SPA/SSR modulares con renderizado eficiente y UX moderna.',
+    projects: ['Portafolio'],
+    icon: Globe,
   },
   {
-    name: "Lean Six Sigma",
-    category: "Metodologías",
-    level: "Black Belt (En desarrollo)",
+    name: 'Lean Six Sigma',
+    category: 'Metodologías',
+    level: 'Black Belt (Dev.)',
     levelPercent: 85,
-    description: "Metodología DMAIC para reducción de variabilidad, optimización de rendimientos y eliminación de desperdicios en líneas de producción.",
-    projects: ["Optimización de Tintas"],
-    icon: Award
+    description:
+      'DMAIC para reducción de variabilidad, optimización de rendimientos y eliminación de desperdicios.',
+    projects: ['Optimización de Tintas'],
+    icon: Award,
   },
   {
-    name: "Modelado Matemático",
-    category: "Metodologías",
-    level: "Intermedio",
+    name: 'Modelado Matemático',
+    category: 'Metodologías',
+    level: 'Intermedio',
     levelPercent: 75,
-    description: "Simulación de balances de masa, flujos de producción, optimización lineal y análisis de cuellos de botella.",
-    projects: ["Gemelo Digital"],
-    icon: Activity
+    description:
+      'Simulación de balances de masa, optimización lineal y análisis de cuellos de botella.',
+    projects: ['Gemelo Digital'],
+    icon: Activity,
   },
   {
-    name: "Mejora Continua",
-    category: "Metodologías",
-    level: "Avanzado",
+    name: 'Mejora Continua',
+    category: 'Metodologías',
+    level: 'Avanzado',
     levelPercent: 90,
-    description: "Filosofía Kaizen, herramientas de causa raíz (5 Porqués, Ishikawa) y optimización general de eficiencia operativa (OEE).",
-    projects: ["Optimización de Tintas", "Gemelo Digital"],
-    icon: RefreshCw
-  }
+    description:
+      'Kaizen, 5 Porqués, Ishikawa y optimización de eficiencia operativa global (OEE).',
+    projects: ['Optimización de Tintas', 'Gemelo Digital'],
+    icon: RefreshCw,
+  },
 ];
 
+const levelColor: Record<string, string> = {
+  'Avanzado':        'text-[var(--color-orange)] border-[var(--color-orange)]/20 bg-[var(--color-orange-muted)]',
+  'Black Belt (Dev.)': 'text-[var(--color-orange)] border-[var(--color-orange)]/20 bg-[var(--color-orange-muted)]',
+  'Intermedio':      'text-amber-400 border-amber-800/30 bg-amber-950/10',
+  'Básico':          'text-sky-400 border-sky-800/30 bg-sky-950/10',
+};
+
+const categories = ['Todos', 'Herramientas', 'Programación', 'Metodologías'] as const;
+type CategoryFilter = typeof categories[number];
+
 export function SkillsGrid() {
-  const [activeCategory, setActiveCategory] = useState<'Todos' | 'Herramientas' | 'Programación' | 'Metodologías'>('Todos');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const filteredSkills = skillsData.filter(skill => 
-    activeCategory === 'Todos' ? true : skill.category === activeCategory
-  );
-
   return (
-    <section id="skills" className="py-24 px-6 overflow-hidden max-w-5xl mx-auto w-full border-t border-[var(--color-concrete)]/30">
+    <section
+      id="skills"
+      className="py-24 px-6 overflow-hidden max-w-5xl mx-auto w-full border-t border-[var(--color-surface-4)]"
+    >
       <FadeUp>
-        <div className="text-center mb-16">
-          <span className="text-xs font-mono tracking-widest text-[var(--color-rust)] uppercase block mb-3">
-            Conocimientos
-          </span>
-          <h2 className="text-4xl md:text-5xl font-heading text-[var(--color-charcoal)] mb-4">
-            Ecosistema de Habilidades
-          </h2>
-          <p className="text-[var(--color-steel)] font-light max-w-xl mx-auto">
-            Habilidades cuantitativas y herramientas tecnológicas enfocadas en la optimización operativa y la automatización de procesos.
+        {/* ── Header ─────────────────────────────────────────── */}
+        <div className="flex flex-col gap-1 mb-16">
+          <span className="tech-label">Conocimientos</span>
+          <div className="flex items-end gap-4">
+            <h2 className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight">
+              Ecosistema de{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+                Habilidades
+              </span>
+            </h2>
+            <div className="flex-1 h-px bg-[var(--color-surface-4)] mb-3 hidden md:block" />
+          </div>
+          <p className="text-sm text-[var(--color-text-secondary)] max-w-xl leading-relaxed">
+            Herramientas cuantitativas y tecnológicas enfocadas en optimización operativa y automatización de procesos.
           </p>
         </div>
       </FadeUp>
 
-      {/* Category filters */}
-      <div className="flex flex-wrap justify-center gap-3 mb-12">
-        {(['Todos', 'Herramientas', 'Programación', 'Metodologías'] as const).map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider transition-all duration-300 ${
-              activeCategory === cat
-                ? 'bg-[var(--color-rust)] text-[var(--color-oatmeal)] shadow-sm'
-                : 'bg-[var(--color-concrete)]/20 hover:bg-[var(--color-concrete)]/40 text-[var(--color-charcoal)]'
-            }`}
-          >
-            {cat.toUpperCase()}
-          </button>
-        ))}
-      </div>
-
-      {/* Skills Grid */}
-      <motion.div 
-        layout 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative"
+      {/* ── Skills grid (3 columns list) ────────────────────── */}
+      <motion.div
+        layout
+        className="grid grid-cols-1 md:grid-cols-3 gap-4"
       >
         <AnimatePresence mode="popLayout">
-          {filteredSkills.map((skill, index) => {
+          {skillsData.map((skill, index) => {
             const Icon = skill.icon;
+            const isHovered = hoveredIndex === index;
+
             return (
               <motion.div
                 layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
                 key={skill.name}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.25, delay: index * 0.03 }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className="bg-[#F4EFEA] border border-[var(--color-concrete)]/50 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:shadow-md hover:border-[var(--color-rust)]/30 min-h-[170px]"
+                className="relative border border-[var(--color-surface-4)] hover:border-[var(--color-orange)]/40 bg-[var(--color-surface-2)]/30 hover:bg-[var(--color-surface-2)] rounded-sm p-4 flex items-center justify-between gap-3 min-h-[72px] transition-all duration-200 group cursor-default"
               >
-                <div>
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-2.5 rounded-lg bg-[var(--color-oatmeal)] border border-[var(--color-concrete)] text-[var(--color-rust)] group-hover:bg-[var(--color-rust)] group-hover:text-[var(--color-oatmeal)] transition-all duration-300">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <span className="text-[10px] font-mono tracking-widest text-[var(--color-gray)] uppercase pt-1">
-                      {skill.level}
+                {/* Left side: Icon & Title */}
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-sm bg-[var(--color-surface-1)] border border-[var(--color-surface-4)] text-[var(--color-text-muted)] group-hover:border-[var(--color-orange)]/30 group-hover:text-[var(--color-orange)] transition-all duration-200 shrink-0">
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-heading font-bold text-[var(--color-text-primary)]">
+                      {skill.name}
+                    </h3>
+                    <span className="text-[8px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider block">
+                      {skill.category}
                     </span>
                   </div>
-
-                  <h3 className="text-lg font-heading text-[var(--color-charcoal)] mb-2 font-medium">
-                    {skill.name}
-                  </h3>
                 </div>
 
-                {/* Level Progress Bar */}
-                <div className="space-y-1.5 w-full mt-auto">
-                  <div className="flex justify-between text-[10px] font-mono text-[var(--color-steel)]">
-                    <span>DOMINIO</span>
-                    <span>{skill.levelPercent}%</span>
-                  </div>
-                  <div className="h-1 bg-[var(--color-concrete)]/30 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.levelPercent}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, ease: "easeOut" }}
-                      className="h-full bg-[var(--color-rust)]"
-                    />
-                  </div>
-                </div>
+                {/* Right side: Level Badge */}
+                <span className={`text-[8px] font-mono border px-2 py-0.5 rounded-sm shrink-0 font-medium ${levelColor[skill.level] ?? 'text-[var(--color-text-muted)] border-[var(--color-surface-4)]'}`}>
+                  {skill.level}
+                </span>
 
-                {/* Tooltip Overlay */}
+                {/* ── Hover overlay ─────────────────────────────── */}
                 <AnimatePresence>
-                  {hoveredIndex === index && (
+                  {isHovered && (
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute inset-0 bg-[var(--color-charcoal)] text-[var(--color-oatmeal)] p-5 flex flex-col justify-between z-10"
+                      key="hover-overlay"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute inset-0 bg-[var(--color-surface-2)] border border-[var(--color-orange)]/30 p-4 flex flex-col justify-between z-10 rounded-sm"
                     >
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-1.5 text-xs text-[var(--color-rust)] font-mono uppercase tracking-wider font-semibold">
-                          <Info size={12} />
-                          <span>Aplicación</span>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1.5">
+                          <Info className="w-3 h-3 text-[var(--color-orange)]" />
+                          <span className="text-[8px] font-mono text-[var(--color-orange)] uppercase tracking-widest font-bold">
+                            {skill.name}
+                          </span>
                         </div>
-                        <p className="text-xs text-[var(--color-concrete)] font-light leading-relaxed">
+                        <p className="text-[10px] font-mono text-[var(--color-text-secondary)] leading-relaxed">
                           {skill.description}
                         </p>
                       </div>
 
                       {skill.projects.length > 0 && (
-                        <div className="pt-2 border-t border-[var(--color-concrete)]/20 mt-2">
-                          <span className="text-[9px] font-mono text-[var(--color-gray)] uppercase block mb-1">
-                            PROYECTOS RELACIONADOS
+                        <div className="pt-2 border-t border-[var(--color-surface-4)]">
+                          <span className="text-[7px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider block mb-1">
+                            Proyectos:
                           </span>
-                          <div className="flex flex-wrap gap-1.5">
-                            {skill.projects.map((proj) => (
-                              <span 
-                                key={proj} 
-                                className="text-[9px] font-mono bg-[var(--color-concrete)]/10 text-[var(--color-concrete)] px-2 py-0.5 rounded border border-[var(--color-concrete)]/20"
+                          <div className="flex flex-wrap gap-1">
+                            {skill.projects.map(proj => (
+                              <span
+                                key={proj}
+                                className="text-[7px] font-mono bg-[var(--color-surface-1)] text-[var(--color-text-secondary)] px-1.5 py-0.5 rounded-sm border border-[var(--color-surface-4)]"
                               >
                                 {proj}
                               </span>

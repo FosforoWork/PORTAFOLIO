@@ -2,133 +2,349 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;700&family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
 @theme inline {
+  /* ── Typography ───────────────────────────────────────── */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Pixelify Sans', system-ui, sans-serif;
-  --font-hud: 'Press Start 2P', system-ui, sans-serif;
-  
-  /* Warm Dark RPG Theme Palette */
-  --color-oatmeal: #1A1613; /* Deep warm dark charcoal */
-  --color-steel: #8D8071;   /* Muted warm gray */
-  --color-gray: #786B5E;    /* Gray */
-  --color-charcoal: #EADFD0;/* High contrast warm oatmeal text */
-  --color-rust: #B7410E;    /* Bold orange-red accent */
-  --color-concrete: #3D342C;/* Deep brown-charcoal borders */
-  --color-black: #000000;
+  --font-heading: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-hud: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Tailwind mappings */
-  --color-background: var(--color-oatmeal);
-  --color-foreground: var(--color-charcoal);
-  --color-primary: var(--color-rust);
-  --color-primary-foreground: var(--color-oatmeal);
-  --color-border: var(--color-concrete);
-  --color-muted: var(--color-concrete);
-  --color-muted-foreground: var(--color-steel);
-  
-  /* Missing variables for shadcn/ui components */
-  --color-ring: var(--color-rust);
-  --color-card: #26201B;
-  --color-card-foreground: var(--color-charcoal);
-  --color-destructive: #B7410E;
+  /* ── Core Engineering Palette ─────────────────────────── */
+  /* Black family */
+  --color-black:        #000000;
+  --color-surface-0:    #080808;  /* Deepest background */
+  --color-surface-1:    #111113;  /* Primary background */
+  --color-surface-2:    #1C1C1E;  /* Card backgrounds - Dark Gray */
+  --color-surface-3:    #252528;  /* Elevated surfaces */
+  --color-surface-4:    #2E2E32;  /* Borders, dividers */
 
-  /* Animations */
-  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+  /* Orange accent family */
+  --color-orange:       #E8500A;  /* Primary accent */
+  --color-orange-vivid: #FF6120;  /* Hover, highlights */
+  --color-orange-dim:   #B83D07;  /* Pressed state */
+  --color-orange-glow:  rgba(232, 80, 10, 0.12); /* Subtle glow */
+  --color-orange-muted: rgba(232, 80, 10, 0.06); /* Very subtle tint */
+
+  /* Light Gray text family */
+  --color-text-primary:   #F2F2F5;  /* Headlines, primary text */
+  --color-text-secondary: #A8A8B0;  /* Body text, descriptions */
+  --color-text-muted:     #68686E;  /* Captions, placeholders */
+  --color-text-disabled:  #3D3D42;  /* Disabled state */
+
+  /* ── Legacy mapped names (keep components working) ───── */
+  --color-oatmeal:   var(--color-surface-1);
+  --color-steel:     var(--color-text-secondary);
+  --color-gray:      var(--color-text-muted);
+  --color-charcoal:  var(--color-text-primary);
+  --color-rust:      var(--color-orange);
+  --color-concrete:  var(--color-surface-4);
+
+  /* ── shadcn/ui semantic tokens ────────────────────────── */
+  --color-background:         var(--color-surface-1);
+  --color-foreground:         var(--color-text-primary);
+  --color-primary:            var(--color-orange);
+  --color-primary-foreground: #FFFFFF;
+  --color-border:             var(--color-surface-4);
+  --color-muted:              var(--color-surface-2);
+  --color-muted-foreground:   var(--color-text-secondary);
+  --color-ring:               var(--color-orange);
+  --color-card:               var(--color-surface-2);
+  --color-card-foreground:    var(--color-text-primary);
+  --color-destructive:        #E8500A;
+
+  /* ── Engineering/Blueprint Tokens ────────────────────── */
+  --color-grid-line:   rgba(255, 255, 255, 0.025);
+  --color-grid-accent: rgba(232, 80, 10, 0.06);
+  --border-engineering: 1px solid var(--color-surface-4);
+
+  /* ── Motion/Animation tokens ──────────────────────────── */
+  --ease-engineering: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-precision:   cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-fade-in-up:    fadeInUp 0.7s var(--ease-precision) forwards;
+  --animate-slide-in-left: slideInLeft 0.7s var(--ease-precision) forwards;
+  --animate-reveal:        reveal 0.6s var(--ease-engineering) forwards;
 }
 
+/* ── Keyframes ────────────────────────────────────────────── */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Base entrance transition class */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes reveal {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); }
+  to   { opacity: 1; clip-path: inset(0 0% 0 0); }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 1000; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes scanHorizontal {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes pulseOrange {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes counterUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes borderDraw {
+  from { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+  to   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
+/* ── Scroll Animation System ─────────────────────────────── */
+
+/* Base scroll reveal */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.75s var(--ease-precision), transform 0.75s var(--ease-precision);
+  will-change: opacity, transform;
+}
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide in from left */
+.scroll-slide-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.75s var(--ease-precision), transform 0.75s var(--ease-precision);
+  will-change: opacity, transform;
+}
+.scroll-slide-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Slide in from right */
+.scroll-slide-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition: opacity 0.75s var(--ease-precision), transform 0.75s var(--ease-precision);
+  will-change: opacity, transform;
+}
+.scroll-slide-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Scale reveal (for cards) */
+.scroll-scale {
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.6s var(--ease-precision), transform 0.6s var(--ease-precision);
+  will-change: opacity, transform;
+}
+.scroll-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stagger delay utilities */
+.scroll-delay-1 { transition-delay: 100ms; }
+.scroll-delay-2 { transition-delay: 200ms; }
+.scroll-delay-3 { transition-delay: 300ms; }
+.scroll-delay-4 { transition-delay: 400ms; }
+.scroll-delay-5 { transition-delay: 500ms; }
+.scroll-delay-6 { transition-delay: 600ms; }
+
+/* Legacy compat */
 .fade-up-element {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease-precision), transform 0.7s var(--ease-precision);
+  will-change: opacity, transform;
 }
-
 .fade-up-element.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* ── Base Styles ──────────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply antialiased;
+    background-color: var(--color-surface-1);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
   }
   html {
-    @apply font-sans scroll-smooth;
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-normal;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
   }
 }
 
-/* CRT Scanline Overlay Effect (Subtle retro feel) */
-.crt-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 99999;
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.08) 50%
-  );
-  background-size: 100% 4px;
-  opacity: 0.45;
+/* ── Engineering UI Elements ──────────────────────────────── */
+
+/* Blueprint micro-grid */
+.blueprint-grid {
+  background-image:
+    linear-gradient(var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid-line) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
-/* Page Noise/Grain */
+/* Orange accent grid lines */
+.blueprint-grid-accent {
+  background-image:
+    linear-gradient(var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(var(--color-grid-accent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid-accent) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px, 256px 256px, 256px 256px;
+}
+
+/* Engineering card */
+.eng-card {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-surface-4);
+  border-radius: 4px;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.eng-card:hover {
+  border-color: var(--color-orange);
+  background: var(--color-surface-3);
+}
+
+/* Corner accent decoration */
+.corner-accent::before,
+.corner-accent::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: var(--color-orange);
+  border-style: solid;
+}
+.corner-accent::before {
+  top: -1px; left: -1px;
+  border-width: 2px 0 0 2px;
+}
+.corner-accent::after {
+  bottom: -1px; right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+/* Noise/grain texture (ultra-subtle) */
 .noise-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   opacity: 0.015;
   pointer-events: none;
   z-index: 9999;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
-/* Retro HUD font-face mapping helpers */
-.font-hud {
-  font-family: var(--font-hud);
+/* Orange scan-line accent for hero (decorative) */
+.scan-accent {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-orange), transparent);
+  animation: scanHorizontal 4s linear infinite;
+  opacity: 0.3;
+  pointer-events: none;
 }
 
+/* Typography helpers */
+.font-hud, .font-mono {
+  font-family: var(--font-mono);
+}
 .font-heading {
   font-family: var(--font-heading);
 }
 
-/* Retro styling classes */
-.retro-border {
-  border: 4px solid var(--color-concrete);
-  image-rendering: pixelated;
+/* Tech label style */
+.tech-label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-orange);
 }
 
+/* Orange underline accent hover */
+.link-accent {
+  position: relative;
+  color: var(--color-text-secondary);
+  transition: color 0.2s;
+}
+.link-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--color-orange);
+  transition: width 0.3s var(--ease-engineering);
+}
+.link-accent:hover {
+  color: var(--color-text-primary);
+}
+.link-accent:hover::after {
+  width: 100%;
+}
+
+/* CRT Overlay disabled */
+.crt-overlay { display: none; }
+
+/* Engineering button */
 .retro-btn {
-  background-color: var(--color-concrete);
-  border: 2px solid var(--color-concrete);
-  box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.5);
-  transition: all 0.1s ease;
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-surface-4);
+  transition: all 0.2s var(--ease-engineering);
+}
+.retro-btn:hover {
+  background-color: var(--color-orange);
+  border-color: var(--color-orange);
+  color: white;
 }
 
-.retro-btn:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0px 0px rgba(0,0,0,0.5);
+/* Precision divider with center label */
+.divider-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-text-muted);
+}
+.divider-label::before,
+.divider-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-surface-4);
 }

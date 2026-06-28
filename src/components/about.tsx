@@ -1,187 +1,210 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import { FadeUp } from './fade-up';
 import { useGameStore } from '@/store/game-store';
-import { MessageSquareCode, Globe, MapPin, Award } from 'lucide-react';
+import { MessageSquareCode, Globe, MapPin, Award, ChevronRight } from 'lucide-react';
+
+interface DialogueTopic {
+  id: string;
+  label: string;
+  question: string;
+  answer: string;
+}
+
+const dialogueTopics: DialogueTopic[] = [
+  {
+    id: 'intro',
+    label: '01',
+    question: '¿Quién eres?',
+    answer:
+      'Soy Samuel Aguilera, estudiante de 3er año de Ingeniería Industrial en la UCB "San Pablo". Me apasiona diseñar e implementar sistemas eficientes donde convergen la ingeniería de procesos y el análisis de datos cuantitativos.',
+  },
+  {
+    id: 'specialty',
+    label: '02',
+    question: '¿Cuál es tu especialidad?',
+    answer:
+      'Mi especialidad es la intersección entre Ingeniería de Procesos (Lean Six Sigma, SPC, SMED) y herramientas analíticas modernas (SQL, Python, Power BI). Traduzco datos operativos en retornos económicos tangibles y medibles.',
+  },
+  {
+    id: 'experience',
+    label: '03',
+    question: '¿Cuál es tu experiencia actual?',
+    answer:
+      'Actualmente realizo mi pasantía de producción en EMPACAR S.A., donde aplico metodologías ágiles para analizar rendimientos de dosificado de tintas, erradicar mermas y automatizar el control de KPIs mediante dashboards en Power BI.',
+  },
+  {
+    id: 'mission',
+    label: '04',
+    question: '¿Cuál es tu misión?',
+    answer:
+      'Mi misión es eliminar la fricción y el desperdicio en cadenas de valor. Creo que la industria del mañana demanda procesos optimizados y decisiones respaldadas por análisis matemáticos rigurosos y datos continuos.',
+  },
+];
+
+const statsData = [
+  { icon: MessageSquareCode, label: 'Especialidad',   value: 'Procesos & Analítica' },
+  { icon: Award,             label: 'Certificación',  value: 'LSS Black Belt (Dev)' },
+  { icon: Globe,             label: 'Idiomas',        value: 'ES / EN / PT (BR)' },
+  { icon: MapPin,            label: 'Ubicación',      value: 'Remoto / LATAM' },
+];
 
 export function About() {
   const { playSfx, soundEnabled, reducedMotion } = useGameStore();
-  const [dialogueIndex, setDialogueIndex] = useState(0);
+  const [activeTopicId, setActiveTopicId] = useState<string>('intro');
   const [displayedText, setDisplayedText] = useState('');
-  const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const dialogues = [
-    "Saludos, viajero. Soy Samuel Aguilera. Mi misión principal es conectar los procesos industriales físicos con el poder de la inteligencia de datos y el software moderno.",
-    "Para lograrlo, convoco metodologías de optimización como Lean Six Sigma (LSS) combinadas con modelado matemático avanzado y desarrollo web ágil."
-  ];
+  const currentTopic = dialogueTopics.find(t => t.id === activeTopicId) || dialogueTopics[0];
 
   // Typewriter effect
   useEffect(() => {
     if (reducedMotion) {
-      setDisplayedText(dialogues[dialogueIndex]);
+      setDisplayedText(currentTopic.answer);
       return;
     }
 
     setDisplayedText('');
-    let charIndex = 0;
-    const currentText = dialogues[dialogueIndex];
+    if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
 
-    const typeChar = () => {
-      if (charIndex < currentText.length) {
-        setDisplayedText((prev) => prev + currentText.charAt(charIndex));
-        
-        // Play very quiet subtle beep/click sound for typewriter effect (every 3 characters to avoid audio overload)
-        if (soundEnabled && charIndex % 3 === 0) {
-          playSfx('hover');
-        }
-        
-        charIndex++;
-        typingTimerRef.current = setTimeout(typeChar, 25);
+    let idx = 1;
+    setDisplayedText(currentTopic.answer.slice(0, 1));
+
+    const type = () => {
+      if (idx <= currentTopic.answer.length) {
+        setDisplayedText(currentTopic.answer.slice(0, idx));
+        if (soundEnabled && idx % 4 === 0) playSfx('hover');
+        idx++;
+        typingTimerRef.current = setTimeout(type, 18);
       }
     };
 
-    typeChar();
+    typingTimerRef.current = setTimeout(type, 18);
+    return () => { if (typingTimerRef.current) clearTimeout(typingTimerRef.current); };
+  }, [activeTopicId, soundEnabled, reducedMotion, currentTopic.answer, playSfx]);
 
-    return () => {
-      if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
-    };
-  }, [dialogueIndex, soundEnabled, reducedMotion]);
-
-  const handleNextDialogue = () => {
+  const handleSelectTopic = (id: string) => {
+    if (id === activeTopicId) return;
     playSfx('click');
-    setDialogueIndex((prev) => (prev + 1) % dialogues.length);
-  };
-
-  const handleHover = () => {
-    playSfx('hover');
+    setActiveTopicId(id);
   };
 
   return (
-    <section id="about" className="py-24 px-6 border-t border-[var(--color-concrete)]/20 max-w-5xl mx-auto w-full">
+    <section id="about" className="py-24 px-6 border-t border-[var(--color-surface-4)] max-w-5xl mx-auto w-full">
       <FadeUp>
         <div className="space-y-12">
-          {/* Header */}
-          <div className="text-center md:text-left mb-8">
-            <span className="text-xs font-hud tracking-widest text-[var(--color-rust)] uppercase block mb-2">
-              NPC Dialogues
-            </span>
-            <h2 className="text-4xl md:text-5xl font-heading text-[var(--color-charcoal)] font-bold uppercase">
-              Biografía del NPC
-            </h2>
+
+          {/* ── Section header ─────────────────────────────────── */}
+          <div className="flex flex-col gap-1">
+            <span className="tech-label">Trayectoria</span>
+            <div className="flex items-end gap-4">
+              <h2 className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight">
+                Diálogo del{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+                  Ingeniero
+                </span>
+              </h2>
+              {/* Section rule */}
+              <div className="flex-1 h-px bg-[var(--color-surface-4)] mb-3 hidden md:block" />
+            </div>
           </div>
 
-          {/* Dialogue Box Row */}
-          <div className="relative border-4 border-double border-[var(--color-concrete)] bg-[#26201B] p-6 rounded-xl flex flex-col md:flex-row gap-6 items-start shadow-xl">
-            
-            {/* NPC Avatar Portrait (SVG Retro style) */}
-            <div className="w-24 h-24 md:w-28 md:h-28 shrink-0 bg-[#352D26] border-2 border-[var(--color-concrete)] rounded-lg flex items-center justify-center p-2 relative overflow-hidden select-none">
-              <svg 
-                viewBox="0 0 64 64" 
-                className="w-full h-full text-[var(--color-rust)] fill-current"
-                style={{ imageRendering: 'pixelated' }}
-                aria-hidden="true"
-              >
-                {/* Background Grid */}
-                <rect x="0" y="0" width="64" height="64" fill="#3D342C" />
-                {/* Character Helmet (LSS Safety Helmet Orange/Rust) */}
-                <rect x="16" y="8" width="32" height="12" fill="#B7410E" />
-                <rect x="12" y="14" width="40" height="6" fill="#B7410E" />
-                {/* Safety Helmet Rim */}
-                <rect x="8" y="18" width="48" height="3" fill="#D35400" />
-                {/* Face/Skin */}
-                <rect x="18" y="21" width="28" height="22" fill="#E6D3B8" />
-                {/* Safety Glasses (Blue/Steel) */}
-                <rect x="16" y="25" width="12" height="6" fill="#3465A4" />
-                <rect x="36" y="25" width="12" height="6" fill="#3465A4" />
-                <rect x="28" y="27" width="8" height="2" fill="#3D342C" />
-                {/* Hair/Beard */}
-                <rect x="18" y="37" width="28" height="6" fill="#3D342C" />
-                {/* Collar/Shirt */}
-                <rect x="16" y="43" width="32" height="13" fill="#8D8071" />
-                {/* Safety Vest (Green/Yellow) */}
-                <rect x="20" y="47" width="24" height="9" fill="#4E9A06" />
-                <rect x="28" y="47" width="8" height="9" fill="#DCA134" />
-              </svg>
-              {/* Badge label inside dialogue */}
-              <span className="absolute bottom-0 inset-x-0 bg-[var(--color-concrete)] text-[8px] font-hud text-[var(--color-oatmeal)] text-center py-0.5 font-bold">
-                SAMUEL
+          {/* ── Engineering terminal panel ─────────────────────── */}
+          <div className="relative border border-[var(--color-surface-4)] bg-[var(--color-surface-2)] rounded-sm overflow-hidden">
+
+            {/* Terminal top bar */}
+            <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--color-surface-1)] border-b border-[var(--color-surface-4)]">
+              <div className="flex items-center gap-2">
+                {/* Traffic light dots */}
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
+                <span className="ml-2 text-[9px] font-mono text-[var(--color-text-muted)] tracking-wider uppercase">
+                  samuel.aguilera@ucb ~ terminal
+                </span>
+              </div>
+              {/* Status indicator */}
+              <span className="flex items-center gap-1.5 text-[8px] font-mono text-emerald-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Disponible
               </span>
             </div>
 
-            {/* Dialogue Text Content Area */}
-            <div className="flex-1 space-y-4">
-              <div className="flex justify-between items-center border-b border-[var(--color-concrete)]/40 pb-2">
-                <span className="text-[10px] font-hud text-[var(--color-accentGold)] tracking-wider">
-                  SAMUEL AGUILERA (PROCESOS & DATOS)
-                </span>
-                <span className="text-[9px] font-mono text-[var(--color-steel)] uppercase">
-                  Active Dialogue {dialogueIndex + 1}/{dialogues.length}
-                </span>
+            {/* Main content: sidebar + output */}
+            <div className="flex flex-col md:flex-row">
+
+              {/* ── Left sidebar: query selection ─────────────── */}
+              <div className="md:w-56 border-b md:border-b-0 md:border-r border-[var(--color-surface-4)] bg-[var(--color-surface-1)]/50">
+                <div className="p-3 border-b border-[var(--color-surface-4)]">
+                  <span className="text-[8px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
+                    $ Consultas disponibles
+                  </span>
+                </div>
+                <div className="p-2 space-y-1">
+                  {dialogueTopics.map(topic => {
+                    const isActive = activeTopicId === topic.id;
+                    return (
+                      <button
+                        key={topic.id}
+                        onClick={() => handleSelectTopic(topic.id)}
+                        className={`w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-sm text-[11px] font-mono cursor-pointer transition-all duration-150 ${
+                          isActive
+                            ? 'bg-[var(--color-orange)] text-white'
+                            : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-3)] hover:text-[var(--color-text-primary)]'
+                        }`}
+                      >
+                        <span className={`text-[8px] shrink-0 ${isActive ? 'text-white/60' : 'text-[var(--color-orange)]/50'}`}>
+                          {topic.label}
+                        </span>
+                        <span className="truncate">{topic.question}</span>
+                        {isActive && <ChevronRight className="ml-auto w-3 h-3 shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
-              <div className="min-h-[70px] md:min-h-[60px]">
-                <p className="text-sm font-hud text-[var(--color-charcoal)] leading-relaxed tracking-wide">
-                  {displayedText}
-                  <span className="animate-pulse font-bold ml-0.5 text-[var(--color-rust)]">_</span>
-                </p>
-              </div>
-
-              {/* Action: Next Dialogue */}
-              <div className="flex justify-end pt-2">
-                <button
-                  onClick={handleNextDialogue}
-                  onMouseEnter={handleHover}
-                  className="px-3 py-1.5 border border-[var(--color-concrete)] bg-[#1A1613] hover:bg-[#352D26] text-[9px] font-hud text-[var(--color-charcoal)] cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)] active:translate-y-0.5 active:shadow-[0px_0px_0px_0px]"
-                >
-                  [ SIGUIENTE DIÁLOGO ]
-                </button>
+              {/* ── Right: output panel ────────────────────────── */}
+              <div className="flex-1 p-5 md:p-6 min-h-[200px]">
+                {/* Command prompt */}
+                <div className="mb-3">
+                  <span className="text-[10px] font-mono text-[var(--color-orange)]">$ </span>
+                  <span className="text-[10px] font-mono text-[var(--color-text-muted)]">
+                    query --topic=&quot;{currentTopic.question}&quot;
+                  </span>
+                </div>
+                {/* Output */}
+                <div className="min-h-[90px]">
+                  <p className="text-sm font-mono text-[var(--color-text-primary)] leading-relaxed tracking-wide">
+                    <span className="text-[var(--color-text-muted)] mr-2">&gt;</span>
+                    {displayedText}
+                    <span className="inline-block w-2 h-4 bg-[var(--color-orange)] ml-0.5 animate-pulse align-bottom" />
+                  </p>
+                </div>
               </div>
             </div>
-
           </div>
 
-          {/* Stats Info Grid (Dialogue rewards/attributes) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
-            
-            <div className="border border-[var(--color-concrete)]/40 bg-[#26201B] p-4 rounded-lg flex items-center gap-3">
-              <div className="p-2 rounded bg-[#1a1613] text-[var(--color-rust)] border border-[var(--color-concrete)]/40">
-                <MessageSquareCode size={18} />
-              </div>
-              <div>
-                <span className="text-[9px] font-hud text-[var(--color-steel)] block">ESPECIALIDAD</span>
-                <span className="text-xs font-hud text-[var(--color-charcoal)]">Procesos & Analítica</span>
-              </div>
-            </div>
-
-            <div className="border border-[var(--color-concrete)]/40 bg-[#26201B] p-4 rounded-lg flex items-center gap-3">
-              <div className="p-2 rounded bg-[#1a1613] text-[var(--color-accentGold)] border border-[var(--color-concrete)]/40">
-                <Award size={18} />
-              </div>
-              <div>
-                <span className="text-[9px] font-hud text-[var(--color-steel)] block">CERTIFICACIÓN</span>
-                <span className="text-xs font-hud text-[var(--color-charcoal)]">LSS Black Belt (En Dev)</span>
-              </div>
-            </div>
-
-            <div className="border border-[var(--color-concrete)]/40 bg-[#26201B] p-4 rounded-lg flex items-center gap-3">
-              <div className="p-2 rounded bg-[#1a1613] text-[var(--color-accentGreen)] border border-[var(--color-concrete)]/40">
-                <Globe size={18} />
-              </div>
-              <div>
-                <span className="text-[9px] font-hud text-[var(--color-steel)] block">IDIOMAS</span>
-                <span className="text-xs font-hud text-[var(--color-charcoal)]">ES / EN / PT (BR)</span>
-              </div>
-            </div>
-
-            <div className="border border-[var(--color-concrete)]/40 bg-[#26201B] p-4 rounded-lg flex items-center gap-3">
-              <div className="p-2 rounded bg-[#1a1613] text-sky-400 border border-[var(--color-concrete)]/40">
-                <MapPin size={18} />
-              </div>
-              <div>
-                <span className="text-[9px] font-hud text-[var(--color-steel)] block">UBICACIÓN</span>
-                <span className="text-xs font-hud text-[var(--color-charcoal)]">Remoto / LATAM</span>
-              </div>
-            </div>
-
+          {/* ── Stats info grid ────────────────────────────────── */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {statsData.map(({ icon: Icon, label, value }, i) => (
+              <FadeUp key={label} delay={i * 80} animation="scale">
+                <div className="border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/50 hover:bg-[var(--color-surface-2)] hover:border-[var(--color-orange)]/30 p-4 rounded-sm transition-all duration-200 group">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="p-1.5 rounded-sm bg-[var(--color-surface-1)] border border-[var(--color-surface-4)] group-hover:border-[var(--color-orange)]/30 group-hover:text-[var(--color-orange)] text-[var(--color-text-muted)] transition-colors">
+                      <Icon className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-[8px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
+                      {label}
+                    </span>
+                  </div>
+                  <span className="text-xs font-mono text-[var(--color-text-primary)] font-medium">
+                    {value}
+                  </span>
+                </div>
+              </FadeUp>
+            ))}
           </div>
 
         </div>

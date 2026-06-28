@@ -1,7 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { useGameStore } from '@/store/game-store';
+
+/* ── Intersection Observer Hook ──────────────────────────── */
 
 interface UseIntersectionObserverOptions {
   threshold?: number;
@@ -10,32 +13,24 @@ interface UseIntersectionObserverOptions {
 }
 
 export function useIntersectionObserver(options: UseIntersectionObserverOptions = {}) {
-  const { threshold = 0.1, rootMargin = '0px', triggerOnce = true } = options;
-
-  // Initialize to false on both server and client to prevent hydration mismatch.
+  const { threshold = 0.08, rootMargin = '0px 0px -40px 0px', triggerOnce = true } = options;
   const [isIntersecting, setIsIntersecting] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const supportsIO = typeof window !== 'undefined' && 'IntersectionObserver' in window;
-    
-    // If IntersectionObserver is not supported, set intersecting to true asynchronously to prevent cascading renders
-    if (!supportsIO) {
-      const timer = setTimeout(() => {
-        setIsIntersecting(true);
-      }, 0);
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      const timer = setTimeout(() => setIsIntersecting(true), 0);
       return () => clearTimeout(timer);
     }
 
-    const currentRef = ref.current;
-    if (!currentRef) return;
+    const el = ref.current;
+    if (!el) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
+      ([entry]) => {
         if (entry.isIntersecting) {
           setIsIntersecting(true);
-          if (triggerOnce) observer.unobserve(currentRef);
+          if (triggerOnce) observer.unobserve(el);
         } else if (!triggerOnce) {
           setIsIntersecting(false);
         }
@@ -43,70 +38,143 @@ export function useIntersectionObserver(options: UseIntersectionObserverOptions 
       { threshold, rootMargin }
     );
 
-    observer.observe(currentRef);
-
-    return () => {
-      if (currentRef && !triggerOnce) {
-        observer.unobserve(currentRef);
-      }
-      observer.disconnect();
-    };
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [threshold, rootMargin, triggerOnce]);
 
   return { ref, isIntersecting };
 }
 
-import { useGameStore } from '@/store/game-store';
+/* ── Animation variant types ─────────────────────────────── */
+
+export type ScrollAnimationType = 'fade-up' | 'fade-left' | 'fade-right' | 'scale' | 'none';
 
 interface FadeUpProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
   as?: React.ElementType;
+  animation?: ScrollAnimationType;
 }
 
-// 1. CSS-based FadeUp component (Fixed version to prevent hydration mismatch)
-export function FadeUp({ children, className = '', delay = 0 }: FadeUpProps) {
+/* ── CSS-based FadeUp (used by most sections) ─────────────── */
+export function FadeUp({
+  children,
+  className = '',
+  delay = 0,
+  animation = 'fade-up',
+}: FadeUpProps) {
   const { ref, isIntersecting } = useIntersectionObserver();
   const reducedMotion = useGameStore((state) => state.reducedMotion);
+
+  const animClass = reducedMotion || animation === 'none'
+    ? ''
+    : animation === 'fade-left'  ? 'scroll-slide-left'
+    : animation === 'fade-right' ? 'scroll-slide-right'
+    : animation === 'scale'      ? 'scroll-scale'
+    : 'scroll-reveal';
+
+  const visibleClass = isIntersecting ? 'is-visible' : '';
 
   return (
     <div
       ref={ref}
-      className={reducedMotion ? className : `fade-up-element ${isIntersecting ? 'is-visible' : ''} ${className}`}
-      style={reducedMotion ? {} : { transitionDelay: `${delay}ms` }}
+      className={[animClass, visibleClass, className].filter(Boolean).join(' ')}
+      style={reducedMotion || animation === 'none' ? {} : { transitionDelay: `${delay}ms` }}
     >
       {children}
     </div>
   );
 }
 
-// Props interface for safe typing of pre-resolved motion components
+/* ── Stagger container: reveals children with cascade delay ─ */
+interface StaggerProps {
+  children: React.ReactNode;
+  className?: string;
+  staggerMs?: number;
+  animation?: ScrollAnimationType;
+}
+
+export function StaggerReveal({
+  children,
+  className = '',
+  staggerMs = 80,
+  animation = 'fade-up',
+}: StaggerProps) {
+  const { ref, isIntersecting } = useIntersectionObserver();
+  const reducedMotion = useGameStore((state) => state.reducedMotion);
+
+  const animClass = reducedMotion || animation === 'none'
+    ? ''
+    : animation === 'fade-left'  ? 'scroll-slide-left'
+    : animation === 'fade-right' ? 'scroll-slide-right'
+    : animation === 'scale'      ? 'scroll-scale'
+    : 'scroll-reveal';
+
+  return (
+    <div ref={ref} className={className}>
+      {Array.isArray(children)
+        ? children.map((child, i) => (
+            <div
+              key={i}
+              className={[animClass, isIntersecting ? 'is-visible' : ''].filter(Boolean).join(' ')}
+              style={reducedMotion ? {} : { transitionDelay: `${i * staggerMs}ms` }}
+            >
+              {child}
+            </div>
+          ))
+        : children}
+    </div>
+  );
+}
+
+/* ── Framer Motion version (for precise spring animations) ── */
+
 interface MotionProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
-  initial?: Record<string, number>;
-  whileInView?: Record<string, number>;
+  initial?: Record<string, number | string>;
+  whileInView?: Record<string, number | string>;
   viewport?: { once?: boolean; margin?: string };
   transition?: { duration?: number; ease?: number[] | string; delay?: number };
 }
 
-// 2. Framer Motion version of FadeUp component (High performance, SSR-safe)
-export function FadeUpMotion({ children, className = '', delay = 0, as: Tag = 'div' }: FadeUpProps) {
-  // Use pre-existing motion proxies instead of dynamically calling motion(Tag) to avoid creating components on render.
+export function FadeUpMotion({
+  children,
+  className = '',
+  delay = 0,
+  as: Tag = 'div',
+  animation = 'fade-up',
+}: FadeUpProps) {
   const tagStr = typeof Tag === 'string' ? Tag : 'div';
   const motionObj = motion as unknown as Record<string, React.ComponentType<MotionProps>>;
   const MotionTag = motionObj[tagStr] || motion.div;
 
+  type MotionValues = Record<string, number | string>;
+
+  const initial: MotionValues =
+    animation === 'fade-left'  ? { opacity: 0, x: -28 }
+    : animation === 'fade-right' ? { opacity: 0, x: 28 }
+    : animation === 'scale'      ? { opacity: 0, scale: 0.96 }
+    : animation === 'none'       ? { opacity: 1 }
+    : { opacity: 0, y: 28 };
+
+  const whileInView: MotionValues =
+    animation === 'fade-left'  ? { opacity: 1, x: 0 }
+    : animation === 'fade-right' ? { opacity: 1, x: 0 }
+    : animation === 'scale'      ? { opacity: 1, scale: 1 }
+    : animation === 'none'       ? { opacity: 1 }
+    : { opacity: 1, y: 0 };
+
   return (
     <MotionTag
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+      initial={initial}
+      whileInView={whileInView}
+      viewport={{ once: true, margin: '-8% 0px -8% 0px' }}
       transition={{
-        duration: 0.8,
-        ease: [0.21, 0.47, 0.32, 0.98], // smooth custom ease out
+        duration: 0.75,
+        ease: [0.16, 1, 0.3, 1],
         delay: delay / 1000,
       }}
       className={className}
@@ -116,4 +184,7 @@ export function FadeUpMotion({ children, className = '', delay = 0, as: Tag = 'd
   );
 }
 
-
+/* ── useScrollReveal hook for manual usage ─────────────────── */
+export function useScrollReveal(options: UseIntersectionObserverOptions = {}) {
+  return useIntersectionObserver(options);
+}

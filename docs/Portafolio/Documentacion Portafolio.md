@@ -5,5 +5,3 @@
 - Tailwind CSS
 ## Tiempo de elaboracion
 - junio 2026 - en desarrollo
-
-Link para el proyecto: 

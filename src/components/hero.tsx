@@ -1,136 +1,147 @@
+'use client';
+
 import React from 'react';
-import { ArrowDown, Sword, Shield, Brain } from 'lucide-react';
+import { ArrowDown, Cpu, GitBranch, Layers } from 'lucide-react';
 import { useGameStore } from '@/store/game-store';
 
 export function Hero() {
-  const { playSfx, reducedMotion } = useGameStore();
+  const { playSfx } = useGameStore();
 
-  const handleHover = () => {
-    playSfx('hover');
-  };
-
-  const handleClick = () => {
-    playSfx('click');
-  };
-
-  const attributes = [
-    { name: 'STR (Procesos e Industria)', val: 85, desc: 'Optimización, Kaizen, LSS', icon: Shield, color: 'bg-red-500' },
-    { name: 'INT (Modelado e Inteligencia)', val: 95, desc: 'Modelos matemáticos, ML, Python', icon: Brain, color: 'bg-sky-500' },
-    { name: 'DEX (Código y Automatización)', val: 90, desc: 'TypeScript, React, SQL, Scripts', icon: Sword, color: 'bg-amber-500' },
-  ];
+  const handleClick = () => playSfx('click');
+  const handleHover = () => playSfx('hover');
 
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col lg:flex-row justify-between items-center px-6 md:px-16 pt-32 pb-16 relative max-w-6xl mx-auto w-full gap-12 overflow-hidden"
-      aria-label="Ficha de personaje principal"
+      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-[var(--color-surface-1)] py-20 md:py-32"
+      aria-label="Presentación Samuel Aguilera"
     >
-      {/* Background Micro-grid */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(141, 128, 113, 0.15) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(141, 128, 113, 0.15) 1px, transparent 1px)
-          `,
-          backgroundSize: '16px 16px'
-        }}
+      {/* Blueprint grid overlay */}
+      <div
+        className="absolute inset-0 blueprint-grid opacity-30 pointer-events-none"
+        aria-hidden="true"
       />
 
-      {/* Left: Character Stats Card */}
-      <div className="flex-1 text-left z-10 space-y-6 max-w-xl">
-        <div className="space-y-2">
-          {/* RPG HUD Subheader */}
-          <div className="flex items-center gap-2 text-[10px] font-hud text-[var(--color-rust)] uppercase tracking-wider animate-pulse">
-            <span className="w-2 h-2 bg-[var(--color-rust)] inline-block" />
-            <span>Ficha de Personaje Seleccionado</span>
+      {/* Decorative engineering annotations */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Top-left corner crosshair */}
+        <svg className="absolute top-8 left-8 w-12 h-12 opacity-20" viewBox="0 0 48 48" fill="none">
+          <line x1="24" y1="0" x2="24" y2="48" stroke="#E8500A" strokeWidth="1" />
+          <line x1="0" y1="24" x2="48" y2="24" stroke="#E8500A" strokeWidth="1" />
+          <circle cx="24" cy="24" r="5" stroke="#E8500A" strokeWidth="1" fill="none" />
+        </svg>
+        {/* Top right annotation */}
+        <div className="absolute top-8 right-8 text-right">
+          <div className="text-[9px] font-mono text-[var(--color-text-muted)] tracking-widest uppercase opacity-50">REV. 3.1.0</div>
+          <div className="text-[9px] font-mono text-[var(--color-text-muted)] tracking-widest uppercase opacity-50">Portafolio v2026</div>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center px-6 relative z-10">
+        
+        {/* ── Left Column: Content Panel ── */}
+        <div className="md:col-span-7 flex flex-col justify-center text-left space-y-6">
+          {/* Status tag line */}
+          <div className="flex items-center gap-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-orange)] animate-pulse inline-block" />
+            <span className="text-[10px] font-mono tracking-widest uppercase text-[var(--color-orange)] font-bold">
+              Perfil Profesional
+            </span>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-[var(--color-text-muted)]">
+              / Samuel Aguilera
+            </span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-heading text-[var(--color-charcoal)] leading-none font-bold uppercase">
-            Samuel Aguilera
+          {/* Main heading */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-[var(--color-text-primary)] leading-none tracking-tight">
+            Samuel
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+              Aguilera
+            </span>
           </h1>
 
-          <div className="flex flex-wrap gap-2 text-xs font-hud text-[var(--color-steel)] pt-1">
-            <span>CLASE: PROCESS & DATA ENG</span>
-            <span className="text-[var(--color-concrete)]">|</span>
-            <span className="text-[var(--color-accentGold)]">RANGO: BLACK BELT (LSSBB)</span>
+          {/* Role / discipline tags */}
+          <div className="flex flex-wrap gap-2">
+            {[
+              { icon: Cpu, label: 'Ingeniería Industrial' },
+              { icon: Layers, label: 'Lean Six Sigma' },
+              { icon: GitBranch, label: 'Data & Automatización' },
+            ].map(({ icon: Icon, label }) => (
+              <span
+                key={label}
+                className="inline-flex items-center gap-1.5 px-3 py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 backdrop-blur-sm text-[10px] font-mono text-[var(--color-text-secondary)] rounded-sm tracking-wider uppercase"
+              >
+                <Icon className="w-3.5 h-3.5 text-[var(--color-orange)] shrink-0" />
+                {label}
+              </span>
+            ))}
+          </div>
+
+          {/* Bio */}
+          <p className="text-sm md:text-base text-[var(--color-text-secondary)] font-normal leading-relaxed max-w-lg">
+            Estudiante de 3er año en la UCB &quot;San Pablo&quot;. Combino rigor de{' '}
+            <strong className="text-[var(--color-text-primary)] font-semibold">mejora continua</strong> con{' '}
+            <strong className="text-[var(--color-text-primary)] font-semibold">ciencia de datos</strong>{' '}
+            (SQL, Python, Power BI) para optimizar procesos y automatizar decisiones operativas.
+          </p>
+
+          {/* Certificaciones - compact row */}
+          <div className="border-l-2 border-[var(--color-orange)]/30 pl-4 space-y-1">
+            <div className="text-[9px] font-mono uppercase tracking-widest text-[var(--color-text-muted)] mb-2">
+              Certificaciones & Hitos
+            </div>
+            <div className="flex flex-wrap gap-x-4 gap-y-1">
+              {['Nestlé IDEAS', 'Nestlé PMI', 'LSS White Belt', 'Fund. Proyectos'].map(cert => (
+                <span key={cert} className="text-[11px] font-mono text-[var(--color-text-secondary)] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-orange)] inline-block shrink-0" />
+                  {cert}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Button */}
+          <div>
+            <a
+              href="#projects"
+              onClick={handleClick}
+              onMouseEnter={handleHover}
+              className="group inline-flex items-center gap-3 px-6 py-3.5 bg-[var(--color-orange)] hover:bg-[var(--color-orange-vivid)] text-white text-xs font-mono font-semibold uppercase tracking-wider rounded-sm transition-all duration-200 hover:shadow-[0_0_24px_rgba(232,80,10,0.35)] active:scale-[0.98]"
+            >
+              Ver Hitos & Proyectos
+              <ArrowDown
+                className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-y-0.5"
+                aria-hidden="true"
+              />
+            </a>
           </div>
         </div>
 
-        <p className="text-base md:text-lg text-[var(--color-steel)] font-light leading-relaxed">
-          Combino metodologías de optimización con modelado matemático y desarrollo de software para transformar datos en decisiones operativas.
-        </p>
-
-        {/* Character Attributes (STR/INT/DEX) */}
-        <div className="space-y-4 pt-2 border-t border-[var(--color-concrete)]/30">
-          <div className="text-[10px] font-hud text-[var(--color-charcoal)] uppercase tracking-wider">
-            ATRIBUTOS BASE
-          </div>
-          
-          <div className="space-y-3">
-            {attributes.map((attr) => {
-              const AttrIcon = attr.icon;
-              return (
-                <div key={attr.name} className="space-y-1">
-                  <div className="flex justify-between items-center text-xs">
-                    <div className="flex items-center gap-1.5 font-hud text-[10px] text-[var(--color-charcoal)]">
-                      <AttrIcon size={12} className="text-[var(--color-steel)]" />
-                      <span>{attr.name}</span>
-                    </div>
-                    <span className="font-hud text-[10px] text-[var(--color-steel)]">{attr.val}%</span>
-                  </div>
-
-                  {/* Level gauge */}
-                  <div className="h-2.5 bg-[#26201B] border border-[var(--color-concrete)] p-0.5 rounded overflow-hidden">
-                    <div
-                      className={`h-full ${attr.color} transition-all duration-1000 ease-out`}
-                      style={{ 
-                        width: `${attr.val}%`,
-                        transitionDelay: reducedMotion ? '0s' : '0.2s'
-                      }}
-                    />
-                  </div>
-                  <span className="text-[10px] font-mono text-[var(--color-steel)] block pl-5 italic">
-                    {attr.desc}
-                  </span>
-                </div>
-              );
-            })}
+        {/* ── Right Column: Portrait Image Container ── */}
+        <div className="md:col-span-5 flex justify-center items-center w-full">
+          <div className="relative w-full aspect-[4/5] max-w-sm rounded-sm border border-[var(--color-surface-4)] overflow-hidden bg-gradient-to-b from-white to-zinc-200 shadow-xl group">
+            {/* The actual image */}
+            <img
+              src="/images/LSSBB CEO PMO Samuel Aguilera.png"
+              alt="Samuel Aguilera"
+              className="w-full h-full object-cover object-top filter saturate-95 contrast-[1.02] mix-blend-multiply opacity-95 transition-all duration-300 group-hover:scale-[1.02]"
+              loading="eager"
+            />
+            {/* Extremely subtle bottom fade to integrate into layout edge */}
+            <div className="absolute bottom-0 left-0 right-0 h-[8%] bg-gradient-to-t from-[var(--color-surface-1)]/10 via-transparent to-transparent pointer-events-none" />
           </div>
         </div>
 
-        {/* Action Button */}
-        <div className="pt-4">
-          <a
-            href="#projects"
-            onClick={handleClick}
-            onMouseEnter={handleHover}
-            className="inline-flex items-center gap-2 text-xs font-hud text-[var(--color-oatmeal)] bg-[var(--color-rust)] hover:bg-[var(--color-primaryHover)] px-5 py-3 border-2 border-[var(--color-concrete)] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.5)] active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.5)] transition-all uppercase tracking-wider"
-          >
-            <span>Ver Hitos (Quests)</span>
-            <ArrowDown size={14} className="animate-bounce" aria-hidden="true" />
-          </a>
-        </div>
       </div>
 
-      {/* Right: Character Portrait Image Container */}
-      <div className="flex-1 w-full flex items-center justify-center relative z-10">
-        {/* Retro monitor border double border */}
-        <div className="relative aspect-[4/3] w-full max-w-md rounded-xl overflow-hidden border-4 border-double border-[var(--color-concrete)] bg-[#26201B] p-2 transition-transform duration-300 hover:scale-[1.01] shadow-2xl">
-          {/* Inner scanline filter for picture */}
-          <div className="absolute inset-0 pointer-events-none z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] bg-[size:100%_6px] opacity-60" />
-          <img
-            src="/images/LSSBB CEO PMO Samuel Aguilera.png"
-            alt="LSSBB CEO PMO Samuel Aguilera"
-            className="w-full h-full object-cover rounded border border-[var(--color-concrete)]/40 filter saturate-90 contrast-110"
-            loading="eager"
-          />
-        </div>
-      </div>
-
-      {/* Scroll Indicator at bottom */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[var(--color-steel)] animate-bounce text-xs font-hud tracking-widest hidden lg:block" aria-hidden="true">
-        SCROLL TO EXPLORE
+      {/* Bottom scroll indicator */}
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
+        aria-hidden="true"
+      >
+        <span className="text-[9px] font-mono text-[var(--color-text-muted)] tracking-widest uppercase">Scroll</span>
+        <div className="w-px h-8 bg-gradient-to-b from-[var(--color-orange)] to-transparent" />
       </div>
     </section>
   );

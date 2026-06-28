@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { FadeUp } from './fade-up';
-import { ArrowUpRight, MapPin, CheckCircle, Flame, Award } from 'lucide-react';
+import { ArrowUpRight, CheckCircle, Flame, Award, Wrench, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useGameStore } from '@/store/game-store';
 
 interface Quest {
@@ -13,259 +14,237 @@ interface Quest {
   tags: string[];
   time: string;
   link: string;
-  difficulty: 'MEDIUM' | 'HARD' | 'EXPERT';
+  difficulty: 'MEDIA' | 'AVANZADA' | 'EXPERTO';
   status: 'COMPLETED' | 'ACTIVE';
+  index: number;
 }
 
-const projectsData: Quest[] = [
+const projectsData: Omit<Quest, 'index'>[] = [
   {
-    title: "Optimización de Tintas (EMPACAR S.A.)",
-    description: "Propuesta de optimización en el rendimiento de tintas en el proceso de dosificado (División Corrugado) mediante análisis cuantitativo y estabilización estadística.",
-    methodology: "Metodología Lean Six Sigma (LSS) con enfoque DMAIC y Control Estadístico de Procesos (SPC).",
+    title: 'Optimización de Tintas — EMPACAR S.A.',
+    description:
+      'Reducción del desperdicio y variabilidad en el dosificado de tintas en la división de corrugado aplicando Lean Six Sigma.',
+    methodology:
+      'Metodología Lean Six Sigma (LSS) con enfoque DMAIC, reducción de tiempos de setup mediante SMED y análisis predictivo multivariante en Minitab.',
     objectives: [
-      "Ahorro directo estimado del 14.2% en el costo de consumo anual de tintas.",
-      "Reducción de 1.8 toneladas de residuos químicos anuales mediante precisión de dosificación.",
-      "Estabilización del proceso alcanzando un índice de capacidad (Cpk) de 1.45."
+      'Reducción del 53.3% en el tiempo de preparación de máquinas (SMED).',
+      'Retorno económico anual proyectado de 218,850 Bs/año por reducción de merma.',
+      'Modelo predictivo con R² = 77.2% en Minitab.',
+      'Bases de datos SQL y dashboards Power BI para SPC.',
     ],
-    tags: ["Lean Six Sigma", "Estadística Descriptiva", "SPC", "Mejora Continua"],
-    time: "marzo 2026 - agosto 2026",
-    link: "#",
-    difficulty: "EXPERT",
-    status: "COMPLETED"
+    tags: ['Lean Six Sigma', 'SMED', 'Minitab', 'SQL & Power BI'],
+    time: 'Mar 2026 — May 2026',
+    link: 'https://www.linkedin.com/in/samuelaguileraaraujo',
+    difficulty: 'EXPERTO',
+    status: 'COMPLETED',
   },
   {
-    title: "Estructuración de Costos Industriales",
-    description: "Análisis financiero y estructuración de costos industriales de la línea de derivados de caña del ingenio azucarero Guabirá, consolidando balances y estados de resultados.",
-    methodology: "Mapeo y distribución de Costos Indirectos de Fabricación (CIF) mediante drivers operativos y costeo por procesos dinámicos.",
+    title: 'Estructuración de Costos Industriales',
+    description:
+      'Análisis financiero y estructuración de costos industriales de la línea de derivados de caña del Ingenio Guabirá.',
+    methodology:
+      'Mapeo y distribución de Costos Indirectos de Fabricación (CIF) mediante drivers operativos y costeo por procesos dinámicos.',
     objectives: [
-      "Precisión superior al 95% en la determinación del margen bruto real por categoría comercial.",
-      "Trazabilidad e imputación lógica del 100% de los CIF en planillas integradas con macros dinámicas.",
-      "Aceleración de 3x en la toma de decisiones estratégicas para cotización mayorista y fijación de precios."
+      'Precisión >95% en la determinación del margen bruto real por categoría.',
+      'Trazabilidad del 100% de los CIF en planillas con macros dinámicas.',
+      'Aceleración de 3× en toma de decisiones estratégicas de cotización.',
     ],
-    tags: ["Planillas de Costos", "EERR & BBGG", "Drivers de Costos", "Análisis Financiero"],
-    time: "septiembre 2025 - noviembre 2025",
-    link: "#",
-    difficulty: "HARD",
-    status: "COMPLETED"
+    tags: ['Planillas de Costos', 'EERR & BBGG', 'Drivers de Costos'],
+    time: 'Sep 2025 — Nov 2025',
+    link: 'https://www.linkedin.com/in/samuelaguileraaraujo',
+    difficulty: 'AVANZADA',
+    status: 'COMPLETED',
   },
   {
-    title: "SST Manager - Gestión de Seguridad y Salud",
-    description: "Sistema integral de gestión de seguridad y salud en el trabajo (SST) para control de riesgos y normativas de salud laboral.",
-    methodology: "Modelado relacional de bases de datos para matrices de riesgos interactiva, digitalización de inspecciones y automatización de alertas críticas.",
+    title: 'SST Manager — Gestión de Seguridad Industrial',
+    description:
+      'Digitalización estructurada de la gestión de riesgos laborales bajo normativas bolivianas de higiene y bienestar.',
+    methodology:
+      'Modelado relacional e IPER bajo Ley DL 16998 y NTS-009/23, algoritmos de criticidad William T. Fine y madurez Hudson.',
     objectives: [
-      "Eliminación del 100% del papel físico en reportes y auditorías de seguridad en campo.",
-      "Notificación instantánea (<1 seg) de condiciones inseguras de severidad alta directamente a supervisores.",
-      "Cumplimiento documental total alineado con la norma internacional ISO 45001 y leyes vigentes."
+      'Implementación del método William T. Fine (GP = C × P × E).',
+      'Índice de Justificación (J) para priorización de inversiones preventivas.',
+      'Digitalización al 100% de inspecciones con alertas automáticas.',
     ],
-    tags: ["TypeScript", "Bases de Datos", "Tailwind CSS", "ISO 45001"],
-    time: "junio 2026 - en desarrollo",
-    link: "#",
-    difficulty: "MEDIUM",
-    status: "ACTIVE"
+    tags: ['NTS-009/23', 'William T. Fine', 'Safety-II', 'TypeScript & SQL'],
+    time: 'Jun 2026 — En desarrollo',
+    link: 'https://github.com/FosforoWork/PROYECTOS',
+    difficulty: 'MEDIA',
+    status: 'ACTIVE',
   },
   {
-    title: "Gemelo Digital en Planta de Soja",
-    description: "Modelado matemático y simulación digital aplicada a optimizar los flujos y cuellos de botella en una planta de producción de proteína de soja.",
-    methodology: "Modelado matemático de balances de masa y energía (termodinámica) y simulación estadística de Monte Carlo en Python.",
+    title: 'Gemelo Digital — Planta de Soja',
+    description:
+      'Diseño de planta de proteína aislada de soja combinando ingeniería de procesos, balances termodinámicos y simulación Python.',
+    methodology:
+      'Balances de masa y energía (termodinámica), simulación estadística determinista en Python y modelado del cuello de botella.',
     objectives: [
-      "Incremento del 4.5% en la capacidad diaria de producción del secador industrial de soja.",
-      "Identificación y eliminación del cuello de botella principal del proceso sin inversión de capital (CAPEX).",
-      "Reducción del 15% en las paradas críticas e imprevistas del sistema de secado."
+      'Incremento del 4.5% en capacidad diaria sin CAPEX adicional.',
+      'Identificación y eliminación del cuello de botella principal de la planta.',
+      'Simulación interactiva del secador industrial (NumPy/Pandas).',
     ],
-    tags: ["Python", "Modelado Matemático", "Simulación", "Mejora Continua"],
-    time: "marzo 2026 - mayo 2026",
-    link: "#",
-    difficulty: "EXPERT",
-    status: "COMPLETED"
-  }
+    tags: ['Python (NumPy/Pandas)', 'Balances Termodinámicos', 'Monte Carlo', 'Sin CAPEX'],
+    time: 'Mar 2026 — May 2026',
+    link: 'https://github.com/samuelthecreat/PROCESOS_UNITARIOS---PROYECTO_MOUNTAIN',
+    difficulty: 'EXPERTO',
+    status: 'COMPLETED',
+  },
 ];
 
-function TimelineItem({
-  project,
-  isLast,
-  onQuestView
-}: {
-  project: Quest;
-  isLast: boolean;
-  onQuestView: (title: string) => void;
-}) {
+const difficultyConfig = {
+  EXPERTO:  { color: 'text-red-400 border-red-900/40 bg-red-950/10',  label: 'Experto'  },
+  AVANZADA: { color: 'text-amber-400 border-amber-900/40 bg-amber-950/10', label: 'Avanzada' },
+  MEDIA:    { color: 'text-sky-400 border-sky-900/40 bg-sky-950/10',  label: 'Media'    },
+};
+
+function ProjectCard({ project, index }: { project: Omit<Quest, 'index'>; index: number }) {
   const { playSfx, completedQuests } = useGameStore();
   const isViewed = completedQuests.includes(project.title);
-
-  const handleHover = () => {
-    playSfx('hover');
-  };
-
-  const handleQuestClick = () => {
-    playSfx('click');
-    onQuestView(project.title);
-  };
-
-  const getDifficultyColor = (diff: Quest['difficulty']) => {
-    if (diff === 'EXPERT') return 'text-red-400 border-red-950 bg-red-950/20';
-    if (diff === 'HARD') return 'text-amber-400 border-amber-950 bg-amber-950/20';
-    return 'text-sky-400 border-sky-950 bg-sky-950/20';
-  };
+  const diff = difficultyConfig[project.difficulty];
+  const completeQuest = useGameStore(s => s.completeQuest);
 
   return (
-    <div className="flex items-start group">
-      {/* Timeline Indicator Column */}
-      <div className="relative w-8 flex flex-col items-center">
-        {/* Dotted pin / active location icon */}
-        <MapPin 
-          onClick={handleQuestClick}
-          onMouseEnter={handleHover}
-          className={`w-5 h-5 cursor-pointer transition-all hover:scale-125 ${
-            isViewed 
-              ? 'text-emerald-500 hover:brightness-125' 
-              : project.status === 'ACTIVE' 
-                ? 'text-amber-500 animate-pulse' 
-                : 'text-[var(--color-rust)]'
-          }`} 
-        />
-        {/* Connecting Line */}
-        {!isLast && (
-          <div className="flex-1 w-px border-l-2 border-dotted border-[var(--color-steel)]/30 mt-1" />
+    <motion.div
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-6% 0px' }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.08 }}
+      onClick={() => { playSfx('click'); completeQuest(project.title); }}
+      onMouseEnter={() => playSfx('hover')}
+      className="group relative border border-[var(--color-surface-4)] hover:border-[var(--color-orange)]/50 bg-[var(--color-surface-2)]/30 hover:bg-[var(--color-surface-2)] rounded-sm p-5 md:p-6 cursor-pointer transition-all duration-300 overflow-hidden"
+    >
+      {/* Orange left accent bar on hover */}
+      <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-[var(--color-orange)] scale-y-0 group-hover:scale-y-100 origin-top transition-transform duration-300" />
+
+      {/* Index number watermark */}
+      <span className="absolute top-4 right-4 text-6xl font-heading font-bold text-[var(--color-surface-4)] select-none leading-none pointer-events-none">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+
+      {/* ── Header row ──────────────────────────────────── */}
+      <div className="flex flex-wrap gap-2 items-center mb-4 pb-3 border-b border-[var(--color-surface-4)]">
+        {project.status === 'COMPLETED' ? (
+          <span className="inline-flex items-center gap-1.5 text-[8px] font-mono font-bold uppercase tracking-widest text-emerald-400 bg-emerald-950/20 border border-emerald-800/30 px-2 py-0.5 rounded-sm">
+            <CheckCircle className="w-2.5 h-2.5" /> Completado
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 text-[8px] font-mono font-bold uppercase tracking-widest text-amber-400 bg-amber-950/20 border border-amber-800/30 px-2 py-0.5 rounded-sm animate-pulse">
+            <Flame className="w-2.5 h-2.5" /> En Desarrollo
+          </span>
         )}
+
+        <span className={`inline-flex items-center text-[8px] font-mono border px-2 py-0.5 rounded-sm ${diff.color}`}>
+          {diff.label}
+        </span>
+
+        {isViewed && (
+          <span className="inline-flex items-center text-[8px] font-mono text-[var(--color-orange)] border border-[var(--color-orange)]/30 bg-[var(--color-orange-muted)] px-2 py-0.5 rounded-sm">
+            Revisado
+          </span>
+        )}
+
+        <span className="ml-auto text-[8px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider">
+          {project.time}
+        </span>
       </div>
 
-      {/* Quest Content Card */}
-      <div 
-        onClick={handleQuestClick}
-        onMouseEnter={handleHover}
-        className={`ml-6 flex-1 pb-12 border-b border-[var(--color-concrete)]/20 last:border-b-0 last:pb-0 cursor-pointer`}
-      >
-        <div className="border border-[var(--color-concrete)]/40 hover:border-[var(--color-rust)]/60 bg-[#26201B] rounded-xl p-5 md:p-6 space-y-4 shadow-md transition-all duration-200 hover:shadow-xl hover:translate-x-1">
-          {/* Header metadata */}
-          <div className="flex flex-wrap gap-2 justify-between items-center border-b border-[var(--color-concrete)]/20 pb-3">
-            <div className="flex items-center gap-2">
-              {project.status === 'COMPLETED' ? (
-                <span className="flex items-center gap-1 text-[9px] font-hud text-emerald-400 bg-emerald-950/30 border border-emerald-900 px-2 py-0.5 rounded">
-                  <CheckCircle size={10} />
-                  <span>COMPLETED</span>
-                </span>
-              ) : (
-                <span className="flex items-center gap-1 text-[9px] font-hud text-amber-400 bg-amber-950/30 border border-amber-900 px-2 py-0.5 rounded animate-pulse">
-                  <Flame size={10} />
-                  <span>ACTIVE QUEST</span>
-                </span>
-              )}
+      {/* ── Title ───────────────────────────────────────── */}
+      <h3 className="text-lg md:text-xl font-heading font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-orange)] transition-colors duration-200 uppercase tracking-tight mb-3 relative z-10">
+        {project.title}
+      </h3>
 
-              <span className={`text-[9px] font-hud border px-2 py-0.5 rounded ${getDifficultyColor(project.difficulty)}`}>
-                DIFF: {project.difficulty}
-              </span>
-            </div>
+      {/* ── Description ─────────────────────────────────── */}
+      <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed mb-5 relative z-10">
+        {project.description}
+      </p>
 
-            <span className="text-[9px] font-hud text-[var(--color-steel)]">
-              {project.time.toUpperCase()}
+      {/* ── Detail grid ─────────────────────────────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 pt-4 border-t border-[var(--color-surface-4)] relative z-10">
+        {/* Methodology */}
+        <div className="md:col-span-5 space-y-2">
+          <div className="flex items-center gap-1.5">
+            <Wrench className="w-2.5 h-2.5 text-[var(--color-orange)]" />
+            <span className="text-[8px] font-mono text-[var(--color-orange)] uppercase tracking-widest font-bold">
+              Enfoque & Metodología
             </span>
           </div>
-
-          {/* Title */}
-          <h3 className="text-xl md:text-2xl font-hud text-[var(--color-charcoal)] group-hover:text-[var(--color-rust)] transition-colors duration-300">
-            {project.title}
-          </h3>
-
-          {/* Objective Description */}
-          <p className="text-sm text-[var(--color-steel)] font-light leading-relaxed">
-            {project.description}
+          <p className="text-[11px] text-[var(--color-text-muted)] leading-relaxed font-mono">
+            {project.methodology}
           </p>
+        </div>
 
-          {/* Grid detailing: Mission (Methodology) & Rewards (Objectives) */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-4 border-t border-[var(--color-concrete)]/20">
-            {/* Methodology */}
-            <div className="md:col-span-5 space-y-1.5">
-              <span className="text-[9px] font-hud text-[var(--color-rust)] block">
-                MISSION BRIEF (METODOLOGÍA)
-              </span>
-              <p className="text-xs text-[var(--color-charcoal)]/90 font-light leading-relaxed">
-                {project.methodology}
-              </p>
-            </div>
-
-            {/* Achievements list */}
-            <div className="md:col-span-7 space-y-1.5">
-              <span className="text-[9px] font-hud text-[var(--color-rust)] flex items-center gap-1">
-                <Award size={10} />
-                <span>LOOT & REWARDS (RESULTADOS OBTENIDOS)</span>
-              </span>
-              <ul className="space-y-1.5 text-xs text-[var(--color-steel)] font-light leading-relaxed">
-                {project.objectives.map((obj, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-emerald-400 font-hud select-none text-[8px] mt-0.5">✔</span>
-                    <span>{obj}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        {/* Results */}
+        <div className="md:col-span-7 space-y-2">
+          <div className="flex items-center gap-1.5">
+            <Award className="w-2.5 h-2.5 text-[var(--color-orange)]" />
+            <span className="text-[8px] font-mono text-[var(--color-orange)] uppercase tracking-widest font-bold">
+              Resultados & Impacto
+            </span>
           </div>
-
-          {/* Footer of Card: Tags & Link */}
-          <div className="flex flex-wrap justify-between items-center gap-3 pt-3 border-t border-[var(--color-concrete)]/25">
-            <div className="flex flex-wrap gap-1.5">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-0.5 border border-[var(--color-concrete)] bg-[#1A1613] rounded text-[9px] font-mono text-[var(--color-steel)]"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                e.stopPropagation();
-                playSfx('click');
-              }}
-              onMouseEnter={handleHover}
-              className="inline-flex items-center gap-1.5 text-[9px] font-hud text-[var(--color-rust)] hover:text-[var(--color-charcoal)] transition-colors border-b border-transparent hover:border-[var(--color-charcoal)] pb-0.5"
-            >
-              VISITAR QUEST
-              <ArrowUpRight size={10} />
-            </a>
-          </div>
+          <ul className="space-y-1.5">
+            {project.objectives.map((obj, i) => (
+              <li key={i} className="flex items-start gap-2 text-[11px] font-mono text-[var(--color-text-secondary)] leading-relaxed">
+                <ChevronRight className="w-3 h-3 text-emerald-500 mt-0.5 shrink-0" />
+                {obj}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-    </div>
+
+      {/* ── Footer: tags + link ──────────────────────────── */}
+      <div className="flex flex-wrap justify-between items-center gap-3 mt-5 pt-4 border-t border-[var(--color-surface-4)] relative z-10">
+        <div className="flex flex-wrap gap-1.5">
+          {project.tags.map(tag => (
+            <span
+              key={tag}
+              className="px-2.5 py-0.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-[8px] font-mono text-[var(--color-text-muted)] uppercase tracking-wide"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={e => { e.stopPropagation(); playSfx('click'); }}
+          onMouseEnter={() => playSfx('hover')}
+          className="inline-flex items-center gap-1 text-[9px] font-mono tracking-widest uppercase font-bold text-[var(--color-orange)] hover:text-[var(--color-text-primary)] transition-colors border-b border-[var(--color-orange)]/30 hover:border-[var(--color-text-primary)] pb-0.5"
+        >
+          Ver Detalles
+          <ArrowUpRight className="w-3 h-3" />
+        </a>
+      </div>
+    </motion.div>
   );
 }
 
 export function Projects() {
-  const completeQuest = useGameStore((state) => state.completeQuest);
-
-  const handleQuestView = (title: string) => {
-    completeQuest(title);
-  };
-
   return (
-    <section id="projects" className="py-24 px-6 max-w-4xl mx-auto w-full">
+    <section id="projects" className="py-24 px-6 max-w-5xl mx-auto w-full">
       <FadeUp>
-        <div className="text-center mb-20">
-          <span className="text-xs font-hud tracking-widest text-[var(--color-rust)] uppercase block mb-3">
-            Quest Log
-          </span>
-          <h2 className="text-4xl md:text-5xl font-heading text-[var(--color-charcoal)] mb-4">
-            Hitos Heroicos
-          </h2>
-          <p className="text-[var(--color-steel)] font-light max-w-xl mx-auto">
-            Cada proyecto es una misión resuelta. Haz clic sobre cada misión para reportarla en tu estado de juego.
+        <div className="flex flex-col gap-1 mb-16">
+          <span className="tech-label">Casos de Estudio</span>
+          <div className="flex items-end gap-4">
+            <h2 className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight">
+              Hitos &{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+                Trayectoria
+              </span>
+            </h2>
+            <div className="flex-1 h-px bg-[var(--color-surface-4)] mb-3 hidden md:block" />
+          </div>
+          <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed max-w-xl">
+            Proyectos destacados que documentan soluciones de ingeniería aplicadas tanto en planta industrial como en desarrollo digital.
           </p>
         </div>
       </FadeUp>
 
-      {/* Vertical Timeline container */}
-      <div className="space-y-6 pt-4">
+      <div className="space-y-5">
         {projectsData.map((project, idx) => (
-          <TimelineItem
-            key={project.title}
-            project={project}
-            isLast={idx === projectsData.length - 1}
-            onQuestView={handleQuestView}
-          />
+          <ProjectCard key={project.title} project={project} index={idx} />
         ))}
       </div>
     </section>
