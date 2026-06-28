@@ -56,6 +56,8 @@ export function useIntersectionObserver(options: UseIntersectionObserverOptions 
   return { ref, isIntersecting };
 }
 
+import { useGameStore } from '@/store/game-store';
+
 interface FadeUpProps {
   children: React.ReactNode;
   className?: string;
@@ -64,17 +66,18 @@ interface FadeUpProps {
 }
 
 // 1. CSS-based FadeUp component (Fixed version to prevent hydration mismatch)
-export function FadeUp({ children, className = '', delay = 0, as: Tag = 'div' }: FadeUpProps) {
+export function FadeUp({ children, className = '', delay = 0 }: FadeUpProps) {
   const { ref, isIntersecting } = useIntersectionObserver();
+  const reducedMotion = useGameStore((state) => state.reducedMotion);
 
   return (
-    <Tag
+    <div
       ref={ref}
-      className={`fade-up-element ${isIntersecting ? 'is-visible' : ''} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+      className={reducedMotion ? className : `fade-up-element ${isIntersecting ? 'is-visible' : ''} ${className}`}
+      style={reducedMotion ? {} : { transitionDelay: `${delay}ms` }}
     >
       {children}
-    </Tag>
+    </div>
   );
 }
 

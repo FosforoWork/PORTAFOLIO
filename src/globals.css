@@ -1,0 +1,134 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;700&family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme inline {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Pixelify Sans', system-ui, sans-serif;
+  --font-hud: 'Press Start 2P', system-ui, sans-serif;
+  
+  /* Warm Dark RPG Theme Palette */
+  --color-oatmeal: #1A1613; /* Deep warm dark charcoal */
+  --color-steel: #8D8071;   /* Muted warm gray */
+  --color-gray: #786B5E;    /* Gray */
+  --color-charcoal: #EADFD0;/* High contrast warm oatmeal text */
+  --color-rust: #B7410E;    /* Bold orange-red accent */
+  --color-concrete: #3D342C;/* Deep brown-charcoal borders */
+  --color-black: #000000;
+
+  /* Tailwind mappings */
+  --color-background: var(--color-oatmeal);
+  --color-foreground: var(--color-charcoal);
+  --color-primary: var(--color-rust);
+  --color-primary-foreground: var(--color-oatmeal);
+  --color-border: var(--color-concrete);
+  --color-muted: var(--color-concrete);
+  --color-muted-foreground: var(--color-steel);
+  
+  /* Missing variables for shadcn/ui components */
+  --color-ring: var(--color-rust);
+  --color-card: #26201B;
+  --color-card-foreground: var(--color-charcoal);
+  --color-destructive: #B7410E;
+
+  /* Animations */
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Base entrance transition class */
+.fade-up-element {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-up-element.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-normal;
+  }
+}
+
+/* CRT Scanline Overlay Effect (Subtle retro feel) */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99999;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.08) 50%
+  );
+  background-size: 100% 4px;
+  opacity: 0.45;
+}
+
+/* Page Noise/Grain */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.015;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Retro HUD font-face mapping helpers */
+.font-hud {
+  font-family: var(--font-hud);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+/* Retro styling classes */
+.retro-border {
+  border: 4px solid var(--color-concrete);
+  image-rendering: pixelated;
+}
+
+.retro-btn {
+  background-color: var(--color-concrete);
+  border: 2px solid var(--color-concrete);
+  box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.5);
+  transition: all 0.1s ease;
+}
+
+.retro-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px 0px rgba(0,0,0,0.5);
+}

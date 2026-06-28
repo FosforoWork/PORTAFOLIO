@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
-import Link from 'next/link';
 import { Magnetic } from './magnetic';
 
 export function HeroMinimal() {
@@ -22,13 +21,13 @@ export function HeroMinimal() {
         </p>
 
         <Magnetic>
-          <Link
+          <a
             href="#projects"
             className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-charcoal)] hover:text-[var(--color-rust)] transition-colors group uppercase tracking-widest border-b border-transparent hover:border-[var(--color-rust)] pb-1"
           >
             Ver proyectos
             <ArrowDown size={16} className="group-hover:translate-y-1 transition-transform" aria-hidden="true" />
-          </Link>
+          </a>
         </Magnetic>
       </div>
 

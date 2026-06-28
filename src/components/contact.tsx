@@ -1,54 +1,126 @@
-import React from 'react';
-import { Mail, Linkedin, Github } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Linkedin, Github, Save } from 'lucide-react';
 import { FadeUp } from './fade-up';
-import { Magnetic } from './magnetic';
+import { useGameStore } from '@/store/game-store';
 
 export function Contact() {
-  return (
-    <section id="contact" className="py-32 px-6 bg-[var(--color-charcoal)] text-[var(--color-oatmeal)] border-t border-[var(--color-black)]/20 mt-12 w-full">
-      <div className="max-w-4xl mx-auto text-center">
-        <FadeUp>
-          <span className="text-sm font-mono tracking-widest text-[var(--color-rust)] uppercase block mb-6">
-            Contacto
-          </span>
-          <h2 className="text-5xl md:text-7xl font-heading mb-12">
-            Hablemos de tu próximo proyecto
-          </h2>
-          
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-8">
-            <Magnetic>
-              <a 
-                href="mailto:samuelagss1@gmail.com"
-                className="flex items-center gap-3 px-8 py-4 bg-[var(--color-rust)] hover:bg-[var(--color-rust)]/90 text-[var(--color-oatmeal)] rounded-full text-sm font-semibold transition-all hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
-              >
-                <Mail size={18} />
-                Enviar Email
-              </a>
-            </Magnetic>
-            
-            <Magnetic>
-              <a 
-                href="https://www.linkedin.com/in/samuelaguileraaraujo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 px-8 py-4 bg-[var(--color-oatmeal)]/10 hover:bg-[var(--color-oatmeal)]/20 text-[var(--color-oatmeal)] border border-[var(--color-oatmeal)]/25 rounded-full text-sm font-semibold transition-all hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
-              >
-                <Linkedin size={18} />
-                LinkedIn
-              </a>
-            </Magnetic>
+  const { playSfx } = useGameStore();
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
-            <Magnetic>
-              <a 
-                href="https://github.com/FosforoWork"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 px-8 py-4 bg-[var(--color-oatmeal)]/10 hover:bg-[var(--color-oatmeal)]/20 text-[var(--color-oatmeal)] border border-[var(--color-oatmeal)]/25 rounded-full text-sm font-semibold transition-all hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
-              >
-                <Github size={18} />
-                GitHub
-              </a>
-            </Magnetic>
+  const handleHover = () => {
+    playSfx('hover');
+  };
+
+  const handleSlotClick = (slotName: string, url: string) => {
+    playSfx('save');
+    setSaveStatus(`ACCEDIENDO A SLOT: ${slotName}... PROGRESS SAVED!`);
+    setTimeout(() => {
+      window.open(url, '_blank', 'noopener,noreferrer');
+      setSaveStatus(null);
+    }, 800);
+  };
+
+  const slots = [
+    {
+      id: '01',
+      name: 'EMAIL ENVOY',
+      meta: 'samuelagss1@gmail.com',
+      mission: 'Alianza y consulta comercial',
+      url: 'mailto:samuelagss1@gmail.com',
+      icon: Mail,
+      color: 'hover:border-red-500/50 hover:bg-red-950/10'
+    },
+    {
+      id: '02',
+      name: 'LINKEDIN LINK',
+      meta: '/in/samuelaguileraaraujo',
+      mission: 'Alianza y red profesional',
+      url: 'https://www.linkedin.com/in/samuelaguileraaraujo',
+      icon: Linkedin,
+      color: 'hover:border-sky-500/50 hover:bg-sky-950/10'
+    },
+    {
+      id: '03',
+      name: 'GITHUB CODE REPO',
+      meta: 'FosforoWork',
+      mission: 'Inspeccionar código fuente',
+      url: 'https://github.com/FosforoWork',
+      icon: Github,
+      color: 'hover:border-zinc-500/50 hover:bg-zinc-950/10'
+    }
+  ];
+
+  return (
+    <section id="contact" className="py-24 px-6 border-t border-[var(--color-concrete)]/20 w-full relative">
+      <div className="max-w-4xl mx-auto">
+        <FadeUp>
+          {/* Header */}
+          <div className="text-center mb-16">
+            <span className="text-xs font-hud tracking-widest text-[var(--color-rust)] uppercase block mb-3">
+              Save Game
+            </span>
+            <h2 className="text-4xl md:text-5xl font-heading text-[var(--color-charcoal)] mb-4 font-bold uppercase">
+              Punto de Guardado
+            </h2>
+            <p className="text-[var(--color-steel)] font-light max-w-xl mx-auto">
+              Selecciona una ranura de memoria para conectarte conmigo y guardar tus registros de progreso en esta sesión.
+            </p>
+          </div>
+
+          {/* Retro Memory Card Save Layout */}
+          <div className="border-4 border-double border-[var(--color-concrete)] bg-[#26201B] p-6 md:p-8 rounded-xl space-y-6 shadow-2xl relative">
+            <div className="flex justify-between items-center border-b border-[var(--color-concrete)]/30 pb-3">
+              <div className="flex items-center gap-2 text-xs font-hud text-[var(--color-accentGold)]">
+                <Save size={14} className="animate-pulse" />
+                <span>MEMORY CARD SELECT</span>
+              </div>
+              <span className="text-[9px] font-hud text-[var(--color-steel)]">
+                SLOTS AVAILABLE: 3/3
+              </span>
+            </div>
+
+            {/* Save Slots List */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {slots.map((slot) => {
+                const Icon = slot.icon;
+                return (
+                  <button
+                    key={slot.id}
+                    onClick={() => handleSlotClick(slot.name, slot.url)}
+                    onMouseEnter={handleHover}
+                    className={`text-left bg-[#1A1613] border-2 border-[var(--color-concrete)]/40 rounded-lg p-4 space-y-3 cursor-pointer transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] active:translate-y-0.5 active:shadow-[0px_0px_0px_0px] ${slot.color}`}
+                  >
+                    <div className="flex justify-between items-start border-b border-[var(--color-concrete)]/20 pb-2">
+                      <span className="text-[9px] font-hud text-[var(--color-steel)]">
+                        SLOT {slot.id}
+                      </span>
+                      <Icon size={14} className="text-[var(--color-steel)]" />
+                    </div>
+
+                    <div className="space-y-1">
+                      <h3 className="text-xs font-hud text-[var(--color-charcoal)]">
+                        {slot.name}
+                      </h3>
+                      <p className="text-[9px] font-mono text-[var(--color-steel)] truncate">
+                        {slot.meta}
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-[var(--color-concrete)]/10 text-[9px] font-mono text-[var(--color-steel)]">
+                      <span className="text-[8px] font-hud text-[var(--color-rust)] block">MISIÓN:</span>
+                      {slot.mission}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Status bar */}
+            <div className="border border-[var(--color-concrete)]/30 bg-[#1A1613] rounded p-3 min-h-[44px] flex items-center justify-center text-center">
+              <p className="text-[10px] font-hud text-emerald-400 uppercase tracking-wide">
+                {saveStatus || "Listo para guardar datos. Elige ranura..."}
+              </p>
+            </div>
           </div>
         </FadeUp>
       </div>
