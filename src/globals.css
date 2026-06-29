@@ -4,6 +4,28 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
+:root {
+  /* Sage Forest palette */
+  --black: #040605;
+  --surface-0: #090C0B;
+  --surface-1: #121815;
+  --surface-2: #1C2521;
+  --surface-3: #28342F;
+  --surface-4: #36463F;
+
+  --orange: #8ECA9A;
+  --orange-vivid: #A8E4B4;
+  --orange-dim: #6FAD7B;
+  --orange-glow: rgba(142, 202, 154, 0.12);
+  --orange-glow-intense: rgba(142, 202, 154, 0.25);
+  --orange-muted: rgba(142, 202, 154, 0.06);
+
+  --text-primary: #F3F7F4;
+  --text-secondary: #A8B9B1;
+  --text-muted: #8AA39A;
+  --text-disabled: #45524B;
+}
+
 @theme inline {
   /* ── Typography ───────────────────────────────────────── */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
@@ -12,28 +34,25 @@
   --font-hud: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* ── Core Engineering Palette ─────────────────────────── */
-  /* Black family */
-  --color-black:        #000000;
-  --color-surface-0:    #080808;  /* Deepest background */
-  --color-surface-1:    #111113;  /* Primary background */
-  --color-surface-2:    #1C1C1E;  /* Card backgrounds - Dark Gray */
-  --color-surface-3:    #252528;  /* Elevated surfaces */
-  --color-surface-4:    #2E2E32;  /* Borders, dividers */
+  --color-black:        var(--black);
+  --color-surface-0:    var(--surface-0);
+  --color-surface-1:    var(--surface-1);
+  --color-surface-2:    var(--surface-2);
+  --color-surface-3:    var(--surface-3);
+  --color-surface-4:    var(--surface-4);
 
-  /* Orange accent family */
-  --color-orange:       #E8500A;  /* Primary accent */
-  --color-orange-vivid: #FF6120;  /* Hover, highlights */
-  --color-orange-dim:   #B83D07;  /* Pressed state */
-  --color-orange-glow:  rgba(232, 80, 10, 0.12); /* Subtle glow */
-  --color-orange-muted: rgba(232, 80, 10, 0.06); /* Very subtle tint */
+  --color-orange:       var(--orange);
+  --color-orange-vivid: var(--orange-vivid);
+  --color-orange-dim:   var(--orange-dim);
+  --color-orange-glow:  var(--orange-glow);
+  --color-orange-muted: var(--orange-muted);
 
-  /* Light Gray text family */
-  --color-text-primary:   #F2F2F5;  /* Headlines, primary text */
-  --color-text-secondary: #A8A8B0;  /* Body text, descriptions */
-  --color-text-muted:     #68686E;  /* Captions, placeholders */
-  --color-text-disabled:  #3D3D42;  /* Disabled state */
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+  --color-text-disabled:  var(--text-disabled);
 
-  /* ── Legacy mapped names (keep components working) ───── */
+  /* ── Legacy mapped names ──────────────────────── */
   --color-oatmeal:   var(--color-surface-1);
   --color-steel:     var(--color-text-secondary);
   --color-gray:      var(--color-text-muted);
@@ -52,17 +71,17 @@
   --color-ring:               var(--color-orange);
   --color-card:               var(--color-surface-2);
   --color-card-foreground:    var(--color-text-primary);
-  --color-destructive:        #E8500A;
+  --color-destructive:        #8ECA9A;
 
   /* ── Engineering/Blueprint Tokens ────────────────────── */
   --color-grid-line:   rgba(255, 255, 255, 0.025);
   --color-grid-accent: rgba(232, 80, 10, 0.06);
-  --border-engineering: 1px solid var(--color-surface-4);
 
   /* ── Motion/Animation tokens ──────────────────────────── */
   --ease-engineering: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-precision:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
 
   --animate-fade-in-up:    fadeInUp 0.7s var(--ease-precision) forwards;
   --animate-slide-in-left: slideInLeft 0.7s var(--ease-precision) forwards;
@@ -97,9 +116,9 @@
   100% { transform: translateY(100%); opacity: 0; }
 }
 
-@keyframes pulseOrange {
+@keyframes fadePulse {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
+  50%      { opacity: 0.4; }
 }
 
 @keyframes counterUp {
@@ -112,9 +131,18 @@
   to   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
 }
 
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px var(--orange-glow), 0 0 40px var(--orange-glow); }
+  50%      { box-shadow: 0 0 30px var(--orange-glow-intense), 0 0 60px var(--orange-glow-intense); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 /* ── Scroll Animation System ─────────────────────────────── */
 
-/* Base scroll reveal */
 .scroll-reveal {
   opacity: 0;
   transform: translateY(32px);
@@ -126,7 +154,6 @@
   transform: translateY(0);
 }
 
-/* Slide in from left */
 .scroll-slide-left {
   opacity: 0;
   transform: translateX(-32px);
@@ -138,7 +165,6 @@
   transform: translateX(0);
 }
 
-/* Slide in from right */
 .scroll-slide-right {
   opacity: 0;
   transform: translateX(32px);
@@ -150,7 +176,6 @@
   transform: translateX(0);
 }
 
-/* Scale reveal (for cards) */
 .scroll-scale {
   opacity: 0;
   transform: scale(0.96);
@@ -162,7 +187,6 @@
   transform: scale(1);
 }
 
-/* Stagger delay utilities */
 .scroll-delay-1 { transition-delay: 100ms; }
 .scroll-delay-2 { transition-delay: 200ms; }
 .scroll-delay-3 { transition-delay: 300ms; }
@@ -170,7 +194,6 @@
 .scroll-delay-5 { transition-delay: 500ms; }
 .scroll-delay-6 { transition-delay: 600ms; }
 
-/* Legacy compat */
 .fade-up-element {
   opacity: 0;
   transform: translateY(24px);
@@ -182,10 +205,108 @@
   transform: translateY(0);
 }
 
+/* ── Glow Utilities ──────────────────────────────────────── */
+.text-glow-orange {
+  text-shadow: 0 0 40px var(--orange-glow), 0 0 80px var(--orange-glow);
+}
+
+.text-glow-subtle {
+  text-shadow: 0 0 20px rgba(142, 202, 154, 0.08);
+}
+
+.box-glow-orange {
+  box-shadow: 0 0 30px var(--orange-glow), inset 0 0 30px var(--orange-glow);
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* ── Scroll Progress ──────────────────────────────────────── */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-vivid));
+  z-index: 100;
+  width: var(--scroll-progress, 0%);
+  transition: width 0.05s linear;
+  pointer-events: none;
+}
+
+/* ── Shimmer text effect ──────────────────────────────────── */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--text-primary) 0%,
+    var(--orange) 30%,
+    var(--orange-vivid) 50%,
+    var(--orange) 70%,
+    var(--text-primary) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* ── Corner L-Accent ──────────────────────────────────────── */
+.corner-l::before,
+.corner-l::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--orange);
+  border-style: solid;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.corner-l::before {
+  top: -1px; left: -1px;
+  border-width: 1.5px 0 0 1.5px;
+}
+.corner-l::after {
+  bottom: -1px; right: -1px;
+  border-width: 0 1.5px 1.5px 0;
+}
+.corner-l:hover::before,
+.corner-l:hover::after {
+  opacity: 0.6;
+}
+
+/* ── Focus visible ring ───────────────────────────────────── */
+*:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+/* ── Skip to content link ──────────────────────────────────── */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 99999;
+  padding: 0.5rem 1rem;
+  background: var(--color-orange);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
 /* ── Base Styles ──────────────────────────────────────────── */
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
     box-sizing: border-box;
   }
   body {
@@ -205,11 +326,14 @@
     letter-spacing: -0.025em;
     line-height: 1.15;
   }
+
+  button:not([disabled]) {
+    cursor: pointer;
+  }
 }
 
 /* ── Engineering UI Elements ──────────────────────────────── */
 
-/* Blueprint micro-grid */
 .blueprint-grid {
   background-image:
     linear-gradient(var(--color-grid-line) 1px, transparent 1px),
@@ -217,7 +341,6 @@
   background-size: 32px 32px;
 }
 
-/* Orange accent grid lines */
 .blueprint-grid-accent {
   background-image:
     linear-gradient(var(--color-grid-line) 1px, transparent 1px),
@@ -227,7 +350,6 @@
   background-size: 32px 32px, 32px 32px, 256px 256px, 256px 256px;
 }
 
-/* Engineering card */
 .eng-card {
   background: var(--color-surface-2);
   border: 1px solid var(--color-surface-4);
@@ -239,7 +361,6 @@
   background: var(--color-surface-3);
 }
 
-/* Corner accent decoration */
 .corner-accent::before,
 .corner-accent::after {
   content: '';
@@ -258,7 +379,6 @@
   border-width: 0 2px 2px 0;
 }
 
-/* Noise/grain texture (ultra-subtle) */
 .noise-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -269,7 +389,6 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
-/* Orange scan-line accent for hero (decorative) */
 .scan-accent {
   position: absolute;
   left: 0; right: 0;
@@ -280,7 +399,6 @@
   pointer-events: none;
 }
 
-/* Typography helpers */
 .font-hud, .font-mono {
   font-family: var(--font-mono);
 }
@@ -288,7 +406,6 @@
   font-family: var(--font-heading);
 }
 
-/* Tech label style */
 .tech-label {
   font-family: var(--font-mono);
   font-size: 0.625rem;
@@ -298,7 +415,6 @@
   color: var(--color-orange);
 }
 
-/* Orange underline accent hover */
 .link-accent {
   position: relative;
   color: var(--color-text-secondary);
@@ -319,10 +435,8 @@
   width: 100%;
 }
 
-/* CRT Overlay disabled */
 .crt-overlay { display: none; }
 
-/* Engineering button */
 .retro-btn {
   background-color: var(--color-surface-2);
   border: 1px solid var(--color-surface-4);
@@ -334,7 +448,6 @@
   color: white;
 }
 
-/* Precision divider with center label */
 .divider-label {
   display: flex;
   align-items: center;

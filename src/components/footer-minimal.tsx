@@ -9,9 +9,9 @@ export function FooterMinimal() {
         {/* Left: branding */}
         <div className="flex items-center gap-3">
           <span className="w-5 h-5 border border-[var(--color-orange)] rounded-sm flex items-center justify-center bg-[var(--color-surface-2)]">
-            <span className="text-[7px] font-mono font-bold text-[var(--color-orange)]">SA</span>
+            <span className="text-[10px] font-mono font-bold text-[var(--color-orange)]">SA</span>
           </span>
-          <p className="text-[9px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
+          <p className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
             © {year} Samuel Aguilera Araujo — Todos los derechos reservados
           </p>
         </div>
@@ -19,7 +19,7 @@ export function FooterMinimal() {
         {/* Right: status */}
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-orange)] animate-pulse" />
-          <p className="text-[9px] font-mono text-[var(--color-orange)] uppercase tracking-widest font-bold">
+          <p className="text-xs font-mono text-[var(--color-orange)] uppercase tracking-widest font-bold">
             Disponible para nuevos proyectos
           </p>
         </div>

@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import gsap from 'gsap';
 import { FadeUp } from './fade-up';
-import { useGameStore } from '@/store/game-store';
+import { TextReveal } from './text-reveal';
 import { MessageSquareCode, Globe, MapPin, Award, ChevronRight } from 'lucide-react';
 
 interface DialogueTopic {
@@ -51,42 +52,41 @@ const statsData = [
 ];
 
 export function About() {
-  const { playSfx, soundEnabled, reducedMotion } = useGameStore();
   const [activeTopicId, setActiveTopicId] = useState<string>('intro');
   const [displayedText, setDisplayedText] = useState('');
-  const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const typewriterRef = useRef<gsap.core.Tween | null>(null);
 
   const currentTopic = dialogueTopics.find(t => t.id === activeTopicId) || dialogueTopics[0];
 
-  // Typewriter effect
-  useEffect(() => {
-    if (reducedMotion) {
-      setDisplayedText(currentTopic.answer);
-      return;
+  // Typewriter effect with GSAP
+  const runTypewriter = useCallback((text: string) => {
+    if (typewriterRef.current) {
+      typewriterRef.current.kill();
     }
-
     setDisplayedText('');
-    if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
 
-    let idx = 1;
-    setDisplayedText(currentTopic.answer.slice(0, 1));
+    const chars = text.split('');
+    typewriterRef.current = gsap.to({}, {
+      duration: Math.min(chars.length * 0.025, 3),
+      ease: 'none',
+      onUpdate: function () {
+        const progress = this.progress();
+        const idx = Math.floor(progress * chars.length);
+        setDisplayedText(chars.slice(0, idx).join(''));
+      },
+      onComplete: () => setDisplayedText(text),
+    });
+  }, []);
 
-    const type = () => {
-      if (idx <= currentTopic.answer.length) {
-        setDisplayedText(currentTopic.answer.slice(0, idx));
-        if (soundEnabled && idx % 4 === 0) playSfx('hover');
-        idx++;
-        typingTimerRef.current = setTimeout(type, 18);
-      }
+  useEffect(() => {
+    runTypewriter(currentTopic.answer);
+    return () => {
+      if (typewriterRef.current) typewriterRef.current.kill();
     };
-
-    typingTimerRef.current = setTimeout(type, 18);
-    return () => { if (typingTimerRef.current) clearTimeout(typingTimerRef.current); };
-  }, [activeTopicId, soundEnabled, reducedMotion, currentTopic.answer, playSfx]);
+  }, [activeTopicId, currentTopic.answer, runTypewriter]);
 
   const handleSelectTopic = (id: string) => {
     if (id === activeTopicId) return;
-    playSfx('click');
     setActiveTopicId(id);
   };
 
@@ -99,12 +99,16 @@ export function About() {
           <div className="flex flex-col gap-1">
             <span className="tech-label">Trayectoria</span>
             <div className="flex items-end gap-4">
-              <h2 className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight">
+              <TextReveal
+                as="h2"
+                type="chars"
+                className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight"
+              >
                 Diálogo del{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
                   Ingeniero
                 </span>
-              </h2>
+              </TextReveal>
               {/* Section rule */}
               <div className="flex-1 h-px bg-[var(--color-surface-4)] mb-3 hidden md:block" />
             </div>
@@ -120,12 +124,12 @@ export function About() {
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                <span className="ml-2 text-[9px] font-mono text-[var(--color-text-muted)] tracking-wider uppercase">
+                <span className="ml-2 text-xs font-mono text-[var(--color-text-muted)] tracking-wider uppercase">
                   samuel.aguilera@ucb ~ terminal
                 </span>
               </div>
               {/* Status indicator */}
-              <span className="flex items-center gap-1.5 text-[8px] font-mono text-emerald-400 uppercase tracking-wider">
+              <span className="flex items-center gap-1.5 text-xs font-mono text-emerald-400 uppercase tracking-wider">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Disponible
               </span>
@@ -137,7 +141,7 @@ export function About() {
               {/* ── Left sidebar: query selection ─────────────── */}
               <div className="md:w-56 border-b md:border-b-0 md:border-r border-[var(--color-surface-4)] bg-[var(--color-surface-1)]/50">
                 <div className="p-3 border-b border-[var(--color-surface-4)]">
-                  <span className="text-[8px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
+                  <span className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
                     $ Consultas disponibles
                   </span>
                 </div>
@@ -148,13 +152,13 @@ export function About() {
                       <button
                         key={topic.id}
                         onClick={() => handleSelectTopic(topic.id)}
-                        className={`w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-sm text-[11px] font-mono cursor-pointer transition-all duration-150 ${
+                        className={`w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-sm text-xs font-mono cursor-pointer transition-all duration-150 ${
                           isActive
                             ? 'bg-[var(--color-orange)] text-white'
                             : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-3)] hover:text-[var(--color-text-primary)]'
                         }`}
                       >
-                        <span className={`text-[8px] shrink-0 ${isActive ? 'text-white/60' : 'text-[var(--color-orange)]/50'}`}>
+                        <span className={`text-xs shrink-0 ${isActive ? 'text-white/60' : 'text-[var(--color-orange)]/50'}`}>
                           {topic.label}
                         </span>
                         <span className="truncate">{topic.question}</span>
@@ -169,8 +173,8 @@ export function About() {
               <div className="flex-1 p-5 md:p-6 min-h-[200px]">
                 {/* Command prompt */}
                 <div className="mb-3">
-                  <span className="text-[10px] font-mono text-[var(--color-orange)]">$ </span>
-                  <span className="text-[10px] font-mono text-[var(--color-text-muted)]">
+                  <span className="text-xs font-mono text-[var(--color-orange)]">$ </span>
+                  <span className="text-xs font-mono text-[var(--color-text-muted)]">
                     query --topic=&quot;{currentTopic.question}&quot;
                   </span>
                 </div>
@@ -179,7 +183,7 @@ export function About() {
                   <p className="text-sm font-mono text-[var(--color-text-primary)] leading-relaxed tracking-wide">
                     <span className="text-[var(--color-text-muted)] mr-2">&gt;</span>
                     {displayedText}
-                    <span className="inline-block w-2 h-4 bg-[var(--color-orange)] ml-0.5 animate-pulse align-bottom" />
+                    <span className="inline-block w-[2px] h-[1em] bg-[var(--color-orange)] ml-0.5 animate-pulse align-text-bottom" aria-hidden="true" />
                   </p>
                 </div>
               </div>
@@ -195,7 +199,7 @@ export function About() {
                     <div className="p-1.5 rounded-sm bg-[var(--color-surface-1)] border border-[var(--color-surface-4)] group-hover:border-[var(--color-orange)]/30 group-hover:text-[var(--color-orange)] text-[var(--color-text-muted)] transition-colors">
                       <Icon className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[8px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
+                    <span className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
                       {label}
                     </span>
                   </div>

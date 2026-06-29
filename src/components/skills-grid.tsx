@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { FadeUp } from './fade-up';
+import { TextReveal } from './text-reveal';
 import {
   FileSpreadsheet,
   BarChart2,
@@ -14,7 +15,6 @@ import {
   Award,
   Activity,
   RefreshCw,
-  Info,
 } from 'lucide-react';
 
 interface Skill {
@@ -137,28 +137,26 @@ const levelColor: Record<string, string> = {
   'Básico':          'text-sky-400 border-sky-800/30 bg-sky-950/10',
 };
 
-const categories = ['Todos', 'Herramientas', 'Programación', 'Metodologías'] as const;
-type CategoryFilter = typeof categories[number];
-
 export function SkillsGrid() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
   return (
     <section
       id="skills"
       className="py-24 px-6 overflow-hidden max-w-5xl mx-auto w-full border-t border-[var(--color-surface-4)]"
     >
       <FadeUp>
-        {/* ── Header ─────────────────────────────────────────── */}
         <div className="flex flex-col gap-1 mb-16">
           <span className="tech-label">Conocimientos</span>
           <div className="flex items-end gap-4">
-            <h2 className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight">
+            <TextReveal
+              as="h2"
+              type="chars"
+              className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight"
+            >
               Ecosistema de{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
                 Habilidades
               </span>
-            </h2>
+            </TextReveal>
             <div className="flex-1 h-px bg-[var(--color-surface-4)] mb-3 hidden md:block" />
           </div>
           <p className="text-sm text-[var(--color-text-secondary)] max-w-xl leading-relaxed">
@@ -167,96 +165,39 @@ export function SkillsGrid() {
         </div>
       </FadeUp>
 
-      {/* ── Skills grid (3 columns list) ────────────────────── */}
-      <motion.div
-        layout
-        className="grid grid-cols-1 md:grid-cols-3 gap-4"
-      >
-        <AnimatePresence mode="popLayout">
-          {skillsData.map((skill, index) => {
-            const Icon = skill.icon;
-            const isHovered = hoveredIndex === index;
-
-            return (
-              <motion.div
-                layout
-                key={skill.name}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.25, delay: index * 0.03 }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                className="relative border border-[var(--color-surface-4)] hover:border-[var(--color-orange)]/40 bg-[var(--color-surface-2)]/30 hover:bg-[var(--color-surface-2)] rounded-sm p-4 flex items-center justify-between gap-3 min-h-[72px] transition-all duration-200 group cursor-default"
-              >
-                {/* Left side: Icon & Title */}
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-sm bg-[var(--color-surface-1)] border border-[var(--color-surface-4)] text-[var(--color-text-muted)] group-hover:border-[var(--color-orange)]/30 group-hover:text-[var(--color-orange)] transition-all duration-200 shrink-0">
-                    <Icon className="w-4 h-4" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {skillsData.map((skill) => {
+          const Icon = skill.icon;
+          return (
+            <motion.div
+              key={skill.name}
+              whileHover={{ scale: 1.02, y: -2 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="relative border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/30 hover:bg-[var(--color-surface-2)] hover:border-[var(--color-orange)]/30 rounded-sm p-5 transition-colors duration-300 group overflow-hidden hover:shadow-[0_0_30px_rgba(142,202,154,0.06)]"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-sm bg-[var(--color-surface-1)] border border-[var(--color-surface-4)] text-[var(--color-text-muted)] group-hover:border-[var(--color-orange)]/30 group-hover:text-[var(--color-orange)] transition-all duration-300 shrink-0">
+                    <Icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-xs font-heading font-bold text-[var(--color-text-primary)]">
+                    <h3 className="text-base font-heading font-bold text-[var(--color-text-primary)]">
                       {skill.name}
                     </h3>
-                    <span className="text-[8px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider block">
+                    <span className="text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider mt-0.5 block">
                       {skill.category}
                     </span>
                   </div>
                 </div>
 
-                {/* Right side: Level Badge */}
-                <span className={`text-[8px] font-mono border px-2 py-0.5 rounded-sm shrink-0 font-medium ${levelColor[skill.level] ?? 'text-[var(--color-text-muted)] border-[var(--color-surface-4)]'}`}>
+                <span className={`text-[9px] font-mono border px-2.5 py-1 rounded-sm shrink-0 font-medium ${levelColor[skill.level] ?? 'text-[var(--color-text-muted)] border-[var(--color-surface-4)]'}`}>
                   {skill.level}
                 </span>
-
-                {/* ── Hover overlay ─────────────────────────────── */}
-                <AnimatePresence>
-                  {isHovered && (
-                    <motion.div
-                      key="hover-overlay"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute inset-0 bg-[var(--color-surface-2)] border border-[var(--color-orange)]/30 p-4 flex flex-col justify-between z-10 rounded-sm"
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1.5">
-                          <Info className="w-3 h-3 text-[var(--color-orange)]" />
-                          <span className="text-[8px] font-mono text-[var(--color-orange)] uppercase tracking-widest font-bold">
-                            {skill.name}
-                          </span>
-                        </div>
-                        <p className="text-[10px] font-mono text-[var(--color-text-secondary)] leading-relaxed">
-                          {skill.description}
-                        </p>
-                      </div>
-
-                      {skill.projects.length > 0 && (
-                        <div className="pt-2 border-t border-[var(--color-surface-4)]">
-                          <span className="text-[7px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider block mb-1">
-                            Proyectos:
-                          </span>
-                          <div className="flex flex-wrap gap-1">
-                            {skill.projects.map(proj => (
-                              <span
-                                key={proj}
-                                className="text-[7px] font-mono bg-[var(--color-surface-1)] text-[var(--color-text-secondary)] px-1.5 py-0.5 rounded-sm border border-[var(--color-surface-4)]"
-                              >
-                                {proj}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </motion.div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
     </section>
   );
 }

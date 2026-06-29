@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useGameStore } from '@/store/game-store';
+import { usePreferences } from '@/store/preferences-store';
 
 /* ── Intersection Observer Hook ──────────────────────────── */
 
@@ -65,7 +65,7 @@ export function FadeUp({
   animation = 'fade-up',
 }: FadeUpProps) {
   const { ref, isIntersecting } = useIntersectionObserver();
-  const reducedMotion = useGameStore((state) => state.reducedMotion);
+  const reducedMotion = usePreferences((state) => state.reducedMotion);
 
   const animClass = reducedMotion || animation === 'none'
     ? ''
@@ -102,7 +102,7 @@ export function StaggerReveal({
   animation = 'fade-up',
 }: StaggerProps) {
   const { ref, isIntersecting } = useIntersectionObserver();
-  const reducedMotion = useGameStore((state) => state.reducedMotion);
+  const reducedMotion = usePreferences((state) => state.reducedMotion);
 
   const animClass = reducedMotion || animation === 'none'
     ? ''
