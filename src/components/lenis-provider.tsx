@@ -3,6 +3,12 @@
 import React, { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 
+let globalLenisInstance: Lenis | null = null;
+
+export function getLenis(): Lenis | null {
+  return globalLenisInstance;
+}
+
 interface LenisProviderProps {
   children: React.ReactNode;
 }
@@ -11,10 +17,9 @@ export function LenisProvider({ children }: LenisProviderProps) {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Initialize Lenis scroll engine
     const lenis = new Lenis({
       duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Smooth easeOutExpo
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
@@ -23,6 +28,7 @@ export function LenisProvider({ children }: LenisProviderProps) {
     });
 
     lenisRef.current = lenis;
+    globalLenisInstance = lenis;
 
     let rafId: number;
     const updateRaf = (time: number) => {
@@ -32,9 +38,9 @@ export function LenisProvider({ children }: LenisProviderProps) {
 
     rafId = requestAnimationFrame(updateRaf);
 
-    // Safe cleanup to prevent memory leaks and duplicate instances
     return () => {
       cancelAnimationFrame(rafId);
+      globalLenisInstance = null;
       lenis.destroy();
     };
   }, []);

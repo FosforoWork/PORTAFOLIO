@@ -1,26 +1,47 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 
 interface SectionRevealProps {
   children: React.ReactNode;
   className?: string;
+  index?: number;
 }
 
-export function SectionReveal({ children, className = '' }: SectionRevealProps) {
+export function SectionReveal({ children, className = '', index = 0 }: SectionRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-10% 0px' });
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.05 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ clipPath: 'inset(0% 0% 100% 0%)' }}
-      animate={isInView ? { clipPath: 'inset(0% 0% 0% 0%)' } : {}}
-      transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
       className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.97)',
+        transition: `opacity 0.7s ease-out, transform 0.7s ease-out`,
+        transitionDelay: `${index * 80}ms`,
+        contentVisibility: visible ? 'visible' : 'auto',
+        containIntrinsicSize: '0 500px',
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

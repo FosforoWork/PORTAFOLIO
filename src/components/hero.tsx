@@ -58,9 +58,8 @@ export function Hero() {
     offset: ['start start', 'end start'],
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
-  const titleY = useTransform(scrollYProgress, [0, 1], [0, -30]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
@@ -238,14 +237,12 @@ export function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
         >
-          <div className="relative aspect-[9/12] w-full max-w-md rounded-lg overflow-hidden border border-[var(--color-surface-4)] bg-[var(--color-surface-2)] p-1 shadow-xl group">
-            <motion.img
+          <div className="relative aspect-[9/12] w-full max-w-md rounded-lg overflow-hidden border border-[var(--color-surface-4)] bg-[var(--color-surface-2)] p-1 shadow-xl group will-change-transform">
+            <img
               src="/images/LSSBB CEO PMO Samuel Aguilera.png"
               alt="LSSBB CEO PMO Samuel Aguilera"
               className="w-full h-full object-cover rounded-md filter saturate-90 contrast-105 transition-all duration-500 group-hover:scale-[1.03] group-hover:saturate-100"
               loading="eager"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.5 }}
             />
             {/* Image border glow on hover */}
             <div
@@ -259,20 +256,17 @@ export function Hero() {
       </div>
 
       {/* Bottom scroll indicator */}
-      <motion.div
+      <div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
         aria-hidden="true"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.8, duration: 0.6 }}
+        style={{
+          opacity: 0,
+          animation: 'fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards',
+        }}
       >
         <span className="text-xs font-mono text-[var(--color-text-muted)] tracking-widest uppercase">Scroll</span>
-        <motion.div
-          className="w-px h-8 bg-gradient-to-b from-[var(--color-orange)] to-transparent"
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-      </motion.div>
+        <div className="w-px h-8 bg-gradient-to-b from-[var(--color-orange)] to-transparent animate-pulse" />
+      </div>
     </section>
   );
 }

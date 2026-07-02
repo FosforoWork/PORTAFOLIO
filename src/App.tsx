@@ -13,11 +13,6 @@ import { useScrollTrigger } from '@/hooks/use-scroll-trigger';
 const Loader = React.lazy(() =>
   import('@/components/loader').then((m) => ({ default: m.Loader }))
 );
-const ParticleBackground = React.lazy(() =>
-  import('@/components/particle-background').then((m) => ({
-    default: m.ParticleBackground,
-  }))
-);
 
 export function App() {
   useScrollTrigger();
@@ -30,7 +25,6 @@ export function App() {
 
       <Suspense fallback={null}>
         <Loader />
-        <ParticleBackground />
       </Suspense>
 
       <div className="noise-overlay" />
@@ -38,9 +32,9 @@ export function App() {
       <main id="main-content" className="w-full flex flex-col items-center">
         <Hero />
         <Projects />
-        <SectionReveal><About /></SectionReveal>
-        <SectionReveal><SkillsGrid /></SectionReveal>
-        <SectionReveal><Contact /></SectionReveal>
+        <SectionReveal index={0}><About /></SectionReveal>
+        <SectionReveal index={1}><SkillsGrid /></SectionReveal>
+        <SectionReveal index={2}><Contact /></SectionReveal>
       </main>
       <FooterMinimal />
     </MotionConfig>

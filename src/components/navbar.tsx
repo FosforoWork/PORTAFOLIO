@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Volume2, VolumeX } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Menu, X, Volume2, VolumeX, ArrowUp } from 'lucide-react';
 import { usePreferences } from '@/store/preferences-store';
+import { getLenis } from './lenis-provider';
 
 interface NavLink {
   name: string;
@@ -13,16 +14,31 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { name: 'Inicio',    href: '#hero',     id: '01' },
-  { name: 'Proyectos',href: '#projects', id: '02' },
-  { name: 'Sobre mí', href: '#about',    id: '03' },
-  { name: 'Contacto', href: '#contact',  id: '04' },
+  { name: 'Proyectos', href: '#projects', id: '02' },
+  { name: 'Sobre mí',  href: '#about',    id: '03' },
+  { name: 'Skills',    href: '#skills',   id: '04' },
+  { name: 'Contacto',  href: '#contact',  id: '05' },
 ];
+
+function scrollToSection(href: string) {
+  const id = href.replace('#', '');
+  const el = document.getElementById(id);
+  if (el) {
+    const lenis = getLenis();
+    if (lenis) {
+      lenis.scrollTo(el, { duration: 1.2, easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    } else {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+}
 
 export function Navbar() {
   const [isScrolled, setIsScrolled]       = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection]  = useState('hero');
   const [scrollProgress, setScrollProgress]  = useState(0);
+  const [showScrollTop, setShowScrollTop]  = useState(false);
 
   const { soundEnabled, toggleSound } = usePreferences();
 
@@ -38,7 +54,13 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sections = ['hero', 'projects', 'about', 'contact'];
+    const handleScrollTop = () => setShowScrollTop(window.scrollY > 600);
+    window.addEventListener('scroll', handleScrollTop, { passive: true });
+    return () => window.removeEventListener('scroll', handleScrollTop);
+  }, []);
+
+  useEffect(() => {
+    const sections = ['hero', 'projects', 'about', 'skills', 'contact'];
     const observers: IntersectionObserver[] = [];
     sections.forEach(id => {
       const el = document.getElementById(id);
@@ -77,9 +99,9 @@ export function Navbar() {
         <div className="max-w-5xl mx-auto px-6 flex justify-between items-center relative">
 
           {/* ── Logo ── */}
-          <a
-            href="#hero"
-            className="flex items-center gap-3 group"
+          <button
+            onClick={() => scrollToSection('#hero')}
+            className="flex items-center gap-3 group cursor-pointer"
             aria-label="Ir al inicio"
           >
             <span className="relative w-7 h-7 border border-[var(--color-orange)] rounded-sm flex items-center justify-center bg-[var(--color-surface-2)] group-hover:bg-[var(--color-orange)] transition-all duration-300">
@@ -92,7 +114,7 @@ export function Navbar() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
               Disponible
             </span>
-          </a>
+          </button>
 
           {/* ── Desktop Nav ── */}
           <nav aria-label="Navegación principal" className="hidden md:flex items-center">
@@ -101,8 +123,8 @@ export function Navbar() {
                 const isActive = activeSection === link.href.slice(1);
                 return (
                   <li key={link.href}>
-                    <a
-                      href={link.href}
+                    <button
+                      onClick={() => scrollToSection(link.href)}
                       className={`relative group flex items-center gap-1.5 px-3 py-2 text-xs font-mono tracking-[0.2em] uppercase transition-all duration-300 rounded-sm ${
                         isActive
                           ? 'text-[var(--color-orange)] bg-[var(--color-orange-muted)]'
@@ -118,7 +140,7 @@ export function Navbar() {
                           transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                         />
                       )}
-                    </a>
+                    </button>
                   </li>
                 );
               })}
@@ -149,39 +171,39 @@ export function Navbar() {
         </div>
 
         {/* ── Mobile Menu ── */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.nav
-              id="mobile-menu"
-              aria-label="Navegación móvil"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: 'easeInOut' }}
+        <nav
+          id="mobile-menu"
+          aria-label="Navegación móvil"
+          className={`md:hidden absolute top-full left-0 right-0 bg-[var(--color-surface-1)]/98 backdrop-blur-xl border-b border-[var(--color-surface-4)] py-4 px-6 flex flex-col gap-1 overflow-hidden transition-all duration-200 ease-in-out ${
+            isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+          }`}
+        >
+          {NAV_LINKS.map((link) => (
+            <button
+              key={link.href}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                scrollToSection(link.href);
+              }}
+              className="w-full text-left flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[var(--color-text-secondary)] hover:text-[var(--color-orange)] transition-colors py-2.5 border-b border-[var(--color-surface-4)] last:border-0 cursor-pointer"
             >
-              <ul className="md:hidden absolute top-full left-0 right-0 bg-[var(--color-surface-1)]/98 backdrop-blur-xl border-b border-[var(--color-surface-4)] py-4 px-6 flex flex-col gap-1 list-none m-0">
-                {NAV_LINKS.map((link, i) => (
-                  <motion.li
-                    key={link.href}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                  >
-                    <a
-                      href={link.href}
-                      className="flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[var(--color-text-secondary)] hover:text-[var(--color-orange)] transition-colors py-2.5 border-b border-[var(--color-surface-4)] last:border-0"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <span className="text-[var(--color-orange)]/50">{link.id}</span>
-                      {link.name}
-                    </a>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.nav>
-          )}
-        </AnimatePresence>
+              <span className="text-[var(--color-orange)]/50">{link.id}</span>
+              {link.name}
+            </button>
+          ))}
+        </nav>
       </header>
+
+      {/* ── Scroll to top button ── */}
+      <button
+        onClick={() => scrollToSection('#hero')}
+        className={`fixed bottom-8 right-8 z-40 p-3 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/80 backdrop-blur-md rounded-sm text-[var(--color-orange)] hover:bg-[var(--color-orange)] hover:text-white transition-all duration-200 cursor-pointer ${
+          showScrollTop ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-75 translate-y-4 pointer-events-none'
+        }`}
+        aria-label="Volver al inicio"
+      >
+        <ArrowUp className="size-4" />
+      </button>
     </>
   );
 }

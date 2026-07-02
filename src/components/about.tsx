@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import gsap from 'gsap';
-import { FadeUp } from './fade-up';
+import React, { useState, useEffect, useRef } from 'react';
+import { FadeUp, useScrollReveal } from './fade-up';
 import { TextReveal } from './text-reveal';
 import { MessageSquareCode, Globe, MapPin, Award, ChevronRight } from 'lucide-react';
 
@@ -44,46 +43,49 @@ const dialogueTopics: DialogueTopic[] = [
   },
 ];
 
+function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
+  const { ref, visible } = useScrollReveal();
+  const [count, setCount] = useState(0);
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    if (!visible || hasRun.current) return;
+    hasRun.current = true;
+    setCount(0);
+
+    const duration = 1500;
+    const steps = 60;
+    const increment = value / steps;
+    const interval = duration / steps;
+    let current = 0;
+
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= value) {
+        setCount(value);
+        clearInterval(timer);
+      } else {
+        setCount(Math.round(current));
+      }
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, [visible, value]);
+
+  return <span ref={ref}>{count}{suffix}</span>;
+}
+
 const statsData = [
-  { icon: MessageSquareCode, label: 'Especialidad',   value: 'Procesos & Analítica' },
-  { icon: Award,             label: 'Certificación',  value: 'LSS Black Belt (Cand.)' },
-  { icon: Globe,             label: 'Idiomas',        value: 'ES / EN / PT (BR)' },
-  { icon: MapPin,            label: 'Ubicación',      value: 'Bolivia - Santa Cruz' },
+  { icon: MessageSquareCode, label: 'Proyectos',      num: 5,  suffix: '+', text: '', isNumber: true },
+  { icon: Award,             label: 'Certificación',  num: 3,  suffix: '',  text: '', isNumber: true },
+  { icon: Globe,             label: 'Idiomas',        num: 3,  suffix: '',  text: '', isNumber: true },
+  { icon: MapPin,            label: 'Ubicación',      num: 0,  suffix: '',  text: 'Bolivia - Santa Cruz', isNumber: false },
 ];
 
 export function About() {
   const [activeTopicId, setActiveTopicId] = useState<string>('intro');
-  const [displayedText, setDisplayedText] = useState('');
-  const typewriterRef = useRef<gsap.core.Tween | null>(null);
 
   const currentTopic = dialogueTopics.find(t => t.id === activeTopicId) || dialogueTopics[0];
-
-  // Typewriter effect with GSAP
-  const runTypewriter = useCallback((text: string) => {
-    if (typewriterRef.current) {
-      typewriterRef.current.kill();
-    }
-    setDisplayedText('');
-
-    const chars = text.split('');
-    typewriterRef.current = gsap.to({}, {
-      duration: Math.min(chars.length * 0.025, 3),
-      ease: 'none',
-      onUpdate: function () {
-        const progress = this.progress();
-        const idx = Math.floor(progress * chars.length);
-        setDisplayedText(chars.slice(0, idx).join(''));
-      },
-      onComplete: () => setDisplayedText(text),
-    });
-  }, []);
-
-  useEffect(() => {
-    runTypewriter(currentTopic.answer);
-    return () => {
-      if (typewriterRef.current) typewriterRef.current.kill();
-    };
-  }, [activeTopicId, currentTopic.answer, runTypewriter]);
 
   const handleSelectTopic = (id: string) => {
     if (id === activeTopicId) return;
@@ -182,8 +184,7 @@ export function About() {
                 <div className="min-h-[90px]">
                   <p className="text-sm font-mono text-[var(--color-text-primary)] leading-relaxed tracking-wide">
                     <span className="text-[var(--color-text-muted)] mr-2">&gt;</span>
-                    {displayedText}
-                    <span className="inline-block w-[2px] h-[1em] bg-[var(--color-cyan)] ml-0.5 animate-pulse align-text-bottom" aria-hidden="true" />
+                    {currentTopic.answer}
                   </p>
                 </div>
               </div>
@@ -192,7 +193,7 @@ export function About() {
 
           {/* ── Stats info grid ────────────────────────────────── */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {statsData.map(({ icon: Icon, label, value }, i) => (
+            {statsData.map(({ icon: Icon, label, num, suffix, text, isNumber }, i) => (
               <FadeUp key={label} delay={i * 80} animation="scale">
                 <div className="border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/50 hover:bg-[var(--color-surface-2)] hover:border-[var(--color-cyan)]/30 backdrop-blur-sm p-4 rounded-sm transition-all duration-200 group">
                   <div className="flex items-center gap-2 mb-2">
@@ -203,8 +204,8 @@ export function About() {
                       {label}
                     </span>
                   </div>
-                  <span className="text-xs font-mono text-[var(--color-text-primary)] font-medium">
-                    {value}
+                  <span className="text-lg font-heading font-bold text-[var(--color-text-primary)] tabular-nums">
+                    {isNumber ? <AnimatedCounter value={num} suffix={suffix} /> : text}
                   </span>
                 </div>
               </FadeUp>
