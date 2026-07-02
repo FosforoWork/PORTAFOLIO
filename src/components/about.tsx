@@ -19,36 +19,36 @@ const dialogueTopics: DialogueTopic[] = [
     label: '01',
     question: '¿Quién eres?',
     answer:
-      'Soy Samuel Aguilera, estudiante de 3er año de Ingeniería Industrial en la UCB "San Pablo". Me apasiona diseñar e implementar sistemas eficientes donde convergen la ingeniería de procesos y el análisis de datos cuantitativos.',
+      'Samuel Aguilera. Estudiante de 3er año de Ingeniería Industrial en la UCB "San Pablo". Enfocado en la convergencia entre el modelado de operaciones físicas y la automatización de flujos de información digital.',
   },
   {
     id: 'specialty',
     label: '02',
     question: '¿Cuál es tu especialidad?',
     answer:
-      'Mi especialidad es la intersección entre Ingeniería de Procesos (Lean Six Sigma, SPC, SMED) y herramientas analíticas modernas (SQL, Python, Power BI). Traduzco datos operativos en retornos económicos tangibles y medibles.',
+      'Optimización de operaciones mediante la intersección de Lean Six Sigma (DMAIC), Ciencia de Datos aplicada (Python, SQL) y orquestación de workflows (n8n). Traduzco variables críticas de proceso en retornos financieros medibles.',
   },
   {
     id: 'experience',
     label: '03',
     question: '¿Cuál es tu experiencia actual?',
     answer:
-      'Actualmente realizo mi pasantía de producción en EMPACAR S.A., donde aplico metodologías ágiles para analizar rendimientos de dosificado de tintas, erradicar mermas y automatizar el control de KPIs mediante dashboards en Power BI.',
+      'Pasantía de producción en EMPACAR S.A. Ejecución de proyectos LSS enfocados en la reducción del 53.3% en tiempos de setup (SMED), modelado predictivo multivariante de mermas y centralización de KPIs en Power BI.',
   },
   {
     id: 'mission',
     label: '04',
-    question: '¿Cuál es tu misión?',
+    question: '¿Cuál es tu enfoque?',
     answer:
-      'Mi misión es eliminar la fricción y el desperdicio en cadenas de valor. Creo que la industria del mañana demanda procesos optimizados y decisiones respaldadas por análisis matemáticos rigurosos y datos continuos.',
+      'Erradicar la "muda" digital y operativa en cadenas de valor. Reemplazar la toma de decisiones por intuición en piso mediante simulación matemática rigurosa (Monte Carlo), analítica continua y sistemas integrados a bajo costo.',
   },
 ];
 
 const statsData = [
   { icon: MessageSquareCode, label: 'Especialidad',   value: 'Procesos & Analítica' },
-  { icon: Award,             label: 'Certificación',  value: 'LSS Black Belt (Dev)' },
+  { icon: Award,             label: 'Certificación',  value: 'LSS Black Belt (Cand.)' },
   { icon: Globe,             label: 'Idiomas',        value: 'ES / EN / PT (BR)' },
-  { icon: MapPin,            label: 'Ubicación',      value: 'Remoto / LATAM' },
+  { icon: MapPin,            label: 'Ubicación',      value: 'Bolivia - Santa Cruz' },
 ];
 
 export function About() {
@@ -104,9 +104,9 @@ export function About() {
                 type="chars"
                 className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight"
               >
-                Diálogo del{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
-                  Ingeniero
+                Informacion{' '}
+                <span className="text-[var(--color-text-primary)]">
+                  Sobre quien soy
                 </span>
               </TextReveal>
               {/* Section rule */}
@@ -115,7 +115,7 @@ export function About() {
           </div>
 
           {/* ── Engineering terminal panel ─────────────────────── */}
-          <div className="relative border border-[var(--color-surface-4)] bg-[var(--color-surface-2)] rounded-sm overflow-hidden">
+          <div className="relative border border-[var(--color-surface-4)] bg-[var(--color-surface-2)] backdrop-blur-sm rounded-sm overflow-hidden">
 
             {/* Terminal top bar */}
             <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--color-surface-1)] border-b border-[var(--color-surface-4)]">
@@ -154,11 +154,11 @@ export function About() {
                         onClick={() => handleSelectTopic(topic.id)}
                         className={`w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-sm text-xs font-mono cursor-pointer transition-all duration-150 ${
                           isActive
-                            ? 'bg-[var(--color-orange)] text-white'
+                            ? 'bg-[var(--color-cyan)] text-white'
                             : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-3)] hover:text-[var(--color-text-primary)]'
                         }`}
                       >
-                        <span className={`text-xs shrink-0 ${isActive ? 'text-white/60' : 'text-[var(--color-orange)]/50'}`}>
+                          <span className={`text-xs shrink-0 ${isActive ? 'text-white/60' : 'text-[var(--color-cyan)]/50'}`}>
                           {topic.label}
                         </span>
                         <span className="truncate">{topic.question}</span>
@@ -173,7 +173,7 @@ export function About() {
               <div className="flex-1 p-5 md:p-6 min-h-[200px]">
                 {/* Command prompt */}
                 <div className="mb-3">
-                  <span className="text-xs font-mono text-[var(--color-orange)]">$ </span>
+                  <span className="text-xs font-mono text-[var(--color-cyan)]">$ </span>
                   <span className="text-xs font-mono text-[var(--color-text-muted)]">
                     query --topic=&quot;{currentTopic.question}&quot;
                   </span>
@@ -183,7 +183,7 @@ export function About() {
                   <p className="text-sm font-mono text-[var(--color-text-primary)] leading-relaxed tracking-wide">
                     <span className="text-[var(--color-text-muted)] mr-2">&gt;</span>
                     {displayedText}
-                    <span className="inline-block w-[2px] h-[1em] bg-[var(--color-orange)] ml-0.5 animate-pulse align-text-bottom" aria-hidden="true" />
+                    <span className="inline-block w-[2px] h-[1em] bg-[var(--color-cyan)] ml-0.5 animate-pulse align-text-bottom" aria-hidden="true" />
                   </p>
                 </div>
               </div>
@@ -194,9 +194,9 @@ export function About() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {statsData.map(({ icon: Icon, label, value }, i) => (
               <FadeUp key={label} delay={i * 80} animation="scale">
-                <div className="border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/50 hover:bg-[var(--color-surface-2)] hover:border-[var(--color-orange)]/30 p-4 rounded-sm transition-all duration-200 group">
+                <div className="border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/50 hover:bg-[var(--color-surface-2)] hover:border-[var(--color-cyan)]/30 backdrop-blur-sm p-4 rounded-sm transition-all duration-200 group">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="p-1.5 rounded-sm bg-[var(--color-surface-1)] border border-[var(--color-surface-4)] group-hover:border-[var(--color-orange)]/30 group-hover:text-[var(--color-orange)] text-[var(--color-text-muted)] transition-colors">
+                    <div className="p-1.5 rounded-sm bg-[var(--color-surface-1)] border border-[var(--color-surface-4)] group-hover:border-[var(--color-cyan)]/30 group-hover:text-[var(--color-cyan)] text-[var(--color-text-muted)] transition-colors">
                       <Icon className="w-3.5 h-3.5" />
                     </div>
                     <span className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-widest">

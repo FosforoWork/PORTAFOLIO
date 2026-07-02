@@ -15,91 +15,59 @@ interface Quest {
   tags: string[];
   time: string;
   link: string;
-  difficulty: 'MEDIA' | 'AVANZADA' | 'EXPERTO';
+  environment: 'Proyecto Industrial' | 'I+D' | 'Caso de Estudio';
   status: 'COMPLETED' | 'ACTIVE';
   index: number;
 }
 
 const projectsData: Omit<Quest, 'index'>[] = [
   {
-    title: 'Optimización de Tintas — EMPACAR S.A.',
+    title: 'Optimización del rendimiento en el dosificado de tintas en Empacar S.A.',
     description:
       'Reducción del desperdicio y variabilidad en el dosificado de tintas en la división de corrugado aplicando Lean Six Sigma.',
     methodology:
-      'Metodología Lean Six Sigma (LSS) con enfoque DMAIC, reducción de tiempos de setup mediante SMED y análisis predictivo multivariante en Minitab.',
+      'DMAIC con SMED y análisis predictivo multivariante en python para reducir variabilidad y desperdicio en el dosificado de tintas.',
     objectives: [
-      'Reducción del 53.3% en el tiempo de preparación de máquinas (SMED).',
-      'Retorno económico anual proyectado de 218,850 Bs/año por reducción de merma.',
-      'Modelo predictivo con R² = 77.2% en Minitab.',
-      'Bases de datos SQL y dashboards Power BI para SPC.',
+      'Reducción del 53.3% en el tiempo de preparación de máquinas mediante SMED.',
+      'Retorno económico anual de 218,850 Bs/año por reducción de merma en dosificado.',
+      'Anticipación de desviaciones en dosificado mediante modelo predictivo multivariante con R² = 77.2% en python.',
+      'Automatización del control estadístico de proceso (SPC) con dashboards Power BI sobre bases de datos relacionales.',
     ],
-    tags: ['Lean Six Sigma', 'SMED', 'Minitab', 'SQL & Power BI'],
-    time: 'Mar 2026 — May 2026',
-    link: 'https://www.linkedin.com/in/samuelaguileraaraujo',
-    difficulty: 'EXPERTO',
-    status: 'COMPLETED',
-  },
-  {
-    title: 'Estructuración de Costos Industriales',
-    description:
-      'Análisis financiero y estructuración de costos industriales de la línea de derivados de caña del Ingenio Guabirá.',
-    methodology:
-      'Mapeo y distribución de Costos Indirectos de Fabricación (CIF) mediante drivers operativos y costeo por procesos dinámicos.',
-    objectives: [
-      'Precisión >95% en la determinación del margen bruto real por categoría.',
-      'Trazabilidad del 100% de los CIF en planillas con macros dinámicas.',
-      'Aceleración de 3× en toma de decisiones estratégicas de cotización.',
-    ],
-    tags: ['Planillas de Costos', 'EERR & BBGG', 'Drivers de Costos'],
-    time: 'Sep 2025 — Nov 2025',
-    link: 'https://www.linkedin.com/in/samuelaguileraaraujo',
-    difficulty: 'AVANZADA',
-    status: 'COMPLETED',
-  },
-  {
-    title: 'SST Manager — Gestión de Seguridad Industrial',
-    description:
-      'Digitalización estructurada de la gestión de riesgos laborales bajo normativas bolivianas de higiene y bienestar.',
-    methodology:
-      'Modelado relacional e IPER bajo Ley DL 16998 y NTS-009/23, algoritmos de criticidad William T. Fine y madurez Hudson.',
-    objectives: [
-      'Implementación del método William T. Fine (GP = C × P × E).',
-      'Índice de Justificación (J) para priorización de inversiones preventivas.',
-      'Digitalización al 100% de inspecciones con alertas automáticas.',
-    ],
-    tags: ['NTS-009/23', 'William T. Fine', 'Safety-II', 'TypeScript & SQL'],
-    time: 'Jun 2026 — En desarrollo',
-    link: 'https://github.com/FosforoWork/PROYECTOS',
-    difficulty: 'MEDIA',
+    tags: ['Lean Six Sigma', 'SMED', 'python', 'Excel', 'Power BI'],
+    time: '',
+    link: '/proyecto-en-desarrollo.html',
+    environment: 'Proyecto Industrial',
     status: 'ACTIVE',
   },
   {
-    title: 'Gemelo Digital — Planta de Soja',
+    title: 'Desarrollo de arquitectura modular para modelos digitales fenomenológicos en python',
     description:
-      'Diseño de planta de proteína aislada de soja combinando ingeniería de procesos, balances termodinámicos y simulación Python.',
+      'Diseño integral y simulación fenomenológica de una planta ISP con modelo ciberfísico acoplado a un gemelo digital en Python, balances termodinámicos rigurosos por etapa y optimización estocástica Monte Carlo.',
     methodology:
-      'Balances de masa y energía (termodinámica), simulación estadística determinista en Python y modelado del cuello de botella.',
+      'Modelado fenomenológico en Python (NumPy/Pandas) con validación de simulaciones de Monte Carlo de 300,000 corridas para optimizar balances de masa y energía de una planta ISP.',
     objectives: [
-      'Incremento del 4.5% en capacidad diaria sin CAPEX adicional.',
-      'Identificación y eliminación del cuello de botella principal de la planta.',
-      'Simulación interactiva del secador industrial (NumPy/Pandas).',
+      'Mitigación de riesgos operativos mediante réplica computacional validada con primeros principios termodinámicos.',
+      'Validación del 99% de éxito operativo en 300,000 escenarios estocásticos mediante simulación Monte Carlo.',
+      'Ahorro energético del 25% en evaporación integrando pre-concentración por Ósmosis Inversa (9 kW vs 1,000 kW térmicos evitados).',
+      'Trazabilidad del 100% de la masa procesada incluyendo dosificación química (NaOH/HCl) y generación de subproductos.',
+      'Estandarización sanitaria bajo ASME BPE y EHEDG con ingeniería hidráulica integral y CIP automatizado.',
     ],
-    tags: ['Python (NumPy/Pandas)', 'Balances Termodinámicos', 'Monte Carlo', 'Sin CAPEX'],
-    time: 'Mar 2026 — May 2026',
+    tags: ['Python', 'Monte Carlo', 'Six Sigma'],
+    time: 'Mar 2026 — Jun 2026',
     link: 'https://github.com/samuelthecreat/PROCESOS_UNITARIOS---PROYECTO_MOUNTAIN',
-    difficulty: 'EXPERTO',
+    environment: 'Proyecto Industrial',
     status: 'COMPLETED',
   },
 ];
 
-const difficultyConfig = {
-  EXPERTO:  { color: 'text-red-400 border-red-900/40 bg-red-950/10',  label: 'Experto'  },
-  AVANZADA: { color: 'text-amber-400 border-amber-900/40 bg-amber-950/10', label: 'Avanzada' },
-  MEDIA:    { color: 'text-sky-400 border-sky-900/40 bg-sky-950/10',  label: 'Media'    },
+const environmentConfig: Record<string, { color: string; label: string }> = {
+  'Proyecto Industrial': { color: 'text-emerald-400 border-emerald-900/40 bg-emerald-950/10', label: 'Proyecto Industrial' },
+  'I+D':                 { color: 'text-cyan-400 border-cyan-900/40 bg-cyan-950/10',           label: 'I+D'              },
+  'Caso de Estudio':     { color: 'text-purple-400 border-purple-900/40 bg-purple-950/10',     label: 'Caso de Estudio' },
 };
 
 function ProjectCard({ project, index }: { project: Omit<Quest, 'index'>; index: number }) {
-  const diff = difficultyConfig[project.difficulty];
+  const env = environmentConfig[project.environment];
 
   return (
     <TiltCard className="group perspective-[1000px]">
@@ -108,13 +76,13 @@ function ProjectCard({ project, index }: { project: Omit<Quest, 'index'>; index:
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-6% 0px' }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.08 }}
-        className="relative border border-[var(--color-surface-4)] hover:border-[var(--color-orange)]/50 bg-[var(--color-surface-2)]/30 hover:bg-[var(--color-surface-2)] rounded-sm p-5 md:p-6 cursor-pointer transition-all duration-500 overflow-hidden corner-l"
+        className="relative border border-[var(--color-surface-4)] hover:border-[var(--color-orange)]/50 bg-[var(--color-surface-2)]/30 hover:bg-[var(--color-surface-2)] backdrop-blur-sm rounded-sm p-5 md:p-6 cursor-pointer transition-all duration-500 overflow-hidden corner-l"
       >
         {/* Hover glow overlay */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
           style={{
-            background: 'radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(142,202,154,0.04), transparent 60%)',
+            background: 'radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56,189,248,0.04), transparent 60%)',
           }}
         />
 
@@ -143,8 +111,8 @@ function ProjectCard({ project, index }: { project: Omit<Quest, 'index'>; index:
             </span>
           )}
 
-          <span className={`inline-flex items-center text-[10px] font-mono border px-2 py-0.5 rounded-sm ${diff.color}`}>
-            {diff.label}
+          <span className={`inline-flex items-center text-[10px] font-mono border px-2 py-0.5 rounded-sm ${env.color}`}>
+            {env.label}
           </span>
 
           <span className="ml-auto text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider">

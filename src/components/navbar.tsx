@@ -13,8 +13,8 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { name: 'Inicio',    href: '#hero',     id: '01' },
-  { name: 'Sobre mí', href: '#about',    id: '02' },
-  { name: 'Proyectos',href: '#projects', id: '03' },
+  { name: 'Proyectos',href: '#projects', id: '02' },
+  { name: 'Sobre mí', href: '#about',    id: '03' },
   { name: 'Contacto', href: '#contact',  id: '04' },
 ];
 
@@ -38,7 +38,7 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sections = ['hero', 'about', 'projects', 'contact'];
+    const sections = ['hero', 'projects', 'about', 'contact'];
     const observers: IntersectionObserver[] = [];
     sections.forEach(id => {
       const el = document.getElementById(id);
@@ -103,7 +103,7 @@ export function Navbar() {
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      className={`relative group flex items-center gap-1.5 px-3 py-2 text-xs font-mono tracking-widest uppercase transition-all duration-300 rounded-sm ${
+                      className={`relative group flex items-center gap-1.5 px-3 py-2 text-xs font-mono tracking-[0.2em] uppercase transition-all duration-300 rounded-sm ${
                         isActive
                           ? 'text-[var(--color-orange)] bg-[var(--color-orange-muted)]'
                           : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-2)]'

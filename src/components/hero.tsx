@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, Cpu, GitBranch, Layers, FileText } from 'lucide-react';
+import { ArrowDown, Cpu, GitBranch, Layers, Github, Linkedin, Mail } from 'lucide-react';
 
 function WordReveal({ children, delay = 0 }: { children: string; delay?: number }) {
   const words = children.split(' ');
@@ -93,7 +93,7 @@ export function Hero() {
       <div
         className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse, rgba(142,202,154,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(56,189,248,0.06) 0%, transparent 70%)',
         }}
         aria-hidden="true"
       />
@@ -119,7 +119,7 @@ export function Hero() {
             <div className="mb-2">
               <WordReveal delay={0.3}>Samuel</WordReveal>
             </div>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+            <span className="text-[var(--color-text-primary)]">
               <WordReveal delay={0.5}>Aguilera</WordReveal>
             </span>
           </h1>
@@ -148,28 +148,62 @@ export function Hero() {
           <StaggerItem delay={0.85}>
             <p className="text-sm md:text-base text-[var(--color-text-secondary)] font-normal leading-relaxed max-w-lg">
               Estudiante de 3er año en la UCB &quot;San Pablo&quot;. Combino rigor de{' '}
-              <strong className="text-[var(--color-text-primary)] font-semibold">mejora continua</strong> con{' '}
-              <strong className="text-[var(--color-text-primary)] font-semibold">ciencia de datos</strong>{' '}
+              <strong className="text-[var(--color-text-primary)] font-semibold">Mejora Continua</strong> con{' '}
+              <strong className="text-[var(--color-text-primary)] font-semibold">Análisis de Datos</strong>{' '}
               (SQL, Python, Power BI) para optimizar procesos y automatizar decisiones operativas.
             </p>
           </StaggerItem>
 
+          {/* Social proof: code audit links */}
+          <StaggerItem delay={0.95}>
+            <div className="flex items-center gap-3">
+              <a
+                href="https://github.com/FosforoWork"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-2)] hover:border-[var(--color-text-secondary)]/60 backdrop-blur-sm rounded-sm transition-all duration-200 group"
+                aria-label="GitHub"
+              >
+                <Github className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)] transition-colors" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/samuelaguileraaraujo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-2)] hover:border-sky-500/60 rounded-sm transition-all duration-200 group"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-sky-400 transition-colors" />
+              </a>
+              <a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=samuelagss1@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-2)] hover:border-sky-500/60 rounded-sm transition-all duration-200 group"
+                aria-label="Gmail"
+              >
+                <Mail className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-sky-400 transition-colors" />
+              </a>
+              
+              
+              </div>
+          </StaggerItem>
+
           {/* Certifications */}
           <StaggerItem delay={1.0}>
-            <div className="border-l-2 border-[var(--color-orange)]/30 pl-4 space-y-1">
-              <div className="text-xs font-mono uppercase tracking-widest text-[var(--color-text-muted)] mb-2">
-                Certificaciones & Hitos
+            <div className="border-l-2 border-[var(--color-orange)]/30 pl-4 space-y-2">
+              <div className="text-xs font-mono uppercase tracking-widest text-[var(--color-text-muted)]">
+                Certificaciones
               </div>
-              <div className="flex flex-wrap gap-x-4 gap-y-1">
-                {['Nestlé IDEAS', 'Nestlé PMI', 'LSS White Belt', 'Fund. Proyectos'].map((cert, i) => (
+              <div className="flex flex-wrap gap-2">
+                {['LSS Black Belt (Cand.)'].map((cert, i) => (
                   <motion.span
                     key={cert}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 1.1 + i * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="text-xs font-mono text-[var(--color-text-secondary)] flex items-center gap-1.5"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.1 + i * 0.08, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="px-2.5 py-0.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-wide"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-orange)] inline-block shrink-0" />
                     {cert}
                   </motion.span>
                 ))}
@@ -183,24 +217,13 @@ export function Hero() {
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <a
                   href="#projects"
-                  className="group inline-flex items-center gap-3 px-6 py-3.5 bg-[var(--color-orange)] hover:bg-[var(--color-orange-vivid)] text-white text-xs font-mono font-semibold uppercase tracking-wider rounded-sm transition-all duration-200 hover:shadow-[0_0_30px_rgba(142,202,154,0.3)] active:scale-[0.98]"
+                  className="group inline-flex items-center gap-3 px-6 py-3.5 bg-[var(--color-cyan)] hover:bg-[var(--color-cyan-vivid)] text-white text-xs font-mono font-semibold uppercase tracking-wider rounded-sm transition-all duration-200 hover:shadow-[0_0_30px_rgba(56,189,248,0.3)] active:scale-[0.98]"
                 >
                   Ver Hitos & Proyectos
                   <ArrowDown
                     className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-y-0.5"
                     aria-hidden="true"
                   />
-                </a>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <a
-                  href="/CV_Samuel_Aguilera.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-3 px-6 py-3.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/80 hover:bg-[var(--color-surface-2)] text-[var(--color-text-primary)] text-xs font-mono font-semibold uppercase tracking-wider rounded-sm transition-all duration-200 hover:border-[var(--color-orange)]/60 hover:shadow-[0_0_20px_rgba(142,202,154,0.08)] active:scale-[0.98]"
-                >
-                  <FileText className="w-3.5 h-3.5 text-[var(--color-orange)]" aria-hidden="true" />
-                  Descargar CV
                 </a>
               </motion.div>
             </div>
@@ -228,7 +251,7 @@ export function Hero() {
             <div
               className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
               style={{
-                boxShadow: 'inset 0 0 40px rgba(142,202,154,0.08)',
+                boxShadow: 'inset 0 0 40px rgba(56,189,248,0.08)',
               }}
             />
           </div>

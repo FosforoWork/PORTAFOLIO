@@ -25,13 +25,13 @@ const channels: Channel[] = [
     description: 'Consultas directas y propuestas de colaboración',
     url: 'https://mail.google.com/mail/?view=cm&fs=1&to=samuelagss1@gmail.com',
     icon: Mail,
-    hoverColor: 'hover:border-[var(--color-orange)]/60',
-    accentColor: 'var(--color-orange)',
+    hoverColor: 'hover:border-[var(--color-cyan)]/60',
+    accentColor: 'var(--color-cyan)',
   },
   {
     id: '02',
     name: 'LinkedIn',
-    handle: '/in/samuelaguileraaraujo',
+    handle: 'Samuel Aguilera Araujo',
     description: 'Red profesional y actualizaciones de carrera',
     url: 'https://www.linkedin.com/in/samuelaguileraaraujo',
     icon: Linkedin,
@@ -50,16 +50,16 @@ const channels: Channel[] = [
   },
 ];
 
-const statusMessages = [
-  'Sistema listo — selecciona un canal de comunicación',
-  'Iniciando handshake...',
-  'Conexión establecida',
-  'Redirigiendo al canal seguro...',
-];
+const hoverMessages: Record<string, string> = {
+  Email: 'PREPARANDO CLIENTE DE CORREO...',
+  LinkedIn: 'ABRIENDO PROTOCOLO LINKEDIN...',
+  GitHub: 'ABRIENDO REPOSITORIO GITHUB...',
+};
 
 export function Contact() {
   const [status, setStatus] = useState<string | null>(null);
   const [connecting, setConnecting] = useState<string | null>(null);
+  const [hoveredChannel, setHoveredChannel] = useState<string | null>(null);
 
   const handleChannelClick = (name: string, url: string) => {
     setConnecting(name);
@@ -88,7 +88,7 @@ export function Contact() {
                 className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight"
               >
                 Conexión{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+                <span className="text-[var(--color-text-primary)]">
                   Profesional
                 </span>
               </TextReveal>
@@ -113,9 +113,11 @@ export function Contact() {
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
+                  onMouseEnter={() => setHoveredChannel(ch.name)}
+                  onMouseLeave={() => setHoveredChannel(null)}
                   onClick={() => handleChannelClick(ch.name, ch.url)}
                   disabled={!!connecting}
-                  className={`text-left group relative border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/50 hover:bg-[var(--color-surface-2)] rounded-sm p-5 cursor-pointer transition-all duration-300 overflow-hidden ${ch.hoverColor} ${isConnecting ? 'pointer-events-none' : ''}`}
+                  className={`text-left group relative border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/50 hover:bg-[var(--color-surface-2)] backdrop-blur-sm rounded-sm p-5 cursor-pointer transition-all duration-300 overflow-hidden ${ch.hoverColor} ${isConnecting ? 'pointer-events-none' : ''}`}
                 >
                   {/* Top bar accent */}
                   <div
@@ -146,14 +148,14 @@ export function Contact() {
                   <h3 className="text-base font-heading font-bold text-[var(--color-text-primary)] mb-1 tracking-tight relative z-10">
                     {ch.name}
                   </h3>
-                  <p className="text-xs font-mono text-[var(--color-orange)] mb-3 truncate relative z-10">
+                  <p className="text-xs font-mono text-[var(--color-cyan)] mb-3 truncate relative z-10">
                     {ch.handle}
                   </p>
                   <p className="text-xs text-[var(--color-text-muted)] leading-relaxed relative z-10">
                     {ch.description}
                   </p>
 
-                  <div className="mt-4 flex items-center gap-1 text-xs font-mono text-[var(--color-text-muted)] group-hover:text-[var(--color-orange)] transition-colors uppercase tracking-wider relative z-10">
+                  <div className="mt-4 flex items-center gap-1 text-xs font-mono text-[var(--color-cyan)] uppercase tracking-wider relative z-10">
                     {isConnecting ? (
                       <>
                         <Sparkles className="w-2.5 h-2.5 animate-pulse" />
@@ -174,13 +176,15 @@ export function Contact() {
 
           {/* ── Status bar ── */}
           <motion.div
-            className="border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/30 rounded-sm px-4 py-3 min-h-[44px] flex items-center"
-            animate={{ borderColor: status ? 'var(--color-orange)' : 'var(--color-surface-4)' }}
+            className="border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/30 backdrop-blur-sm rounded-sm px-4 py-3 min-h-[44px] flex items-center"
+            animate={{ borderColor: hoveredChannel || status ? 'var(--color-cyan)' : 'var(--color-surface-4)' }}
             transition={{ duration: 0.3 }}
           >
-            <span className={`w-2 h-2 rounded-full mr-2.5 shrink-0 ${status && !status.includes('listo') ? 'bg-[var(--color-orange)] animate-pulse' : 'bg-emerald-500'}`} />
+            <span className={`w-2 h-2 rounded-full mr-2.5 shrink-0 ${hoveredChannel ? 'bg-[var(--color-cyan)] animate-pulse' : status && !status.includes('listo') ? 'bg-[var(--color-cyan)] animate-pulse' : 'bg-emerald-500'}`} />
             <p className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
-              {status || 'Sistema listo — selecciona un canal de comunicación'}
+              {hoveredChannel
+                ? hoverMessages[hoveredChannel]
+                : status || 'Sistema listo — selecciona un canal de comunicación'}
             </p>
           </motion.div>
         </FadeUp>

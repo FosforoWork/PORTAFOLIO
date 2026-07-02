@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proyecto en Desarrollo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0d0f12;
+      color: #e2e4e8;
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .container {
+      text-align: center;
+      max-width: 600px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border: 1px solid rgba(142, 202, 154, 0.3);
+      background: rgba(142, 202, 154, 0.05);
+      border-radius: 2px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #8eca9a;
+      margin-bottom: 2rem;
+    }
+    .badge span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fbbf24;
+      display: inline-block;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+      color: #f0f2f5;
+    }
+    p {
+      font-size: 0.8rem;
+      color: #8a8f9a;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    svg {
+      max-width: 360px;
+      width: 100%;
+      height: auto;
+      margin-bottom: 2.5rem;
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: #8eca9a;
+      color: #0d0f12;
+    }
+    .btn-primary:hover {
+      background: #a8e4b4;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #8a8f9a;
+      border: 1px solid rgba(138, 143, 154, 0.3);
+    }
+    .btn-secondary:hover {
+      border-color: #8eca9a;
+      color: #e2e4e8;
+    }
+    .status-bar {
+      margin-top: 2.5rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(138, 143, 154, 0.15);
+      background: rgba(13, 15, 18, 0.6);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #6b7280;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fbbf24;
+      flex-shrink: 0;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">
+      <span></span>
+      Estado: En Desarrollo
+    </div>
+
+    <svg viewBox="0 0 360 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background blueprint grid -->
+      <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#8eca9a" stroke-width="0.3" opacity="0.15" />
+      </pattern>
+      <rect width="360" height="240" fill="url(#grid)" />
+
+      <!-- Desk -->
+      <rect x="60" y="160" width="240" height="8" rx="2" fill="#2a2d35" stroke="#3a3d45" stroke-width="0.8" />
+      <rect x="70" y="168" width="10" height="40" rx="1" fill="#1e2027" />
+      <rect x="280" y="168" width="10" height="40" rx="1" fill="#1e2027" />
+
+      <!-- Monitor -->
+      <rect x="130" y="110" width="100" height="60" rx="3" fill="#1a1c23" stroke="#3a3d45" stroke-width="0.8" />
+      <rect x="135" y="115" width="90" height="45" rx="2" fill="#0d0f12" />
+      <!-- Code lines on screen -->
+      <rect x="142" y="122" width="60" height="2.5" rx="1" fill="#8eca9a" opacity="0.7" />
+      <rect x="142" y="130" width="45" height="2.5" rx="1" fill="#6fad7b" opacity="0.5" />
+      <rect x="142" y="138" width="50" height="2.5" rx="1" fill="#8eca9a" opacity="0.6" />
+      <rect x="142" y="146" width="35" height="2.5" rx="1" fill="#5a9e6e" opacity="0.4" />
+      <!-- Monitor stand -->
+      <rect x="170" y="170" width="20" height="6" rx="1" fill="#2a2d35" />
+
+      <!-- Keyboard -->
+      <rect x="140" y="178" width="80" height="20" rx="2" fill="#1e2027" stroke="#3a3d45" stroke-width="0.5" />
+      <rect x="148" y="182" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="158" y="182" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="168" y="182" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="178" y="182" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="188" y="182" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="198" y="182" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="153" y="189" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="163" y="189" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="173" y="189" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="183" y="189" width="6" height="4" rx="0.8" fill="#2a2d35" />
+      <rect x="193" y="189" width="6" height="4" rx="0.8" fill="#2a2d35" />
+
+      <!-- Person 1 (left) -->
+      <g transform="translate(85, 75)">
+        <!-- Head -->
+        <circle cx="0" cy="0" r="12" fill="#2a2d35" stroke="#3a3d45" stroke-width="0.8" />
+        <!-- Body -->
+        <rect x="-10" y="12" width="20" height="28" rx="4" fill="#2a2d35" stroke="#3a3d45" stroke-width="0.6" />
+        <!-- Arm reaching to keyboard -->
+        <path d="M 10 20 Q 30 22 55 95" stroke="#2a2d35" stroke-width="6" stroke-linecap="round" fill="none" />
+        <path d="M 10 20 Q 30 22 55 95" stroke="#3a3d45" stroke-width="0.6" stroke-linecap="round" fill="none" />
+        <!-- Other arm -->
+        <path d="M -10 20 Q -25 35 -20 55" stroke="#2a2d35" stroke-width="6" stroke-linecap="round" fill="none" />
+        <!-- Hard hat -->
+        <path d="M -14 -6 Q -16 -14 0 -18 Q 16 -14 14 -6" fill="#fbbf24" stroke="#d97706" stroke-width="0.6" />
+        <rect x="-12" y="-6" width="24" height="3" rx="1" fill="#fbbf24" stroke="#d97706" stroke-width="0.4" />
+      </g>
+
+      <!-- Person 2 (right) -->
+      <g transform="translate(265, 70)">
+        <!-- Head -->
+        <circle cx="0" cy="0" r="12" fill="#2a2d35" stroke="#3a3d45" stroke-width="0.8" />
+        <!-- Body -->
+        <rect x="-10" y="12" width="20" height="28" rx="4" fill="#2a2d35" stroke="#3a3d45" stroke-width="0.6" />
+        <!-- Arm holding blueprint -->
+        <path d="M -10 18 Q -30 15 -35 5" stroke="#2a2d35" stroke-width="6" stroke-linecap="round" fill="none" />
+        <path d="M -10 18 Q -30 15 -35 5" stroke="#3a3d45" stroke-width="0.6" stroke-linecap="round" fill="none" />
+        <!-- Other arm -->
+        <path d="M 10 18 Q 25 30 20 50" stroke="#2a2d35" stroke-width="6" stroke-linecap="round" fill="none" />
+        <!-- Hard hat -->
+        <path d="M -14 -6 Q -16 -14 0 -18 Q 16 -14 14 -6" fill="#fbbf24" stroke="#d97706" stroke-width="0.6" />
+        <rect x="-12" y="-6" width="24" height="3" rx="1" fill="#fbbf24" stroke="#d97706" stroke-width="0.4" />
+      </g>
+
+      <!-- Blueprint paper held by person 2 -->
+      <g transform="translate(225, 45)">
+        <rect x="0" y="0" width="30" height="40" rx="1" fill="#1a3a5c" opacity="0.6" stroke="#3b82f6" stroke-width="0.5" opacity="0.4" />
+        <line x1="6" y1="8" x2="24" y2="8" stroke="#60a5fa" stroke-width="0.8" opacity="0.5" />
+        <line x1="6" y1="14" x2="20" y2="14" stroke="#60a5fa" stroke-width="0.8" opacity="0.5" />
+        <line x1="6" y1="20" x2="22" y2="20" stroke="#60a5fa" stroke-width="0.8" opacity="0.5" />
+        <rect x="6" y="26" width="12" height="8" fill="none" stroke="#60a5fa" stroke-width="0.6" opacity="0.4" />
+      </g>
+
+      <!-- Gear icons (decoration) -->
+      <g transform="translate(320, 30)" opacity="0.2">
+        <circle cx="0" cy="0" r="10" fill="none" stroke="#8eca9a" stroke-width="1.5" stroke-dasharray="3 2" />
+        <circle cx="0" cy="0" r="4" fill="none" stroke="#8eca9a" stroke-width="1" />
+      </g>
+      <g transform="translate(35, 35)" opacity="0.15">
+        <circle cx="0" cy="0" r="8" fill="none" stroke="#8eca9a" stroke-width="1.5" stroke-dasharray="2.5 2" />
+        <circle cx="0" cy="0" r="3" fill="none" stroke="#8eca9a" stroke-width="1" />
+      </g>
+
+      <!-- Chips / data packets -->
+      <g transform="translate(315, 180)" opacity="0.25">
+        <rect x="0" y="0" width="12" height="8" rx="1" fill="none" stroke="#8eca9a" stroke-width="0.8" />
+        <rect x="2" y="2" width="8" height="4" rx="0.5" fill="#8eca9a" />
+      </g>
+      <g transform="translate(30, 175)" opacity="0.2">
+        <rect x="0" y="0" width="10" height="7" rx="1" fill="none" stroke="#8eca9a" stroke-width="0.8" />
+        <rect x="1.5" y="1.5" width="7" height="4" rx="0.5" fill="#8eca9a" />
+      </g>
+    </svg>
+
+    <h1>Proyecto en Desarrollo</h1>
+    <p>
+      El módulo de optimización de tintas — EMPACAR S.A. se encuentra actualmente<br />
+      en fase de ejecución. Los resultados finales y la memoria técnica completa<br />
+      serán publicados al cierre del proyecto.
+    </p>
+
+    <div class="btn-group">
+      <a href="/" class="btn btn-primary">
+        &larr; Volver al Portafolio
+      </a>
+      <a href="https://www.linkedin.com/in/samuelaguileraaraujo" target="_blank" class="btn btn-secondary">
+        Seguir en LinkedIn &nearr;
+      </a>
+    </div>
+
+    <div class="status-bar">
+      <span class="status-dot"></span>
+      Sistema en espera — el repositorio se habilitará al finalizar la fase de implementación
+    </div>
+  </div>
+</body>
+</html>

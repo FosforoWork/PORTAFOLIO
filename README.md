@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portafolio · Samuel Aguilera Araujo
 
-## Getting Started
+[![GitHub Pages](https://img.shields.io/badge/deploy-GitHub%20Pages-blue?logo=github&logoColor=white)](https://samuelaguilera.com)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
-First, run the development server:
+Portfolio profesional de **Samuel Aguilera Araujo** — Ingeniería Industrial con enfoque en Optimización de Procesos, Mejora Continua y Transformación Digital. Construido como una SPA moderna con animaciones inmersivas y una estética inspirada en ingeniería industrial.
+
+🌐 **Sitio en vivo:** [samuelaguilera.com]
+
+---
+
+## Stack Tecnológico
+
+| Categoría        | Tecnologías                                                                 |
+| ---------------- | --------------------------------------------------------------------------- |
+| **Framework**    | [React 19](https://react.dev) · [Vite 6](https://vitejs.dev) · TypeScript 5 |
+| **Estilos**      | [Tailwind CSS v4](https://tailwindcss.com) · `clsx` · `tailwind-merge`     |
+| **Animaciones**  | [Framer Motion](https://www.framer.com/motion) · [GSAP](https://gsap.com)   |
+| **Scroll**       | [Lenis](https://lenis.studiofreight.com) · GSAP ScrollTrigger               |
+| **UI / Iconos**  | [shadcn/ui](https://ui.shadcn.com) · [Lucide](https://lucide.dev)          |
+| **Estado**       | [Zustand](https://github.com/pmndrs/zustand)                                |
+
+---
+
+## Secciones del Portfolio
+
+| Sección       | Descripción                                                                 |
+| ------------- | --------------------------------------------------------------------------- |
+| **Loader**    | Animación de ADN tipo "double helix" con progreso de carga                  |
+| **Hero**      | Presentación con foto, certificaciones y CTAs                               |
+| **About**     | Terminal interactiva estilo "query-selector" con efecto máquina de escribir |
+| **Skills**    | Grid de 10 habilidades técnicas con indicador de nivel                      |
+| **Proyectos** | 4 casos de estudio con efecto tilt-card y badges de metodología             |
+| **Contacto**  | Canales de contacto con simulación de conexión animada                      |
+| **Footer**    | Footer minimal con estado de disponibilidad                                 |
+
+---
+
+## Empezar
 
 ```bash
+# Clonar el repositorio
+git clone https://github.com/FosforoWork/portafolio.git
+cd portafolio
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir [http://localhost:5173](http://localhost:5173) en el navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Comando           | Descripción                                    |
+| ----------------- | ---------------------------------------------- |
+| `npm run dev`     | Inicia el servidor de desarrollo (Vite)        |
+| `npm run build`   | Type-check + build de producción               |
+| `npm run preview` | Previsualiza el build de producción            |
+| `npm run lint`    | Ejecuta ESLint                                 |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Build & Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+El proyecto genera una SPA estática en la carpeta `dist/`.
 
-## Deploy on Vercel
+```bash
+npm run build
+npm run preview
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+El despliegue se realiza automáticamente a **GitHub Pages** mediante GitHub Actions al hacer push a la rama `main`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Estructura del Proyecto
+
+```
+src/
+├── components/       # Componentes React (15)
+├── hooks/            # Custom hooks (3)
+├── lib/              # Utilidades (cn)
+├── store/            # Estado global (Zustand)
+├── globals.css       # Estilos globales + Tailwind
+├── App.tsx           # Componente raíz
+└── main.tsx          # Entry point Vite
+public/
+├── images/           # Imágenes de perfil y proyectos
+└── favicon / icons   # Iconos del sitio
+docs/                 # Documentación de proyectos
+```
+
+---
+
+## Autor
+
+**Samuel Aguilera Araujo**  
+Ingeniería Industrial · UCB "San Pablo", Bolivia
+
+[![Email](https://img.shields.io/badge/samuelagss1@gmail.com-D14836?logo=gmail&logoColor=white)](mailto:samuelagss1@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/samuel-aguilera-962560332/)
+[![GitHub](https://img.shields.io/badge/FosforoWork-181717?logo=github&logoColor=white)](https://github.com/FosforoWork)

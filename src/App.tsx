@@ -8,7 +8,6 @@ import { Projects } from '@/components/projects';
 import { Contact } from '@/components/contact';
 import { FooterMinimal } from '@/components/footer-minimal';
 import { SectionReveal } from '@/components/section-reveal';
-import { FloatingCTA } from '@/components/floating-cta';
 import { useScrollTrigger } from '@/hooks/use-scroll-trigger';
 
 const Loader = React.lazy(() =>
@@ -38,13 +37,12 @@ export function App() {
       <Navbar />
       <main id="main-content" className="w-full flex flex-col items-center">
         <Hero />
+        <Projects />
         <SectionReveal><About /></SectionReveal>
         <SectionReveal><SkillsGrid /></SectionReveal>
-        <Projects />
         <SectionReveal><Contact /></SectionReveal>
       </main>
       <FooterMinimal />
-      <FloatingCTA />
     </MotionConfig>
   );
 }

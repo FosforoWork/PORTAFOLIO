@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const BASE_PAIRS = ['A', 'T', 'G', 'C'] as const;
 const PAIR_COLORS: Record<string, string> = {
-  A: '#8ECA9A',
-  T: '#6FAD7B',
-  G: '#A8E4B4',
-  C: '#5A9E6E',
+  A: '#38BDF8',
+  T: '#7DD3FC',
+  G: '#34D399',
+  C: '#6EE7B7',
 };
 
 export function Loader() {
@@ -29,12 +29,12 @@ export function Loader() {
           setTimeout(() => {
             setUnwinding(true);
             setOverlayOpacity(0.9);
-          }, 400);
+          }, 200);
           return 100;
         }
-        return p + Math.floor(Math.random() * 4) + 1;
+        return p + Math.floor(Math.random() * 6) + 2;
       });
-    }, 120);
+    }, 60);
     return () => clearInterval(interval);
   }, []);
 
@@ -43,17 +43,17 @@ export function Loader() {
     if (!ctx) return;
 
     const dpr = Math.min(window.devicePixelRatio, 2);
-    const size = 280;
+    const size = 520;
     canvas.width = size * dpr;
     canvas.height = size * dpr;
 
     const cx = (size / 2) * dpr;
     const cy = (size / 2) * dpr;
-    const radius = 65 * dpr;
-    const height = 210 * dpr;
+    const radius = 117 * dpr;
+    const height = 390 * dpr;
     const pairs = 24;
     const revealHeight = (prog / 100) * height;
-    const maxDrift = 160 * dpr;
+    const maxDrift = 286 * dpr;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.lineCap = 'round';
@@ -82,15 +82,16 @@ export function Loader() {
       if (alpha < 0.01) continue;
 
       // Strand nodes
-      ctx.strokeStyle = '#8ECA9A';
-      ctx.lineWidth = 2.5 * dpr;
+      ctx.fillStyle = '#38BDF8';
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 3.25 * dpr;
       ctx.globalAlpha = alpha * 0.7;
       ctx.beginPath();
-      ctx.arc(x1, y, Math.max(0.5, 2.5 * (1 - easedSep * 0.4)) * dpr, 0, Math.PI * 2);
+      ctx.arc(x1, y, Math.max(0.65, 3.25 * (1 - easedSep * 0.4)) * dpr, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(x2, y, Math.max(0.5, 2.5 * (1 - easedSep * 0.4)) * dpr, 0, Math.PI * 2);
+      ctx.arc(x2, y, Math.max(0.65, 3.25 * (1 - easedSep * 0.4)) * dpr, 0, Math.PI * 2);
       ctx.fill();
 
       // Backbone lines
@@ -106,8 +107,8 @@ export function Loader() {
         const nx2 = nBaseX2 + nDrift2;
 
         ctx.globalAlpha = alpha * 0.25;
-        ctx.lineWidth = 2 * dpr;
-        ctx.strokeStyle = '#8ECA9A';
+        ctx.lineWidth = 2.6 * dpr;
+        ctx.strokeStyle = '#38BDF8';
         ctx.beginPath();
         ctx.moveTo(x1, y);
         ctx.lineTo(nx1, ny);
@@ -118,8 +119,8 @@ export function Loader() {
         ctx.stroke();
 
         ctx.globalAlpha = alpha * 0.04;
-        ctx.lineWidth = 8 * dpr;
-        ctx.strokeStyle = '#8ECA9A';
+        ctx.lineWidth = 10.4 * dpr;
+        ctx.strokeStyle = '#38BDF8';
         ctx.beginPath();
         ctx.moveTo(x1, y);
         ctx.lineTo(nx1, ny);
@@ -140,7 +141,7 @@ export function Loader() {
 
         ctx.globalAlpha = alpha * 0.6 * pairAlpha;
         ctx.strokeStyle = color;
-        ctx.lineWidth = Math.max(0.3, 1.5 * pairAlpha) * dpr;
+        ctx.lineWidth = Math.max(0.4, 1.95 * pairAlpha) * dpr;
         ctx.beginPath();
         ctx.moveTo(x1, y);
         ctx.lineTo(x2, y);
@@ -148,10 +149,10 @@ export function Loader() {
 
         ctx.globalAlpha = alpha * 0.3 * pairAlpha;
         ctx.beginPath();
-        ctx.arc(cx + (drift1 + drift2) / 2, y, 3 * dpr * pairAlpha, 0, Math.PI * 2);
+        ctx.arc(cx + (drift1 + drift2) / 2, y, 3.9 * dpr * pairAlpha, 0, Math.PI * 2);
         const grad = ctx.createRadialGradient(
           cx + (drift1 + drift2) / 2, y, 0,
-          cx + (drift1 + drift2) / 2, y, 3 * dpr * pairAlpha
+          cx + (drift1 + drift2) / 2, y, 3.9 * dpr * pairAlpha
         );
         grad.addColorStop(0, color);
         grad.addColorStop(1, 'transparent');
@@ -160,21 +161,21 @@ export function Loader() {
 
         ctx.globalAlpha = alpha * 0.35 * pairAlpha;
         ctx.fillStyle = color;
-        ctx.font = `bold ${9 * dpr * pairAlpha}px "JetBrains Mono", monospace`;
+        ctx.font = `bold ${11.7 * dpr * pairAlpha}px "JetBrains Mono", monospace`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        const labelX = x1 > cx ? x1 + 10 * dpr : x1 - 10 * dpr;
+        const labelX = x1 > cx ? x1 + 13 * dpr : x1 - 13 * dpr;
         ctx.fillText(base, labelX, y);
       } else {
         // Broken base pair — particles flying apart
         const fragAlpha = (easedSep - breakpoint) / (1 - breakpoint);
         ctx.globalAlpha = alpha * 0.15 * (1 - fragAlpha);
-        ctx.fillStyle = '#8ECA9A';
+        ctx.fillStyle = '#38BDF8';
         ctx.beginPath();
-        ctx.arc(x1 + (Math.random() - 0.5) * 10 * dpr * fragAlpha, y + (Math.random() - 0.5) * 10 * dpr * fragAlpha, 1 * dpr, 0, Math.PI * 2);
+        ctx.arc(x1 + (Math.random() - 0.5) * 13 * dpr * fragAlpha, y + (Math.random() - 0.5) * 13 * dpr * fragAlpha, 1.3 * dpr, 0, Math.PI * 2);
         ctx.fill();
         ctx.beginPath();
-        ctx.arc(x2 + (Math.random() - 0.5) * 10 * dpr * fragAlpha, y + (Math.random() - 0.5) * 10 * dpr * fragAlpha, 1 * dpr, 0, Math.PI * 2);
+        ctx.arc(x2 + (Math.random() - 0.5) * 13 * dpr * fragAlpha, y + (Math.random() - 0.5) * 13 * dpr * fragAlpha, 1.3 * dpr, 0, Math.PI * 2);
         ctx.fill();
       }
     }
@@ -193,8 +194,8 @@ export function Loader() {
       timeRef.current += 0.012;
 
       if (unwinding) {
-        unwindRef.current += 0.008;
-        setOverlayOpacity((o) => Math.max(0, o - 0.006));
+        unwindRef.current += 0.025;
+        setOverlayOpacity((o) => Math.max(0, o - 0.02));
         if (unwindRef.current >= 1) {
           setIsLoading(false);
           running = false;
@@ -231,14 +232,14 @@ export function Loader() {
           <div className="flex flex-col items-center gap-10">
             <canvas
               ref={canvasRef}
-              className="w-[280px] h-[280px]"
+              className="w-[520px] h-[520px] max-w-[90vw] max-h-[90vw]"
               aria-hidden="true"
             />
 
             <motion.span
               animate={unwinding ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-xs font-mono text-[var(--color-orange)] tracking-[0.3em] uppercase"
+              className="text-xs font-mono text-[var(--color-cyan)] tracking-[0.3em] uppercase"
             >
               {unwinding ? 'Desenrollando secuencia...' : 'Sintetizando ADN Profesional'}
             </motion.span>
@@ -246,10 +247,10 @@ export function Loader() {
             <motion.div
               animate={unwinding ? { opacity: 0, scaleX: 0.8 } : { opacity: 1, scaleX: 1 }}
               transition={{ duration: 0.4 }}
-              className="relative w-64 h-[2px] bg-[var(--color-surface-4)] overflow-hidden rounded-full"
+              className="relative w-80 h-[3px] bg-[var(--color-surface-4)] overflow-hidden rounded-full"
             >
               <motion.div
-                className="absolute inset-y-0 left-0 bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]"
+                className="absolute inset-y-0 left-0 bg-gradient-to-r from-[var(--color-cyan)] to-[var(--color-cyan-vivid)]"
                 animate={{ width: `${Math.min(progress, 100)}%` }}
                 transition={{ duration: 0.15, ease: 'linear' }}
               />

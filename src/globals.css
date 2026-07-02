@@ -5,25 +5,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Sage Forest palette */
-  --black: #040605;
-  --surface-0: #090C0B;
-  --surface-1: #121815;
-  --surface-2: #1C2521;
-  --surface-3: #28342F;
-  --surface-4: #36463F;
+  /* Cyber / Consola palette (60-30-10) */
+  --black: #080C10;
+  --surface-0: #080C10;
+  --surface-1: #080C10;
+  --surface-2: #12161A;
+  --surface-3: #1E2329;
+  --surface-4: #334155;
 
-  --orange: #8ECA9A;
-  --orange-vivid: #A8E4B4;
-  --orange-dim: #6FAD7B;
-  --orange-glow: rgba(142, 202, 154, 0.12);
-  --orange-glow-intense: rgba(142, 202, 154, 0.25);
-  --orange-muted: rgba(142, 202, 154, 0.06);
+  --cyan: #38BDF8;
+  --cyan-vivid: #7DD3FC;
+  --cyan-dim: #0284C7;
+  --cyan-glow: rgba(56, 189, 248, 0.12);
+  --cyan-muted: rgba(56, 189, 248, 0.06);
 
-  --text-primary: #F3F7F4;
-  --text-secondary: #A8B9B1;
-  --text-muted: #8AA39A;
-  --text-disabled: #45524B;
+  --emerald: #34D399;
+  --emerald-vivid: #6EE7B7;
+  --emerald-dim: #059669;
+  --emerald-glow: rgba(52, 211, 153, 0.12);
+  --emerald-muted: rgba(52, 211, 153, 0.06);
+
+  /* Backward-compat alias: all generic interactive elements → cyan */
+  --orange: var(--cyan);
+  --orange-vivid: var(--cyan-vivid);
+  --orange-dim: var(--cyan-dim);
+  --orange-glow: var(--cyan-glow);
+  --orange-glow-intense: rgba(56, 189, 248, 0.25);
+  --orange-muted: var(--cyan-muted);
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-disabled: #475569;
 }
 
 @theme inline {
@@ -41,11 +54,24 @@
   --color-surface-3:    var(--surface-3);
   --color-surface-4:    var(--surface-4);
 
-  --color-orange:       var(--orange);
-  --color-orange-vivid: var(--orange-vivid);
-  --color-orange-dim:   var(--orange-dim);
-  --color-orange-glow:  var(--orange-glow);
-  --color-orange-muted: var(--orange-muted);
+  --color-cyan:         var(--cyan);
+  --color-cyan-vivid:   var(--cyan-vivid);
+  --color-cyan-dim:     var(--cyan-dim);
+  --color-cyan-glow:    var(--cyan-glow);
+  --color-cyan-muted:   var(--cyan-muted);
+
+  --color-emerald:         var(--emerald);
+  --color-emerald-vivid:   var(--emerald-vivid);
+  --color-emerald-dim:     var(--emerald-dim);
+  --color-emerald-glow:    var(--emerald-glow);
+  --color-emerald-muted:   var(--emerald-muted);
+
+  /* Backward-compat alias */
+  --color-orange:       var(--color-cyan);
+  --color-orange-vivid: var(--color-cyan-vivid);
+  --color-orange-dim:   var(--color-cyan-dim);
+  --color-orange-glow:  var(--color-cyan-glow);
+  --color-orange-muted: var(--color-cyan-muted);
 
   --color-text-primary:   var(--text-primary);
   --color-text-secondary: var(--text-secondary);
