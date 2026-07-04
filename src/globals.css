@@ -2,16 +2,16 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syncopate:wght@400;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
 :root {
   /* Cyber / Consola palette (60-30-10) */
-  --black: #080C10;
-  --surface-0: #080C10;
-  --surface-1: #080C10;
-  --surface-2: #12161A;
-  --surface-3: #1E2329;
-  --surface-4: #334155;
+  --black: #1E1E24;
+  --surface-0: #17171B;
+  --surface-1: #12121F;
+  --surface-2: #24242f;
+  --surface-3: #34343a;
+  --surface-4: #4B4B5A;
 
   --cyan: #38BDF8;
   --cyan-vivid: #7DD3FC;
@@ -25,15 +25,15 @@
   --emerald-glow: rgba(52, 211, 153, 0.12);
   --emerald-muted: rgba(52, 211, 153, 0.06);
 
-  /* Backward-compat alias: all generic interactive elements → cyan */
-  --orange: var(--cyan);
-  --orange-vivid: var(--cyan-vivid);
-  --orange-dim: var(--cyan-dim);
-  --orange-glow: var(--cyan-glow);
-  --orange-glow-intense: rgba(56, 189, 248, 0.25);
-  --orange-muted: var(--cyan-muted);
+  /* Backward-compat alias: all generic interactive elements → safety orange */
+  --orange: #F97316;
+  --orange-vivid: #FB923C;
+  --orange-dim: #EA580C;
+  --orange-glow: rgba(249, 115, 22, 0.12);
+  --orange-glow-intense: rgba(249, 115, 22, 0.25);
+  --orange-muted: rgba(249, 115, 22, 0.06);
 
-  --text-primary: #F8FAFC;
+  --text-primary: #E2E8F0;
   --text-secondary: #94A3B8;
   --text-muted: #64748B;
   --text-disabled: #475569;
@@ -41,8 +41,8 @@
 
 @theme inline {
   /* ── Typography ───────────────────────────────────────── */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Inter', system-ui, sans-serif;
+  --font-sans: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Syncopate', 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-hud: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
@@ -67,11 +67,11 @@
   --color-emerald-muted:   var(--emerald-muted);
 
   /* Backward-compat alias */
-  --color-orange:       var(--color-cyan);
-  --color-orange-vivid: var(--color-cyan-vivid);
-  --color-orange-dim:   var(--color-cyan-dim);
-  --color-orange-glow:  var(--color-cyan-glow);
-  --color-orange-muted: var(--color-cyan-muted);
+  --color-orange:       var(--orange);
+  --color-orange-vivid: var(--orange-vivid);
+  --color-orange-dim:   var(--orange-dim);
+  --color-orange-glow:  var(--orange-glow);
+  --color-orange-muted: var(--orange-muted);
 
   --color-text-primary:   var(--text-primary);
   --color-text-secondary: var(--text-secondary);
@@ -337,13 +337,14 @@
   }
   body {
     @apply antialiased;
-    background-color: var(--color-surface-1);
+    background-color: transparent;
     color: var(--color-text-primary);
     font-family: var(--font-sans);
   }
   html {
     scroll-behavior: smooth;
     font-family: var(--font-sans);
+    background-color: var(--color-surface-1);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -486,4 +487,16 @@
   flex: 1;
   height: 1px;
   background: var(--color-surface-4);
+}
+
+/* ── Professional Card ──────────────────────────── */
+.pro-card {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-surface-4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+.pro-card:hover {
+  border-color: var(--color-orange);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(56, 189, 248, 0.05);
 }

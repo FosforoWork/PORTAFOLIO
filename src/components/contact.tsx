@@ -1,194 +1,191 @@
-'use client';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { Mail, Linkedin, Github, ArrowUpRight, Compass, CheckCircle } from 'lucide-react';
+import { TiltCard } from './tilt-card';
 
-import React, { useState } from 'react';
-import { Mail, Linkedin, Github, ArrowUpRight, Send, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { FadeUp } from './fade-up';
-import { TextReveal } from './text-reveal';
-
-interface Channel {
-  id: string;
-  name: string;
-  handle: string;
-  description: string;
-  url: string;
-  icon: React.ComponentType<{ className?: string }>;
-  hoverColor: string;
-  accentColor: string;
-}
-
-const channels: Channel[] = [
+const channels = [
   {
-    id: '01',
     name: 'Email',
     handle: 'samuelagss1@gmail.com',
-    description: 'Consultas directas y propuestas de colaboración',
+    desc: 'Consultas directas y colaboración',
     url: 'https://mail.google.com/mail/?view=cm&fs=1&to=samuelagss1@gmail.com',
     icon: Mail,
-    hoverColor: 'hover:border-[var(--color-cyan)]/60',
-    accentColor: 'var(--color-cyan)',
+    color: 'var(--color-orange)',
   },
   {
-    id: '02',
     name: 'LinkedIn',
     handle: 'Samuel Aguilera Araujo',
-    description: 'Red profesional y actualizaciones de carrera',
+    desc: 'Red profesional y updates',
     url: 'https://www.linkedin.com/in/samuelaguileraaraujo',
     icon: Linkedin,
-    hoverColor: 'hover:border-sky-500/40',
-    accentColor: '#0A66C2',
+    color: 'var(--color-orange)',
   },
   {
-    id: '03',
     name: 'GitHub',
     handle: 'FosforoWork',
-    description: 'Repositorios de código y simulaciones industriales',
+    desc: 'Repositorios y simulaciones',
     url: 'https://github.com/FosforoWork',
     icon: Github,
-    hoverColor: 'hover:border-[var(--color-text-secondary)]/40',
-    accentColor: '#E8E8E8',
+    color: 'var(--color-orange)',
   },
 ];
 
-const hoverMessages: Record<string, string> = {
-  Email: 'PREPARANDO CLIENTE DE CORREO...',
-  LinkedIn: 'ABRIENDO PROTOCOLO LINKEDIN...',
-  GitHub: 'ABRIENDO REPOSITORIO GITHUB...',
-};
-
 export function Contact() {
-  const [status, setStatus] = useState<string | null>(null);
-  const [connecting, setConnecting] = useState<string | null>(null);
-  const [hoveredChannel, setHoveredChannel] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollYProgress = useMotionValue(0);
 
-  const handleChannelClick = (name: string, url: string) => {
-    setConnecting(name);
-    setStatus(`Conectando con ${name}...`);
-    setTimeout(() => {
-      window.open(url, '_blank', 'noopener,noreferrer');
-      setStatus(`Redirigido a ${name}`);
-      setConnecting(null);
-    }, 500);
-  };
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const rect = el.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const totalRange = rect.height + viewportHeight;
+      const currentScroll = viewportHeight - rect.top;
+      let progress = currentScroll / totalRange;
+      progress = Math.max(0, Math.min(1, progress));
+      scrollYProgress.set(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [scrollYProgress]);
+
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  // ── 3-card stack: Intro → Channels → Outro ────────────────────────────
+  // h-[350vh] divided across 3 cards.
+
+  // Card 0: Intro  (exits ~30%)
+  const y0      = useTransform(scrollYProgress, [0, 0.30],           ['0px', '-40px']);
+  const scale0  = useTransform(scrollYProgress, [0.20, 0.30],        [1, 0.92]);
+  const opacity0 = useTransform(scrollYProgress, [0.20, 0.30],       [1, 0]);
+  const pointerEvents0 = useTransform(scrollYProgress, [0.20, 0.30], ['auto', 'none']);
+
+  // Card 1: Channels  (enters 24%, exits 68%)
+  const y1       = useTransform(scrollYProgress, [0.22, 0.45, 0.62], ['95vh', '0px', '-40px']);
+  const scale1   = useTransform(scrollYProgress, [0.54, 0.64],       [1, 0.92]);
+  const opacity1 = useTransform(scrollYProgress, [0.22, 0.43, 0.56, 0.65], [0, 1, 1, 0]);
+  const pointerEvents1 = useTransform(scrollYProgress, [0.22, 0.25, 0.56, 0.65], ['none', 'auto', 'auto', 'none']);
+
+  // Card 2: Outro  (enters 62%, stays)
+  const y2       = useTransform(scrollYProgress, [0.60, 0.85],  ['95vh', '0px']);
+  const opacity2 = useTransform(scrollYProgress, [0.60, 0.85],  [0, 1]);
+  const pointerEvents2 = useTransform(scrollYProgress, [0.60, 0.64], ['none', 'auto']);
 
   return (
-    <section
-      id="contact"
-      className="py-24 px-6 border-t border-[var(--color-surface-4)] w-full relative"
-    >
-      <div className="max-w-5xl mx-auto">
-        <FadeUp>
-          {/* ── Header ── */}
-          <div className="flex flex-col gap-1 mb-16">
-            <span className="tech-label">Contacto</span>
-            <div className="flex items-end gap-4">
-              <TextReveal
-                as="h2"
-                type="chars"
-                className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight"
-              >
-                Conexión{' '}
-                <span className="text-[var(--color-text-primary)]">
-                  Profesional
-                </span>
-              </TextReveal>
-              <div className="flex-1 h-px bg-[var(--color-surface-4)] mb-3 hidden md:block" />
-            </div>
-            <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed max-w-lg">
-              Selecciona un canal para comunicarte directamente conmigo o revisar mi trabajo en la red.
-            </p>
-          </div>
+    <div ref={containerRef} id="contact" className="relative h-[350vh] w-full bg-transparent">
+      {/* Sticky viewport wrapper */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center items-center">
 
-          {/* ── Channel cards ── */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            {channels.map((ch, i) => {
-              const Icon = ch.icon;
-              const isConnecting = connecting === ch.name;
-              return (
-                <motion.button
-                  key={ch.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onMouseEnter={() => setHoveredChannel(ch.name)}
-                  onMouseLeave={() => setHoveredChannel(null)}
-                  onClick={() => handleChannelClick(ch.name, ch.url)}
-                  disabled={!!connecting}
-                  className={`text-left group relative border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/50 hover:bg-[var(--color-surface-2)] backdrop-blur-sm rounded-sm p-5 cursor-pointer transition-all duration-300 overflow-hidden ${ch.hoverColor} ${isConnecting ? 'pointer-events-none' : ''}`}
-                >
-                  {/* Top bar accent */}
-                  <div
-                    className="absolute top-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
-                    style={{ background: ch.accentColor }}
-                  />
+        {/* Stack Wrapper */}
+        <div className="relative w-[88vw] md:w-[70vw] h-[65vh] md:h-[68vh] flex items-center justify-center">
 
-                  {/* Corner glow on hover */}
-                  <div
-                    className="absolute -top-20 -right-20 w-40 h-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{
-                      background: `radial-gradient(circle, ${ch.accentColor}15, transparent 70%)`,
-                    }}
-                  />
-
-                  <div className="flex justify-between items-start mb-4 pb-3 border-b border-[var(--color-surface-4)] relative z-10">
-                    <span className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
-                      Canal {ch.id}
-                    </span>
-                    <motion.div
-                      animate={isConnecting ? { rotate: 360 } : {}}
-                      transition={isConnecting ? { duration: 1, repeat: Infinity, ease: 'linear' } : {}}
-                    >
-                      <Icon className={`w-4 h-4 transition-colors ${isConnecting ? 'text-[var(--color-orange)]' : 'text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)]'}`} aria-hidden="true" />
-                    </motion.div>
-                  </div>
-
-                  <h3 className="text-base font-heading font-bold text-[var(--color-text-primary)] mb-1 tracking-tight relative z-10">
-                    {ch.name}
-                  </h3>
-                  <p className="text-xs font-mono text-[var(--color-cyan)] mb-3 truncate relative z-10">
-                    {ch.handle}
-                  </p>
-                  <p className="text-xs text-[var(--color-text-muted)] leading-relaxed relative z-10">
-                    {ch.description}
-                  </p>
-
-                  <div className="mt-4 flex items-center gap-1 text-xs font-mono text-[var(--color-cyan)] uppercase tracking-wider relative z-10">
-                    {isConnecting ? (
-                      <>
-                        <Sparkles className="w-2.5 h-2.5 animate-pulse" />
-                        Conectando...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-2.5 h-2.5" />
-                        Abrir
-                        <ArrowUpRight className="w-2.5 h-2.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </>
-                    )}
-                  </div>
-                </motion.button>
-              );
-            })}
-          </div>
-
-          {/* ── Status bar ── */}
-          <motion.div
-            className="border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/30 backdrop-blur-sm rounded-sm px-4 py-3 min-h-[44px] flex items-center"
-            animate={{ borderColor: hoveredChannel || status ? 'var(--color-cyan)' : 'var(--color-surface-4)' }}
-            transition={{ duration: 0.3 }}
+          {/* ── Card 0: Intro ── */}
+          <motion.div 
+            style={{ y: y0, scale: scale0, opacity: opacity0, pointerEvents: pointerEvents0 }} 
+            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center text-center p-8 md:p-14 pro-card rounded-sm corner-l"
           >
-            <span className={`w-2 h-2 rounded-full mr-2.5 shrink-0 ${hoveredChannel ? 'bg-[var(--color-cyan)] animate-pulse' : status && !status.includes('listo') ? 'bg-[var(--color-cyan)] animate-pulse' : 'bg-emerald-500'}`} />
-            <p className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
-              {hoveredChannel
-                ? hoverMessages[hoveredChannel]
-                : status || 'Sistema listo — selecciona un canal de comunicación'}
+            <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+            <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-6 mx-auto">
+              Networking
+            </span>
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[0.9] mb-8 text-center">
+              Conexión<br/>
+              <span className="text-[var(--color-text-secondary)]">
+                Profesional
+              </span>
+            </h2>
+            <div className="flex items-center gap-2 justify-center text-xs font-mono text-[var(--color-text-muted)] animate-pulse">
+              <Compass className="w-4 h-4 text-[var(--color-orange)]" />
+              <span>SCROLL PARA CONECTAR</span>
+            </div>
+          </motion.div>
+
+          {/* ── Card 1: Channels ── */}
+          <motion.div 
+            style={{ y: y1, scale: scale1, opacity: opacity1, pointerEvents: pointerEvents1 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <TiltCard className="h-full w-full">
+              <div className="relative h-full w-full pro-card rounded-sm p-8 md:p-14 flex flex-col items-center text-center justify-between corner-l group overflow-hidden">
+                <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+                <span className="absolute top-6 right-8 text-7xl md:text-9xl font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">01</span>
+
+                {hovered && (
+                  <div 
+                    className="absolute inset-0 transition-all duration-700 pointer-events-none opacity-5"
+                    style={{ background: `radial-gradient(circle at center, ${channels.find(c => c.name === hovered)?.color}, transparent)` }}
+                  />
+                )}
+
+                <div className="relative z-10 mb-6">
+                  <h3 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-3">
+                    Comunícate
+                  </h3>
+                  <p className="text-base md:text-xl text-[var(--color-text-secondary)] font-sans max-w-2xl">
+                    Selecciona un canal para conversar directamente o revisar código.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10 mt-auto">
+                  {channels.map((ch) => (
+                    <a
+                      key={ch.name}
+                      href={ch.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onMouseEnter={() => setHovered(ch.name)}
+                      onMouseLeave={() => setHovered(null)}
+                      className="group/btn relative p-6 bg-[var(--color-surface-1)] border border-[var(--color-surface-4)] rounded-sm flex flex-col items-center text-center hover:border-[var(--color-orange)] transition-all duration-300"
+                    >
+                      <div className="absolute top-0 left-0 right-0 h-0.5 scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-300" style={{ background: ch.color }} />
+                      <div className="flex justify-center items-start mb-6">
+                        <ch.icon className="w-6 h-6 text-[var(--color-text-muted)] group-hover/btn:text-[var(--color-text-primary)] transition-colors" />
+                      </div>
+                      <h4 className="text-xl font-heading font-bold text-[var(--color-text-primary)] tracking-tight mb-2">{ch.name}</h4>
+                      <p className="text-xs font-mono text-[var(--color-orange)] truncate mb-2">{ch.handle}</p>
+                      <p className="text-sm text-[var(--color-text-muted)]">{ch.desc}</p>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* ── Card 2: Outro Finalizer ── */}
+          <motion.div 
+            style={{ y: y2, opacity: opacity2, pointerEvents: pointerEvents2 }}
+            className="absolute inset-0 w-full h-full pro-card rounded-sm p-8 md:p-14 flex flex-col justify-center items-center text-center corner-l"
+          >
+            <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+            <div 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.05) 0%, transparent 70%)' }}
+            />
+            <div className="w-14 h-14 rounded-sm border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] flex items-center justify-center mb-8">
+              <CheckCircle className="w-7 h-7 text-[var(--color-orange)]" />
+            </div>
+            <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-8">
+              Listo para colaborar
+            </span>
+            <h3 className="text-4xl md:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter mb-6">
+              Gracias por <span className="text-[var(--color-orange)]">Visitar</span>
+            </h3>
+            <p className="text-base md:text-xl text-[var(--color-text-secondary)] leading-relaxed font-sans max-w-2xl">
+              Si tienes un proyecto de optimización industrial o análisis de datos, estoy disponible para colaborar.
             </p>
           </motion.div>
-        </FadeUp>
+
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

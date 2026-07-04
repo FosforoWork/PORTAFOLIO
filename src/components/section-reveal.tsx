@@ -37,8 +37,6 @@ export function SectionReveal({ children, className = '', index = 0 }: SectionRe
         transform: visible ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.97)',
         transition: `opacity 0.7s ease-out, transform 0.7s ease-out`,
         transitionDelay: `${index * 80}ms`,
-        contentVisibility: visible ? 'visible' : 'auto',
-        containIntrinsicSize: '0 500px',
       }}
     >
       {children}

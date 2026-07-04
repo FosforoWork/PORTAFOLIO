@@ -1,225 +1,272 @@
-'use client';
-
-import React from 'react';
-import { FadeUp } from './fade-up';
-import { TextReveal } from './text-reveal';
+import React, { useRef, useEffect } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { ArrowUpRight, CheckCircle, Flame, Github, Compass, Clock } from 'lucide-react';
 import { TiltCard } from './tilt-card';
-import { ArrowUpRight, CheckCircle, Flame, Award, Wrench, ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
 
-interface Quest {
+interface ProjectMetric {
+  value: string;
+  label: string;
+}
+
+interface Project {
   title: string;
   description: string;
-  methodology: string;
-  objectives: string[];
+  metrics: ProjectMetric[];
   tags: string[];
   time: string;
   link: string;
-  environment: 'Proyecto Industrial' | 'I+D' | 'Caso de Estudio';
+  linkLabel: string;
   status: 'COMPLETED' | 'ACTIVE';
-  index: number;
 }
 
-const projectsData: Omit<Quest, 'index'>[] = [
+const projectsData: Project[] = [
   {
-    title: 'Optimización del rendimiento en el dosificado de tintas en Empacar S.A.',
-    description:
-      'Reducción del desperdicio y variabilidad en el dosificado de tintas en la división de corrugado aplicando Lean Six Sigma.',
-    methodology:
-      'DMAIC con SMED y análisis predictivo multivariante en python para reducir variabilidad y desperdicio en el dosificado de tintas.',
-    objectives: [
-      'Reducción del 53.3% en el tiempo de preparación de máquinas mediante SMED.',
-      'Retorno económico anual de 218,850 Bs/año por reducción de merma en dosificado.',
-      'Anticipación de desviaciones en dosificado mediante modelo predictivo multivariante con R² = 77.2% en python.',
-      'Automatización del control estadístico de proceso (SPC) con dashboards Power BI sobre bases de datos relacionales.',
+    title: 'Optimización de dosificado de tintas',
+    description: 'Reducción del desperdicio en dosificado mediante Lean Six Sigma y modelo predictivo.',
+    metrics: [
+      { value: '-53.3%', label: 'SMED Setup' },
+      { value: '+218.8k', label: 'Retorno (Bs/año)' },
     ],
-    tags: ['Lean Six Sigma', 'SMED', 'python', 'Excel', 'Power BI'],
-    time: '',
+    tags: ['Lean Six Sigma', 'Python'],
+    time: '2025',
     link: '/proyecto-en-desarrollo.html',
-    environment: 'Proyecto Industrial',
+    linkLabel: 'Ver Estado',
     status: 'ACTIVE',
   },
   {
-    title: 'Desarrollo de arquitectura modular para modelos digitales fenomenológicos en python',
-    description:
-      'Diseño integral y simulación fenomenológica de una planta ISP con modelo ciberfísico acoplado a un gemelo digital en Python, balances termodinámicos rigurosos por etapa y optimización estocástica Monte Carlo.',
-    methodology:
-      'Modelado fenomenológico en Python (NumPy/Pandas) con validación de simulaciones de Monte Carlo de 300,000 corridas para optimizar balances de masa y energía de una planta ISP.',
-    objectives: [
-      'Mitigación de riesgos operativos mediante réplica computacional validada con primeros principios termodinámicos.',
-      'Validación del 99% de éxito operativo en 300,000 escenarios estocásticos mediante simulación Monte Carlo.',
-      'Ahorro energético del 25% en evaporación integrando pre-concentración por Ósmosis Inversa (9 kW vs 1,000 kW térmicos evitados).',
-      'Trazabilidad del 100% de la masa procesada incluyendo dosificación química (NaOH/HCl) y generación de subproductos.',
-      'Estandarización sanitaria bajo ASME BPE y EHEDG con ingeniería hidráulica integral y CIP automatizado.',
+    title: 'Modelo digital fenomenológico de ISP',
+    description: 'Gemelo digital de evaporación con balances termodinámicos rigurosos y optimización estocástica.',
+    metrics: [
+      { value: '300k', label: 'Corridas Monte Carlo' },
+      { value: '-25%', label: 'Consumo Evaporación' },
     ],
-    tags: ['Python', 'Monte Carlo', 'Six Sigma'],
-    time: 'Mar 2026 — Jun 2026',
+    tags: ['Python', 'Monte Carlo', 'ASME BPE'],
+    time: '2026',
     link: 'https://github.com/samuelthecreat/PROCESOS_UNITARIOS---PROYECTO_MOUNTAIN',
-    environment: 'Proyecto Industrial',
+    linkLabel: 'Repositorio',
     status: 'COMPLETED',
   },
 ];
 
-const environmentConfig: Record<string, { color: string; label: string }> = {
-  'Proyecto Industrial': { color: 'text-emerald-400 border-emerald-900/40 bg-emerald-950/10', label: 'Proyecto Industrial' },
-  'I+D':                 { color: 'text-cyan-400 border-cyan-900/40 bg-cyan-950/10',           label: 'I+D'              },
-  'Caso de Estudio':     { color: 'text-purple-400 border-purple-900/40 bg-purple-950/10',     label: 'Caso de Estudio' },
-};
-
-function ProjectCard({ project, index }: { project: Omit<Quest, 'index'>; index: number }) {
-  const env = environmentConfig[project.environment];
-
-  return (
-    <TiltCard className="group perspective-[1000px]">
-      <motion.div
-        initial={{ opacity: 0, y: 32 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-6% 0px' }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.08 }}
-        className="relative border border-[var(--color-surface-4)] hover:border-[var(--color-orange)]/50 bg-[var(--color-surface-2)]/30 hover:bg-[var(--color-surface-2)] backdrop-blur-sm rounded-sm p-5 md:p-6 cursor-pointer transition-all duration-500 overflow-hidden corner-l"
-      >
-        {/* Hover glow overlay */}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{
-            background: 'radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56,189,248,0.04), transparent 60%)',
-          }}
-        />
-
-        {/* Orange left accent bar */}
-        <motion.div
-          className="absolute left-0 top-0 bottom-0 w-0.5 bg-[var(--color-orange)] origin-top"
-          initial={{ scaleY: 0 }}
-          whileHover={{ scaleY: 1 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        />
-
-        {/* Index watermark */}
-        <span className="absolute top-4 right-4 text-6xl font-heading font-bold text-[var(--color-surface-4)]/30 select-none leading-none pointer-events-none transition-all duration-300 group-hover:text-[var(--color-orange)]/10 group-hover:scale-110">
-          {String(index + 1).padStart(2, '0')}
-        </span>
-
-        {/* Header row */}
-        <div className="flex flex-wrap gap-2 items-center mb-4 pb-3 border-b border-[var(--color-surface-4)] relative z-10">
-          {project.status === 'COMPLETED' ? (
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400 bg-emerald-950/20 border border-emerald-800/30 px-2 py-0.5 rounded-sm">
-              <CheckCircle className="w-2.5 h-2.5" /> Completado
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 bg-amber-950/20 border border-amber-800/30 px-2 py-0.5 rounded-sm animate-pulse">
-              <Flame className="w-2.5 h-2.5" /> En Desarrollo
-            </span>
-          )}
-
-          <span className={`inline-flex items-center text-[10px] font-mono border px-2 py-0.5 rounded-sm ${env.color}`}>
-            {env.label}
-          </span>
-
-          <span className="ml-auto text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider">
-            {project.time}
-          </span>
-        </div>
-
-        {/* Title */}
-        <h3 className="text-lg md:text-xl font-heading font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-orange)] transition-colors duration-300 uppercase tracking-tight mb-3 relative z-10">
-          {project.title}
-        </h3>
-
-        {/* Description */}
-        <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed mb-5 relative z-10">
-          {project.description}
-        </p>
-
-        {/* Detail grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 pt-4 border-t border-[var(--color-surface-4)] relative z-10">
-          <div className="md:col-span-5 space-y-2">
-            <div className="flex items-center gap-1.5">
-              <Wrench className="w-2.5 h-2.5 text-[var(--color-orange)]" />
-              <span className="text-[10px] font-mono text-[var(--color-orange)] uppercase tracking-widest font-bold">
-                Enfoque & Metodología
-              </span>
-            </div>
-            <p className="text-xs text-[var(--color-text-muted)] leading-relaxed font-mono">
-              {project.methodology}
-            </p>
-          </div>
-
-          <div className="md:col-span-7 space-y-2">
-            <div className="flex items-center gap-1.5">
-              <Award className="w-2.5 h-2.5 text-[var(--color-orange)]" />
-              <span className="text-[10px] font-mono text-[var(--color-orange)] uppercase tracking-widest font-bold">
-                Resultados & Impacto
-              </span>
-            </div>
-            <ul className="space-y-1.5">
-              {project.objectives.map((obj, i) => (
-                <li key={i} className="flex items-start gap-2 text-xs font-mono text-[var(--color-text-secondary)] leading-relaxed">
-                  <ChevronRight className="w-3 h-3 text-emerald-500 mt-0.5 shrink-0" />
-                  {obj}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Footer: tags + link */}
-        <div className="flex flex-wrap justify-between items-center gap-3 mt-5 pt-4 border-t border-[var(--color-surface-4)] relative z-10">
-          <div className="flex flex-wrap gap-1.5">
-            {project.tags.map(tag => (
-              <span
-                key={tag}
-                className="px-2.5 py-0.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-wide hover:border-[var(--color-orange)]/30 hover:text-[var(--color-text-secondary)] transition-all duration-200"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs font-mono tracking-widest uppercase font-bold text-[var(--color-orange)] hover:text-[var(--color-text-primary)] transition-colors border-b border-[var(--color-orange)]/30 hover:border-[var(--color-text-primary)] pb-0.5 group/link"
-          >
-            Ver Detalles
-            <ArrowUpRight className="w-3 h-3 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-          </a>
-        </div>
-      </motion.div>
-    </TiltCard>
-  );
-}
-
 export function Projects() {
-  return (
-    <section id="projects" className="py-24 px-6 max-w-5xl mx-auto w-full">
-      <FadeUp>
-        <div className="flex flex-col gap-1 mb-16">
-          <span className="tech-label">Casos de Estudio</span>
-          <div className="flex items-end gap-4">
-            <TextReveal
-              as="h2"
-              type="chars"
-              className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight"
-            >
-              Hitos &{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
-                Trayectoria
-              </span>
-            </TextReveal>
-            <div className="flex-1 h-px bg-[var(--color-surface-4)] mb-3 hidden md:block" />
-          </div>
-          <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed max-w-xl">
-            Proyectos destacados que documentan soluciones de ingeniería aplicadas tanto en planta industrial como en desarrollo digital.
-          </p>
-        </div>
-      </FadeUp>
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollYProgress = useMotionValue(0);
 
-      <div className="space-y-5">
-        {projectsData.map((project, idx) => (
-          <ProjectCard key={project.title} project={project} index={idx} />
-        ))}
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const rect = el.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const totalRange = rect.height + viewportHeight;
+      const currentScroll = viewportHeight - rect.top;
+      let progress = currentScroll / totalRange;
+      progress = Math.max(0, Math.min(1, progress));
+      scrollYProgress.set(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [scrollYProgress]);
+
+  // ── 4-card stack: Intro → P1 → P2 → Outro ──────────────────────────
+  // Total scroll space divided into 4 segments of ~25% each.
+  // Each card fades to 0 before the next one peaks at full opacity.
+
+  // Card 0: Intro/Header  (exits around 25%)
+  const y0      = useTransform(scrollYProgress, [0, 0.25],           ['0px', '-40px']);
+  const scale0  = useTransform(scrollYProgress, [0.15, 0.25],        [1, 0.92]);
+  const opacity0 = useTransform(scrollYProgress, [0.15, 0.25],       [1, 0]);
+  const pointerEvents0 = useTransform(scrollYProgress, [0.15, 0.25], ['auto', 'none']);
+
+  // Card 1: Project 1  (enters 20%, exits 50%)
+  const y1      = useTransform(scrollYProgress, [0.15, 0.35, 0.48], ['95vh', '0px', '-40px']);
+  const scale1  = useTransform(scrollYProgress, [0.40, 0.50],       [1, 0.92]);
+  const opacity1 = useTransform(scrollYProgress, [0.15, 0.35, 0.42, 0.50], [0, 1, 1, 0]);
+  const pointerEvents1 = useTransform(scrollYProgress, [0.15, 0.18, 0.42, 0.50], ['none', 'auto', 'auto', 'none']);
+
+  // Card 2: Project 2  (enters 45%, exits 75%)
+  const y2      = useTransform(scrollYProgress, [0.40, 0.60, 0.73], ['95vh', '0px', '-40px']);
+  const scale2  = useTransform(scrollYProgress, [0.65, 0.75],       [1, 0.92]);
+  const opacity2 = useTransform(scrollYProgress, [0.40, 0.60, 0.67, 0.75], [0, 1, 1, 0]);
+  const pointerEvents2 = useTransform(scrollYProgress, [0.40, 0.43, 0.67, 0.75], ['none', 'auto', 'auto', 'none']);
+
+  // Card 3: Outro finalizer  (enters 70%, stays)
+  const y3      = useTransform(scrollYProgress, [0.68, 0.88],  ['95vh', '0px']);
+  const opacity3 = useTransform(scrollYProgress, [0.68, 0.88], [0, 1]);
+  const pointerEvents3 = useTransform(scrollYProgress, [0.68, 0.72], ['none', 'auto']);
+
+  return (
+    <div ref={containerRef} className="relative h-[600vh] w-full bg-transparent">
+      {/* Sticky viewport wrapper */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center items-center">
+
+        {/* Stack Wrapper */}
+        <div className="relative w-[88vw] md:w-[70vw] h-[65vh] md:h-[68vh] flex items-center justify-center">
+          
+          {/* ── Card 0: Section Intro ── */}
+          <motion.div 
+            style={{ y: y0, scale: scale0, opacity: opacity0, pointerEvents: pointerEvents0 }} 
+            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center text-center p-8 md:p-14 pro-card rounded-sm corner-l"
+          >
+            <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+            <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-6 mx-auto">
+              Casos de Estudio
+            </span>
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[0.9] mb-8 text-center">
+              Hitos &<br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+                Proyectos
+              </span>
+            </h2>
+            <div className="flex items-center gap-2 justify-center text-xs font-mono text-[var(--color-text-muted)] animate-pulse">
+              <Compass className="w-4 h-4 text-[var(--color-orange)]" />
+              <span>SCROLL PARA EXPLORAR</span>
+            </div>
+          </motion.div>
+
+          {/* ── Card 1: Project 1 (Tintas) ── */}
+          <motion.div 
+            style={{ y: y1, scale: scale1, opacity: opacity1, pointerEvents: pointerEvents1 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <TiltCard className="h-full w-full">
+              <div className="relative h-full w-full pro-card rounded-sm p-8 md:p-14 overflow-hidden flex flex-col items-center text-center justify-between corner-l group">
+                <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+                <span className="absolute top-6 right-8 text-7xl md:text-9xl font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">01</span>
+
+                <div className="flex flex-col items-center justify-center flex-1 relative z-10 mt-6">
+                  <h3 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-6 text-center">
+                    {projectsData[0].title}
+                  </h3>
+                  <p className="text-base md:text-2xl text-[var(--color-text-secondary)] font-sans max-w-4xl mb-8 leading-relaxed text-center">
+                    {projectsData[0].description}
+                  </p>
+                  <div className="flex flex-wrap gap-4 items-center justify-center">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-widest text-[var(--color-orange-vivid)] bg-[var(--color-orange-muted)] border border-[var(--color-orange-dim)]/30 px-3 py-1 rounded-sm animate-pulse">
+                      <Flame className="w-3.5 h-3.5" /> En Desarrollo
+                    </span>
+                    {projectsData[0].tags.map((tag) => (
+                      <span key={tag} className="px-3 py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wide">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap justify-center items-end gap-6 relative z-10 border-t border-[var(--color-surface-4)]/40 pt-6">
+                  <div className="flex gap-6">
+                    {projectsData[0].metrics.map((m) => (
+                      <div key={m.label} className="flex flex-col items-center text-center">
+                        <span className="text-2xl md:text-3xl font-heading font-bold text-[var(--color-orange)] tabular-nums leading-none mb-1 text-glow-subtle">{m.value}</span>
+                        <span className="text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{m.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href={projectsData[0].link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm md:text-base font-mono tracking-widest uppercase font-bold text-[var(--color-text-primary)] hover:text-[var(--color-orange)] transition-colors border-b border-transparent hover:border-[var(--color-orange)] pb-0.5 group/link"
+                  >
+                    <Clock className="w-4 h-4" />
+                    {projectsData[0].linkLabel}
+                  </a>
+                </div>
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* ── Card 2: Project 2 (Modelo Digital) ── */}
+          <motion.div 
+            style={{ y: y2, scale: scale2, opacity: opacity2, pointerEvents: pointerEvents2 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <TiltCard className="h-full w-full">
+              <div className="relative h-full w-full pro-card rounded-sm p-8 md:p-14 overflow-hidden flex flex-col items-center text-center justify-between corner-l group">
+                <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+                <span className="absolute top-6 right-8 text-7xl md:text-9xl font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">02</span>
+
+                <div className="flex flex-col items-center justify-center flex-1 relative z-10 mt-6">
+                  <h3 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-6 text-center">
+                    {projectsData[1].title}
+                  </h3>
+                  <p className="text-base md:text-2xl text-[var(--color-text-secondary)] font-sans max-w-4xl mb-8 leading-relaxed text-center">
+                    {projectsData[1].description}
+                  </p>
+                  <div className="flex flex-wrap gap-4 items-center justify-center">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-widest text-[var(--color-orange)] bg-[var(--color-orange-muted)] border border-[var(--color-orange-dim)]/30 px-3 py-1 rounded-sm">
+                      <CheckCircle className="w-3.5 h-3.5" /> Completado
+                    </span>
+                    {projectsData[1].tags.map((tag) => (
+                      <span key={tag} className="px-3 py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wide">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap justify-center items-end gap-6 relative z-10 border-t border-[var(--color-surface-4)]/40 pt-6">
+                  <div className="flex gap-6">
+                    {projectsData[1].metrics.map((m) => (
+                      <div key={m.label} className="flex flex-col items-center text-center">
+                        <span className="text-2xl md:text-3xl font-heading font-bold text-[var(--color-orange)] tabular-nums leading-none mb-1 text-glow-subtle">{m.value}</span>
+                        <span className="text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{m.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href={projectsData[1].link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm md:text-base font-mono tracking-widest uppercase font-bold text-[var(--color-text-primary)] hover:text-[var(--color-orange)] transition-colors border-b border-transparent hover:border-[var(--color-orange)] pb-0.5 group/link"
+                  >
+                    {projectsData[1].linkLabel} <ArrowUpRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
+                  </a>
+                </div>
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* ── Card 3: Outro Finalizer ── */}
+          <motion.div 
+            style={{ y: y3, opacity: opacity3, pointerEvents: pointerEvents3 }}
+            className="absolute inset-0 w-full h-full pro-card rounded-sm p-8 md:p-14 flex flex-col justify-center items-center text-center corner-l"
+          >
+            <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+            <div 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%)' }}
+            />
+            <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-10">
+              Código Abierto
+            </span>
+            <h3 className="text-4xl md:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter mb-6">
+              Explora el <span className="text-[var(--color-orange)]">Código</span>
+            </h3>
+            <p className="text-base md:text-xl text-[var(--color-text-secondary)] leading-relaxed font-sans max-w-2xl mb-10">
+              Todos mis proyectos industriales, modelos termodinámicos y orquestaciones están documentados y disponibles en código abierto.
+            </p>
+            <a
+              href="https://github.com/FosforoWork"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-[var(--color-surface-1)] hover:bg-[var(--color-orange)] hover:text-[var(--color-text-primary)] border border-[var(--color-surface-4)] hover:border-[var(--color-orange)] text-sm md:text-base font-mono font-bold uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_var(--orange-glow)]"
+            >
+              <Github className="w-5 h-5" />
+              Ver GitHub
+            </a>
+          </motion.div>
+
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

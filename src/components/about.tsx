@@ -1,47 +1,7 @@
-'use client';
-
 import React, { useState, useEffect, useRef } from 'react';
-import { FadeUp, useScrollReveal } from './fade-up';
-import { TextReveal } from './text-reveal';
-import { MessageSquareCode, Globe, MapPin, Award, ChevronRight } from 'lucide-react';
-
-interface DialogueTopic {
-  id: string;
-  label: string;
-  question: string;
-  answer: string;
-}
-
-const dialogueTopics: DialogueTopic[] = [
-  {
-    id: 'intro',
-    label: '01',
-    question: '¿Quién eres?',
-    answer:
-      'Samuel Aguilera. Estudiante de 3er año de Ingeniería Industrial en la UCB "San Pablo". Enfocado en la convergencia entre el modelado de operaciones físicas y la automatización de flujos de información digital.',
-  },
-  {
-    id: 'specialty',
-    label: '02',
-    question: '¿Cuál es tu especialidad?',
-    answer:
-      'Optimización de operaciones mediante la intersección de Lean Six Sigma (DMAIC), Ciencia de Datos aplicada (Python, SQL) y orquestación de workflows (n8n). Traduzco variables críticas de proceso en retornos financieros medibles.',
-  },
-  {
-    id: 'experience',
-    label: '03',
-    question: '¿Cuál es tu experiencia actual?',
-    answer:
-      'Pasantía de producción en EMPACAR S.A. Ejecución de proyectos LSS enfocados en la reducción del 53.3% en tiempos de setup (SMED), modelado predictivo multivariante de mermas y centralización de KPIs en Power BI.',
-  },
-  {
-    id: 'mission',
-    label: '04',
-    question: '¿Cuál es tu enfoque?',
-    answer:
-      'Erradicar la "muda" digital y operativa en cadenas de valor. Reemplazar la toma de decisiones por intuición en piso mediante simulación matemática rigurosa (Monte Carlo), analítica continua y sistemas integrados a bajo costo.',
-  },
-];
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { useScrollReveal } from './fade-up';
+import { MessageSquareCode, Globe, MapPin, Award, Compass, ArrowDown } from 'lucide-react';
 
 function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
   const { ref, visible } = useScrollReveal();
@@ -76,144 +36,168 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 }
 
 const statsData = [
-  { icon: MessageSquareCode, label: 'Proyectos',      num: 5,  suffix: '+', text: '', isNumber: true },
-  { icon: Award,             label: 'Certificación',  num: 3,  suffix: '',  text: '', isNumber: true },
-  { icon: Globe,             label: 'Idiomas',        num: 3,  suffix: '',  text: '', isNumber: true },
-  { icon: MapPin,            label: 'Ubicación',      num: 0,  suffix: '',  text: 'Bolivia - Santa Cruz', isNumber: false },
+  { icon: MessageSquareCode, label: 'Proyectos',       num: 5,  suffix: '+', text: '',                   isNumber: true  },
+  { icon: Award,             label: 'Certificaciones', num: 3,  suffix: '',  text: '',                   isNumber: true  },
+  { icon: Globe,             label: 'Idiomas',         num: 3,  suffix: '',  text: '',                   isNumber: true  },
+  { icon: MapPin,            label: 'Ubicación',       num: 0,  suffix: '',  text: 'Bolivia - Santa Cruz', isNumber: false },
 ];
 
 export function About() {
-  const [activeTopicId, setActiveTopicId] = useState<string>('intro');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollYProgress = useMotionValue(0);
 
-  const currentTopic = dialogueTopics.find(t => t.id === activeTopicId) || dialogueTopics[0];
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
 
-  const handleSelectTopic = (id: string) => {
-    if (id === activeTopicId) return;
-    setActiveTopicId(id);
-  };
+    const handleScroll = () => {
+      const rect = el.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const totalRange = rect.height + viewportHeight;
+      const currentScroll = viewportHeight - rect.top;
+      let progress = currentScroll / totalRange;
+      progress = Math.max(0, Math.min(1, progress));
+      scrollYProgress.set(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [scrollYProgress]);
+
+  // ── 3-card stack: Intro → Stats → Outro ──────────────────────────────
+  // h-[400vh] divided into 3 segments of ~33% each.
+
+  // Card 0: Intro  (exits around 28%)
+  const y0      = useTransform(scrollYProgress, [0, 0.28],           ['0px', '-40px']);
+  const scale0  = useTransform(scrollYProgress, [0.20, 0.28],        [1, 0.92]);
+  const opacity0 = useTransform(scrollYProgress, [0.20, 0.28],       [1, 0]);
+  const pointerEvents0 = useTransform(scrollYProgress, [0.20, 0.28], ['auto', 'none']);
+
+  // Card 1: Stats  (enters 22%, exits 62%)
+  const y1       = useTransform(scrollYProgress, [0.18, 0.40, 0.58], ['95vh', '0px', '-40px']);
+  const scale1   = useTransform(scrollYProgress, [0.50, 0.60],       [1, 0.92]);
+  const opacity1 = useTransform(scrollYProgress, [0.18, 0.38, 0.52, 0.62], [0, 1, 1, 0]);
+  const pointerEvents1 = useTransform(scrollYProgress, [0.18, 0.22, 0.52, 0.62], ['none', 'auto', 'auto', 'none']);
+
+  // Card 2: Outro  (enters 58%, stays)
+  const y2       = useTransform(scrollYProgress, [0.56, 0.80],  ['95vh', '0px']);
+  const opacity2 = useTransform(scrollYProgress, [0.56, 0.80],  [0, 1]);
+  const pointerEvents2 = useTransform(scrollYProgress, [0.56, 0.60], ['none', 'auto']);
 
   return (
-    <section id="about" className="py-24 px-6 border-t border-[var(--color-surface-4)] max-w-5xl mx-auto w-full">
-      <FadeUp>
-        <div className="space-y-12">
+    <section ref={containerRef} id="about" className="relative h-[400vh] w-full bg-transparent">
+      {/* Divider gradient line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--color-surface-4)]/40 to-transparent" />
+      
+      {/* Sticky viewport wrapper */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center items-center">
 
-          {/* ── Section header ─────────────────────────────────── */}
-          <div className="flex flex-col gap-1">
-            <span className="tech-label">Trayectoria</span>
-            <div className="flex items-end gap-4">
-              <TextReveal
-                as="h2"
-                type="chars"
-                className="text-4xl md:text-5xl font-heading text-[var(--color-text-primary)] uppercase tracking-tight"
-              >
-                Informacion{' '}
-                <span className="text-[var(--color-text-primary)]">
-                  Sobre quien soy
-                </span>
-              </TextReveal>
-              {/* Section rule */}
-              <div className="flex-1 h-px bg-[var(--color-surface-4)] mb-3 hidden md:block" />
-            </div>
-          </div>
+        {/* Stack Wrapper */}
+        <div className="relative w-[88vw] md:w-[70vw] h-[65vh] md:h-[68vh] flex items-center justify-center">
 
-          {/* ── Engineering terminal panel ─────────────────────── */}
-          <div className="relative border border-[var(--color-surface-4)] bg-[var(--color-surface-2)] backdrop-blur-sm rounded-sm overflow-hidden">
-
-            {/* Terminal top bar */}
-            <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--color-surface-1)] border-b border-[var(--color-surface-4)]">
-              <div className="flex items-center gap-2">
-                {/* Traffic light dots */}
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                <span className="ml-2 text-xs font-mono text-[var(--color-text-muted)] tracking-wider uppercase">
-                  samuel.aguilera@ucb ~ terminal
-                </span>
-              </div>
-              {/* Status indicator */}
-              <span className="flex items-center gap-1.5 text-xs font-mono text-emerald-400 uppercase tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Disponible
+          {/* ── Card 0: Intro ── */}
+          <motion.div
+            style={{ y: y0, scale: scale0, opacity: opacity0, pointerEvents: pointerEvents0 }}
+            className="absolute inset-0 w-full h-full pro-card rounded-sm p-8 md:p-14 flex flex-col justify-center items-center text-center corner-l"
+          >
+            <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+            <div className="relative z-10 flex flex-col gap-6 items-center text-center w-full">
+              <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mx-auto">
+                Perfil Principal
               </span>
-            </div>
-
-            {/* Main content: sidebar + output */}
-            <div className="flex flex-col md:flex-row">
-
-              {/* ── Left sidebar: query selection ─────────────── */}
-              <div className="md:w-56 border-b md:border-b-0 md:border-r border-[var(--color-surface-4)] bg-[var(--color-surface-1)]/50">
-                <div className="p-3 border-b border-[var(--color-surface-4)]">
-                  <span className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
-                    $ Consultas disponibles
-                  </span>
-                </div>
-                <div className="p-2 space-y-1">
-                  {dialogueTopics.map(topic => {
-                    const isActive = activeTopicId === topic.id;
-                    return (
-                      <button
-                        key={topic.id}
-                        onClick={() => handleSelectTopic(topic.id)}
-                        className={`w-full text-left flex items-center gap-2 px-3 py-2.5 rounded-sm text-xs font-mono cursor-pointer transition-all duration-150 ${
-                          isActive
-                            ? 'bg-[var(--color-cyan)] text-white'
-                            : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-3)] hover:text-[var(--color-text-primary)]'
-                        }`}
-                      >
-                          <span className={`text-xs shrink-0 ${isActive ? 'text-white/60' : 'text-[var(--color-cyan)]/50'}`}>
-                          {topic.label}
-                        </span>
-                        <span className="truncate">{topic.question}</span>
-                        {isActive && <ChevronRight className="ml-auto w-3 h-3 shrink-0" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* ── Right: output panel ────────────────────────── */}
-              <div className="flex-1 p-5 md:p-6 min-h-[200px]">
-                {/* Command prompt */}
-                <div className="mb-3">
-                  <span className="text-xs font-mono text-[var(--color-cyan)]">$ </span>
-                  <span className="text-xs font-mono text-[var(--color-text-muted)]">
-                    query --topic=&quot;{currentTopic.question}&quot;
-                  </span>
-                </div>
-                {/* Output */}
-                <div className="min-h-[90px]">
-                  <p className="text-sm font-mono text-[var(--color-text-primary)] leading-relaxed tracking-wide">
-                    <span className="text-[var(--color-text-muted)] mr-2">&gt;</span>
-                    {currentTopic.answer}
-                  </p>
-                </div>
+              <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[0.9] text-center">
+                Sobre<br/>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+                  Mí
+                </span>
+              </h2>
+              <div className="flex items-center gap-2 justify-center text-xs font-mono text-[var(--color-text-muted)] animate-pulse">
+                <Compass className="w-4 h-4 text-[var(--color-orange)]" />
+                <span>SCROLL PARA CONOCERME</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* ── Stats info grid ────────────────────────────────── */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {statsData.map(({ icon: Icon, label, num, suffix, text, isNumber }, i) => (
-              <FadeUp key={label} delay={i * 80} animation="scale">
-                <div className="border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/50 hover:bg-[var(--color-surface-2)] hover:border-[var(--color-cyan)]/30 backdrop-blur-sm p-4 rounded-sm transition-all duration-200 group">
+          {/* ── Card 1: Stats / Content ── */}
+          <motion.div
+            style={{ y: y1, scale: scale1, opacity: opacity1, pointerEvents: pointerEvents1 }}
+            className="absolute inset-0 w-full h-full pro-card rounded-sm p-6 md:p-10 flex flex-col justify-between corner-l"
+          >
+            <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+            <span className="absolute top-4 right-6 text-7xl font-heading font-bold text-[var(--color-surface-4)]/20 select-none leading-none pointer-events-none">01</span>
+
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <span className="text-[9px] font-mono text-[var(--color-orange)] tracking-widest uppercase mb-3 block">
+                Ingeniero Industrial · UCB
+              </span>
+              <h3 className="text-2xl md:text-4xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tight mb-3">
+                Optimizando operaciones físicas con{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+                  Ciencia de Datos
+                </span>{' '}
+                y{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange-vivid)] to-[var(--color-orange)]">
+                  Lean Six Sigma
+                </span>.
+              </h3>
+              <p className="text-sm md:text-base text-[var(--color-text-secondary)] leading-relaxed font-sans max-w-3xl text-center">
+                Especializado en reducción de mermas y tiempos de setup. Combino simulación Monte Carlo, analítica predictiva en Python y orquestación para transformar cuellos de botella en retornos financieros medibles.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 relative z-10 mt-4">
+              {statsData.map(({ icon: Icon, label, num, suffix, text, isNumber }) => (
+                <div 
+                  key={label} 
+                  className="border border-[var(--color-surface-4)]/60 bg-[var(--color-surface-1)]/40 p-4 rounded-sm group flex flex-col items-center text-center hover:border-[var(--color-orange)] transition-colors"
+                >
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="p-1.5 rounded-sm bg-[var(--color-surface-1)] border border-[var(--color-surface-4)] group-hover:border-[var(--color-cyan)]/30 group-hover:text-[var(--color-cyan)] text-[var(--color-text-muted)] transition-colors">
+                    <div className="p-1.5 rounded-sm bg-[var(--color-surface-2)] border border-[var(--color-surface-4)] text-[var(--color-text-muted)] group-hover:text-[var(--color-orange)] transition-colors">
                       <Icon className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-widest">
-                      {label}
-                    </span>
+                    <span className="text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{label}</span>
                   </div>
-                  <span className="text-lg font-heading font-bold text-[var(--color-text-primary)] tabular-nums">
+                  <span className="text-2xl md:text-3xl font-heading font-bold text-[var(--color-text-primary)] tabular-nums leading-none mt-1">
                     {isNumber ? <AnimatedCounter value={num} suffix={suffix} /> : text}
                   </span>
                 </div>
-              </FadeUp>
-            ))}
-          </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* ── Card 2: Outro Finalizer ── */}
+          <motion.div
+            style={{ y: y2, opacity: opacity2, pointerEvents: pointerEvents2 }}
+            className="absolute inset-0 w-full h-full pro-card rounded-sm p-8 md:p-14 flex flex-col justify-center items-center text-center corner-l"
+          >
+            <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+            <div 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%)' }}
+            />
+            <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-10">
+              Mi Perfil Completo
+            </span>
+            <h3 className="text-4xl md:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter mb-6">
+              Conoce mis <span className="text-[var(--color-orange)]">Skills</span>
+            </h3>
+            <p className="text-base md:text-xl text-[var(--color-text-secondary)] leading-relaxed font-sans max-w-2xl mb-3">
+              Continúa scrolleando para explorar el stack de herramientas y metodologías que aplico en cada proyecto.
+            </p>
+            <div className="flex items-center gap-2 text-xs font-mono text-[var(--color-text-muted)] animate-pulse mt-4">
+              <ArrowDown className="w-4 h-4 text-[var(--color-orange)]" />
+              <span>SIGUIENTE SECCIÓN</span>
+            </div>
+          </motion.div>
 
         </div>
-      </FadeUp>
+      </div>
     </section>
   );
 }

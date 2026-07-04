@@ -2,270 +2,216 @@
 
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, Cpu, GitBranch, Layers, Github, Linkedin, Mail } from 'lucide-react';
-
-function WordReveal({ children, delay = 0 }: { children: string; delay?: number }) {
-  const words = children.split(' ');
-  return (
-    <span className="inline">
-      {words.map((word, i) => (
-        <span key={i} className="inline-block overflow-hidden mr-[0.25em] last:mr-0">
-          <motion.span
-            className="inline-block"
-            initial={{ y: '110%', rotate: 8, opacity: 0 }}
-            animate={{ y: 0, rotate: 0, opacity: 1 }}
-            transition={{
-              duration: 0.7,
-              ease: [0.16, 1, 0.3, 1],
-              delay: delay + i * 0.08,
-            }}
-          >
-            {word}
-          </motion.span>
-        </span>
-      ))}
-    </span>
-  );
-}
-
-function StaggerItem({
-  children,
-  delay,
-  className = '',
-  as: Tag = 'div',
-}: {
-  children: React.ReactNode;
-  delay: number;
-  className?: string;
-  as?: 'div' | 'p' | 'span';
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
+import { Cpu, GitBranch, Layers, Github, Linkedin, Mail } from 'lucide-react';
+import { HeroSvgBackground } from './hero-svg-background';
 
 export function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ['start start', 'end start'],
+    // El offset mide el progreso desde que el Hero está en la parte superior ('start start')
+    // hasta que el fondo del contenedor largo de 350vh toca el fondo del viewport ('end end')
+    offset: ['start start', 'end end'],
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], [0, 60]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  // Background stripes
+  const leftY = useTransform(scrollYProgress, [0, 0.2], ['-15%', '0%']);
+  const leftOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+
+  const rightY = useTransform(scrollYProgress, [0.15, 0.35], ['15%', '0%']);
+  const rightOpacity = useTransform(scrollYProgress, [0.15, 0.35], [0, 1]);
+
+  const centerScale = useTransform(scrollYProgress, [0.3, 0.5], [0.92, 1]);
+  const centerOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1]);
+
+  // Dark overlay (entra para facilitar la lectura del texto)
+  const overlayOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+
+  // Foreground text items
+  const tagOpacity = useTransform(scrollYProgress, [0.55, 0.65], [0, 1]);
+  const tagY = useTransform(scrollYProgress, [0.55, 0.65], [20, 0]);
+
+  const titleOpacity = useTransform(scrollYProgress, [0.6, 0.7], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0.6, 0.7], [20, 0]);
+
+  const roleOpacity = useTransform(scrollYProgress, [0.65, 0.75], [0, 1]);
+  const roleY = useTransform(scrollYProgress, [0.65, 0.75], [20, 0]);
+
+  const bioOpacity = useTransform(scrollYProgress, [0.7, 0.8], [0, 1]);
+  const bioY = useTransform(scrollYProgress, [0.7, 0.8], [20, 0]);
+
+  const linksOpacity = useTransform(scrollYProgress, [0.75, 0.85], [0, 1]);
+  const linksY = useTransform(scrollYProgress, [0.75, 0.85], [20, 0]);
+
+  const certsOpacity = useTransform(scrollYProgress, [0.8, 0.9], [0, 1]);
+  const certsY = useTransform(scrollYProgress, [0.8, 0.9], [20, 0]);
+
+  // Scroll Indicator se desvanece al empezar a scrollear
+  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
 
   return (
-    <section
-      id="hero"
-      ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-[var(--color-surface-1)] py-20 md:py-32"
-      aria-label="Presentación Samuel Aguilera"
-    >
-      {/* Blueprint grid overlay */}
-      <div
-        className="absolute inset-0 blueprint-grid opacity-30 pointer-events-none"
-        aria-hidden="true"
-      />
+    <section ref={sectionRef} id="hero" className="relative h-[450vh] w-full" aria-label="Presentación Samuel Aguilera">
+      {/* ── Contenedor Pegajoso (Sticky) ── */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[var(--color-surface-1)]">
+        
+        {/* ── Background: Animado por Scroll ── */}
+        <div className="absolute inset-0 z-0">
+          {/* Franja Izquierda */}
+          <motion.div
+            className="absolute inset-0"
+            style={{ clipPath: 'polygon(0 0, 40% 0, 15% 100%, 0 100%)', y: leftY, opacity: leftOpacity }}
+          >
+            <img
+              src="/images/Banner Industrial Samuel.png"
+              alt="Hero Background Left"
+              className="w-full h-full object-cover filter saturate-90 contrast-105"
+              loading="eager"
+            />
+          </motion.div>
 
-      {/* Decorative engineering annotations */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <svg className="absolute top-8 left-8 w-12 h-12 opacity-20" viewBox="0 0 48 48" fill="none">
-          <line x1="24" y1="0" x2="24" y2="48" stroke="var(--color-orange)" strokeWidth="1" />
-          <line x1="0" y1="24" x2="48" y2="24" stroke="var(--color-orange)" strokeWidth="1" />
-          <circle cx="24" cy="24" r="5" stroke="var(--color-orange)" strokeWidth="1" fill="none" />
-        </svg>
-        <div className="absolute top-8 right-8 text-right">
-          <div className="text-xs font-mono text-[var(--color-text-muted)] tracking-widest uppercase opacity-50">REV. 3.1.0</div>
-          <div className="text-xs font-mono text-[var(--color-text-muted)] tracking-widest uppercase opacity-50">Portafolio v2026</div>
+          {/* Franja Derecha */}
+          <motion.div
+            className="absolute inset-0"
+            style={{ clipPath: 'polygon(85% 0, 100% 0, 100% 100%, 60% 100%)', y: rightY, opacity: rightOpacity }}
+          >
+            <img
+              src="/images/Banner Industrial Samuel.png"
+              alt="Hero Background Right"
+              className="w-full h-full object-cover filter saturate-90 contrast-105"
+              loading="eager"
+            />
+          </motion.div>
+
+          {/* Franja Central */}
+          <motion.div
+            className="absolute inset-0"
+            style={{ clipPath: 'polygon(40% 0, 85% 0, 60% 100%, 15% 100%)', scale: centerScale, opacity: centerOpacity }}
+          >
+            <img
+              src="/images/Banner Industrial Samuel.png"
+              alt="Hero Background Center"
+              className="w-full h-full object-cover filter saturate-90 contrast-105"
+              loading="eager"
+            />
+          </motion.div>
+
+          {/* Dark overlay */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-b from-[var(--color-surface-1)]/80 via-[var(--color-surface-1)]/50 to-[var(--color-surface-1)]/90"
+            style={{ opacity: overlayOpacity }}
+          />
+
+          {/* Decorative engineering annotations */}
+          <div className="absolute inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen">
+            <HeroSvgBackground />
+            <div className="absolute top-8 right-8 text-center">
+              <div className="text-xs font-mono text-[var(--color-orange)] tracking-widest uppercase opacity-70">REV. 3.1.0</div>
+              <div className="text-xs font-mono text-[var(--color-text-muted)] tracking-widest uppercase opacity-50">Portafolio v2026</div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Ambient glow behind hero content */}
-      <div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse, rgba(56,189,248,0.06) 0%, transparent 70%)',
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center px-6 relative z-10">
-        {/* ── Left Column ── */}
-        <motion.div className="md:col-span-7 flex flex-col justify-center text-left space-y-6" style={{ opacity }}>
-          {/* Status tag line */}
-          <StaggerItem delay={0.1}>
-            <div className="flex items-center gap-3">
+        {/* ── Contenido de Primer Plano ── */}
+        <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center justify-center px-6 h-full text-center space-y-6 pt-10">
+          
+          <motion.div style={{ opacity: tagOpacity, y: tagY }}>
+            <div className="flex items-center gap-3 justify-center">
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-orange)] animate-pulse inline-block" />
-              <span className="text-xs font-mono tracking-widest uppercase text-[var(--color-orange)] font-bold">
+              <span className="text-xs font-mono tracking-widest uppercase text-[var(--color-orange)] font-bold drop-shadow-md">
                 Perfil Profesional
               </span>
-              <span className="text-xs font-mono tracking-widest uppercase text-[var(--color-text-muted)]">
+              <span className="text-xs font-mono tracking-widest uppercase text-[var(--color-text-secondary)] drop-shadow-md">
                 / Samuel Aguilera
               </span>
             </div>
-          </StaggerItem>
+          </motion.div>
 
-          {/* Main heading - word by word */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-[var(--color-text-primary)] leading-none tracking-tight overflow-hidden">
-            <div className="mb-2">
-              <WordReveal delay={0.3}>Samuel</WordReveal>
-            </div>
-            <span className="text-[var(--color-text-primary)]">
-              <WordReveal delay={0.5}>Aguilera</WordReveal>
-            </span>
-          </h1>
+          <motion.h1 style={{ opacity: titleOpacity, y: titleY }} className="text-5xl sm:text-6xl md:text-8xl font-heading font-bold text-[var(--color-text-primary)] leading-none tracking-tight text-center w-full drop-shadow-xl flex flex-col gap-2">
+            <span>Samuel</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-text-primary)] to-[var(--color-text-secondary)]">Aguilera</span>
+          </motion.h1>
 
-          {/* Role tags */}
-          <StaggerItem delay={0.7}>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { icon: Cpu, label: 'Ingeniería Industrial' },
-                { icon: Layers, label: 'Lean Six Sigma' },
-                { icon: GitBranch, label: 'Data & Automatización' },
-              ].map(({ icon: Icon, label }) => (
-                <motion.span
-                  key={label}
-                  whileHover={{ scale: 1.02, borderColor: 'var(--color-orange)' }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 backdrop-blur-sm text-xs font-mono text-[var(--color-text-secondary)] rounded-sm tracking-wider uppercase cursor-default"
-                >
-                  <Icon className="w-3.5 h-3.5 text-[var(--color-orange)] shrink-0" />
-                  {label}
-                </motion.span>
-              ))}
-            </div>
-          </StaggerItem>
+          <motion.div style={{ opacity: roleOpacity, y: roleY }} className="flex flex-wrap gap-2 justify-center">
+            {[
+              { icon: Cpu, label: 'Ingeniería Industrial' },
+              { icon: Layers, label: 'Lean Six Sigma' },
+              { icon: GitBranch, label: 'Data & Automatización' },
+            ].map(({ icon: Icon, label }) => (
+              <span
+                key={label}
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 backdrop-blur-md text-xs font-mono text-[var(--color-text-secondary)] rounded-sm tracking-wider uppercase cursor-default shadow-lg transition-colors hover:border-[var(--color-orange)] hover:bg-[rgba(249,115,22,0.1)] hover:text-[var(--color-text-primary)] hover:scale-105"
+              >
+                <Icon className="w-3.5 h-3.5 text-[var(--color-orange)] shrink-0" />
+                {label}
+              </span>
+            ))}
+          </motion.div>
 
-          {/* Bio */}
-          <StaggerItem delay={0.85}>
-            <p className="text-sm md:text-base text-[var(--color-text-secondary)] font-normal leading-relaxed max-w-lg">
+          <motion.div style={{ opacity: bioOpacity, y: bioY }}>
+            <p className="text-sm md:text-lg text-[var(--color-text-secondary)] font-normal leading-relaxed max-w-2xl mx-auto text-center drop-shadow-md">
               Estudiante de 3er año en la UCB &quot;San Pablo&quot;. Combino rigor de{' '}
               <strong className="text-[var(--color-text-primary)] font-semibold">Mejora Continua</strong> con{' '}
               <strong className="text-[var(--color-text-primary)] font-semibold">Análisis de Datos</strong>{' '}
               (SQL, Python, Power BI) para optimizar procesos y automatizar decisiones operativas.
             </p>
-          </StaggerItem>
+          </motion.div>
 
-          {/* Social proof: code audit links */}
-          <StaggerItem delay={0.95}>
-            <div className="flex items-center gap-3">
-              <a
-                href="https://github.com/FosforoWork"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-2)] hover:border-[var(--color-text-secondary)]/60 backdrop-blur-sm rounded-sm transition-all duration-200 group"
-                aria-label="GitHub"
-              >
-                <Github className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)] transition-colors" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/samuelaguileraaraujo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-2)] hover:border-sky-500/60 rounded-sm transition-all duration-200 group"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-sky-400 transition-colors" />
-              </a>
-              <a
-                href="https://mail.google.com/mail/?view=cm&fs=1&to=samuelagss1@gmail.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-2)] hover:border-sky-500/60 rounded-sm transition-all duration-200 group"
-                aria-label="Gmail"
-              >
-                <Mail className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-sky-400 transition-colors" />
-              </a>
-              
-              
-              </div>
-          </StaggerItem>
+          <motion.div style={{ opacity: linksOpacity, y: linksY }} className="flex items-center gap-4 justify-center mt-4">
+            <a
+              href="https://github.com/FosforoWork"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-3)] hover:border-[var(--color-text-secondary)]/60 backdrop-blur-md rounded-sm transition-all duration-200 group shadow-lg"
+              aria-label="GitHub"
+            >
+              <Github className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/samuelaguileraaraujo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-3)] hover:border-sky-500/60 backdrop-blur-md rounded-sm transition-all duration-200 group shadow-lg"
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-orange)] transition-colors" />
+            </a>
+            <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=samuelagss1@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-3)] hover:border-sky-500/60 backdrop-blur-md rounded-sm transition-all duration-200 group shadow-lg"
+              aria-label="Gmail"
+            >
+              <Mail className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-orange)] transition-colors" />
+            </a>
+          </motion.div>
 
-          {/* Certifications */}
-          <StaggerItem delay={1.0}>
-            <div className="border-l-2 border-[var(--color-orange)]/30 pl-4 space-y-2">
-              <div className="text-xs font-mono uppercase tracking-widest text-[var(--color-text-muted)]">
-                Certificaciones
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {['LSS Black Belt (Cand.)'].map((cert, i) => (
-                  <motion.span
-                    key={cert}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1.1 + i * 0.08, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="px-2.5 py-0.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-wide"
-                  >
-                    {cert}
-                  </motion.span>
-                ))}
-              </div>
+          <motion.div style={{ opacity: certsOpacity, y: certsY }} className="border-t border-[var(--color-surface-4)]/60 pt-6 mt-6 w-full max-w-md flex flex-col items-center space-y-3">
+            <div className="text-xs font-mono uppercase tracking-widest text-[var(--color-text-muted)] drop-shadow-md">
+              Certificaciones
             </div>
-          </StaggerItem>
-
-          {/* CTAs */}
-          <StaggerItem delay={1.2}>
-            <div className="flex flex-wrap gap-3">
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <a
-                  href="#projects"
-                  className="group inline-flex items-center gap-3 px-6 py-3.5 bg-[var(--color-cyan)] hover:bg-[var(--color-cyan-vivid)] text-white text-xs font-mono font-semibold uppercase tracking-wider rounded-sm transition-all duration-200 hover:shadow-[0_0_30px_rgba(56,189,248,0.3)] active:scale-[0.98]"
+            <div className="flex flex-wrap gap-2 justify-center">
+              {['LSS Black Belt (Cand.)'].map((cert) => (
+                <span
+                  key={cert}
+                  className="px-3 py-1 border border-[var(--color-orange)]/40 bg-[var(--color-orange)]/10 backdrop-blur-sm rounded-sm text-xs font-mono text-[var(--color-orange)] uppercase tracking-wide shadow-lg"
                 >
-                  Ver Hitos & Proyectos
-                  <ArrowDown
-                    className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-y-0.5"
-                    aria-hidden="true"
-                  />
-                </a>
-              </motion.div>
+                  {cert}
+                </span>
+              ))}
             </div>
-          </StaggerItem>
-        </motion.div>
+          </motion.div>
+        </div>
 
-        {/* ── Right Column: Portrait ── */}
+        {/* Scroll Indicator */}
         <motion.div
-          className="md:col-span-5 flex justify-center items-center w-full"
-          style={{ y: imageY, scale: imageScale }}
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-20"
+          style={{ opacity: scrollIndicatorOpacity }}
         >
-          <div className="relative aspect-[9/12] w-full max-w-md rounded-lg overflow-hidden border border-[var(--color-surface-4)] bg-[var(--color-surface-2)] p-1 shadow-xl group will-change-transform">
-            <img
-              src="/images/LSSBB CEO PMO Samuel Aguilera.png"
-              alt="LSSBB CEO PMO Samuel Aguilera"
-              className="w-full h-full object-cover rounded-md filter saturate-90 contrast-105 transition-all duration-500 group-hover:scale-[1.03] group-hover:saturate-100"
-              loading="eager"
-            />
-            {/* Image border glow on hover */}
-            <div
-              className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-              style={{
-                boxShadow: 'inset 0 0 40px rgba(56,189,248,0.08)',
-              }}
-            />
-          </div>
+          <span className="text-xs font-mono text-[var(--color-orange)] tracking-widest uppercase drop-shadow-md font-bold">Inicia Scroll</span>
+          <div className="w-px h-12 bg-gradient-to-b from-[var(--color-orange)] to-transparent animate-pulse" />
         </motion.div>
-      </div>
-
-      {/* Bottom scroll indicator */}
-      <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
-        aria-hidden="true"
-        style={{
-          opacity: 0,
-          animation: 'fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards',
-        }}
-      >
-        <span className="text-xs font-mono text-[var(--color-text-muted)] tracking-widest uppercase">Scroll</span>
-        <div className="w-px h-8 bg-gradient-to-b from-[var(--color-orange)] to-transparent animate-pulse" />
       </div>
     </section>
   );

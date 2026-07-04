@@ -105,13 +105,13 @@ export function Navbar() {
             aria-label="Ir al inicio"
           >
             <span className="relative w-7 h-7 border border-[var(--color-orange)] rounded-sm flex items-center justify-center bg-[var(--color-surface-2)] group-hover:bg-[var(--color-orange)] transition-all duration-300">
-              <span className="text-xs font-mono font-bold text-[var(--color-orange)] group-hover:text-white transition-colors duration-300">SA</span>
+              <span className="text-xs font-mono font-bold text-[var(--color-orange)] group-hover:text-[var(--color-text-primary)] transition-colors duration-300">SA</span>
             </span>
             <span className="text-xs font-mono tracking-widest text-[var(--color-text-primary)] uppercase font-bold hidden sm:block">
               Samuel Aguilera
             </span>
             <span className="flex items-center gap-1.5 text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wider hidden sm:flex">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-orange)] animate-pulse inline-block" />
               Disponible
             </span>
           </button>
@@ -185,7 +185,7 @@ export function Navbar() {
                 setIsMobileMenuOpen(false);
                 scrollToSection(link.href);
               }}
-              className="w-full text-left flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[var(--color-text-secondary)] hover:text-[var(--color-orange)] transition-colors py-2.5 border-b border-[var(--color-surface-4)] last:border-0 cursor-pointer"
+              className="w-full text-center flex items-center justify-center gap-2 text-xs font-mono tracking-widest uppercase text-[var(--color-text-secondary)] hover:text-[var(--color-orange)] transition-colors py-2.5 border-b border-[var(--color-surface-4)] last:border-0 cursor-pointer"
             >
               <span className="text-[var(--color-orange)]/50">{link.id}</span>
               {link.name}
@@ -197,7 +197,7 @@ export function Navbar() {
       {/* ── Scroll to top button ── */}
       <button
         onClick={() => scrollToSection('#hero')}
-        className={`fixed bottom-8 right-8 z-40 p-3 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/80 backdrop-blur-md rounded-sm text-[var(--color-orange)] hover:bg-[var(--color-orange)] hover:text-white transition-all duration-200 cursor-pointer ${
+        className={`fixed bottom-8 right-8 z-40 p-3 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/80 backdrop-blur-md rounded-sm text-[var(--color-orange)] hover:bg-[var(--color-orange)] hover:text-[var(--color-text-primary)] transition-all duration-200 cursor-pointer ${
           showScrollTop ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-75 translate-y-4 pointer-events-none'
         }`}
         aria-label="Volver al inicio"
