@@ -93,20 +93,20 @@ export function SkillsGrid() {
           {/* ── Card 0: Intro ── */}
           <motion.div 
             style={{ y: y0, scale: scale0, opacity: opacity0, pointerEvents: pointerEvents0 }} 
-            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center text-center p-8 md:p-14 pro-card rounded-sm corner-l"
+            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center text-center p-[clamp(1rem,4vh,3rem)] pro-card rounded-sm corner-l"
           >
             <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
-            <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-6 mx-auto">
+            <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-[clamp(0.5rem,2vh,1.5rem)] mx-auto">
               Core Stack
             </span>
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[0.9] mb-8 text-center">
+            <h2 className="text-[clamp(2.2rem,8.5vh,5.8rem)] md:text-[clamp(4.2rem,11vh,7.2rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[0.9] mb-[clamp(1rem,3vh,2rem)] text-center">
               Herramientas &<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
                 Skills
               </span>
             </h2>
-            <div className="flex items-center gap-2 justify-center text-xs font-mono text-[var(--color-text-muted)] animate-pulse">
-              <Compass className="w-4 h-4 text-[var(--color-orange)]" />
+            <div className="flex items-center gap-2 justify-center text-[clamp(10px,1.4vh,12px)] font-mono text-[var(--color-text-muted)] animate-pulse">
+              <Compass className="w-[clamp(12px,1.6vh,15px)] h-[clamp(12px,1.6vh,15px)] text-[var(--color-orange)]" />
               <span>SCROLL PARA EXPLORAR</span>
             </div>
           </motion.div>
@@ -117,23 +117,23 @@ export function SkillsGrid() {
             className="absolute inset-0 w-full h-full"
           >
             <TiltCard className="h-full w-full">
-              <div className="relative h-full w-full pro-card rounded-sm p-8 md:p-14 flex flex-col items-center text-center corner-l group">
+              <div className="relative h-full w-full pro-card rounded-sm p-[clamp(1rem,3vh,2rem)] md:p-[clamp(1.5rem,4vh,3rem)] flex flex-col items-center text-center corner-l group">
                 <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
-                <span className="absolute top-6 right-8 text-7xl md:text-9xl font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">01</span>
-                <h3 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-4">
+                <span className="absolute top-[clamp(0.5rem,2vh,1.5rem)] right-[clamp(1rem,3vh,2rem)] text-[clamp(3.5rem,9vh,7rem)] font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">01</span>
+                <h3 className="text-[clamp(1.25rem,3.5vh,2rem)] md:text-[clamp(1.8rem,4.5vh,2.8rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-[clamp(0.25rem,0.8vh,0.5rem)]">
                   Datos & Sistemas
                 </h3>
-                <p className="text-base md:text-xl text-[var(--color-text-secondary)] font-sans max-w-3xl mb-12">
+                <p className="text-[clamp(11px,1.6vh,13px)] md:text-[clamp(13px,1.9vh,15px)] text-[var(--color-text-secondary)] font-sans max-w-3xl mb-[clamp(0.5rem,2.5vh,1.5rem)]">
                   Estructuración, extracción y automatización de flujos operativos para análisis de alto rendimiento.
                 </p>
-                <div className="grid grid-cols-2 gap-6 mt-auto relative z-10">
+                <div className="grid grid-cols-2 gap-[clamp(0.5rem,1.5vh,1rem)] mt-auto relative z-10 w-full">
                   {datosSkills.map((skill) => (
-                    <div key={skill.name} className="flex flex-col items-center text-center p-7 bg-[var(--color-surface-1)] border border-[var(--color-surface-4)]/50 rounded-sm hover:border-[var(--color-orange)] transition-colors">
-                      <div className="flex items-center gap-4 mb-4">
-                        <skill.icon className="w-7 h-7 text-[var(--color-orange)]" />
-                        <span className="font-heading font-bold text-xl md:text-2xl text-[var(--color-text-primary)] tracking-tight">{skill.name}</span>
+                    <div key={skill.name} className="flex flex-col items-center text-center p-[clamp(0.5rem,1.5vh,1rem)] bg-[var(--color-surface-1)] border border-[var(--color-surface-4)]/50 rounded-sm hover:border-[var(--color-orange)] transition-colors">
+                      <div className="flex items-center gap-[clamp(0.25rem,1vw,0.75rem)] mb-[clamp(0.2rem,0.6vh,0.4rem)]">
+                        <skill.icon className="w-[clamp(14px,2.2vh,20px)] h-[clamp(14px,2.2vh,20px)] text-[var(--color-orange)]" />
+                        <span className="font-heading font-bold text-[clamp(12px,2.2vh,18px)] text-[var(--color-text-primary)] tracking-tight">{skill.name}</span>
                       </div>
-                      <span className="text-sm font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{skill.focus}</span>
+                      <span className="text-[clamp(9px,1.3vh,11px)] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{skill.focus}</span>
                     </div>
                   ))}
                 </div>
@@ -147,23 +147,23 @@ export function SkillsGrid() {
             className="absolute inset-0 w-full h-full"
           >
             <TiltCard className="h-full w-full">
-              <div className="relative h-full w-full pro-card rounded-sm p-8 md:p-14 flex flex-col items-center text-center corner-l group">
+              <div className="relative h-full w-full pro-card rounded-sm p-[clamp(1rem,3vh,2rem)] md:p-[clamp(1.5rem,4vh,3rem)] flex flex-col items-center text-center corner-l group">
                 <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
-                <span className="absolute top-6 right-8 text-7xl md:text-9xl font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">02</span>
-                <h3 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-4">
+                <span className="absolute top-[clamp(0.5rem,2vh,1.5rem)] right-[clamp(1rem,3vh,2rem)] text-[clamp(3.5rem,9vh,7rem)] font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">02</span>
+                <h3 className="text-[clamp(1.25rem,3.5vh,2rem)] md:text-[clamp(1.8rem,4.5vh,2.8rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-[clamp(0.25rem,0.8vh,0.5rem)]">
                   Metodologías
                 </h3>
-                <p className="text-base md:text-xl text-[var(--color-text-secondary)] font-sans max-w-3xl mb-12">
+                <p className="text-[clamp(11px,1.6vh,13px)] md:text-[clamp(13px,1.9vh,15px)] text-[var(--color-text-secondary)] font-sans max-w-3xl mb-[clamp(0.5rem,2.5vh,1.5rem)]">
                   Análisis de procesos, optimización estadística y modelado industrial bajo frameworks comprobados.
                 </p>
-                <div className="grid grid-cols-2 gap-6 mt-auto relative z-10">
+                <div className="grid grid-cols-2 gap-[clamp(0.5rem,1.5vh,1rem)] mt-auto relative z-10 w-full">
                   {metodologiasSkills.map((skill) => (
-                    <div key={skill.name} className="flex flex-col items-center text-center p-7 bg-[var(--color-surface-1)] border border-[var(--color-surface-4)]/50 rounded-sm hover:border-[var(--color-orange-vivid)] transition-colors">
-                      <div className="flex items-center gap-4 mb-4">
-                        <skill.icon className="w-7 h-7 text-[var(--color-orange-vivid)]" />
-                        <span className="font-heading font-bold text-xl md:text-2xl text-[var(--color-text-primary)] tracking-tight">{skill.name}</span>
+                    <div key={skill.name} className="flex flex-col items-center text-center p-[clamp(0.5rem,1.5vh,1rem)] bg-[var(--color-surface-1)] border border-[var(--color-surface-4)]/50 rounded-sm hover:border-[var(--color-orange-vivid)] transition-colors">
+                      <div className="flex items-center gap-[clamp(0.25rem,1vw,0.75rem)] mb-[clamp(0.2rem,0.6vh,0.4rem)]">
+                        <skill.icon className="w-[clamp(14px,2.2vh,20px)] h-[clamp(14px,2.2vh,20px)] text-[var(--color-orange-vivid)]" />
+                        <span className="font-heading font-bold text-[clamp(12px,2.2vh,18px)] text-[var(--color-text-primary)] tracking-tight">{skill.name}</span>
                       </div>
-                      <span className="text-sm font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{skill.focus}</span>
+                      <span className="text-[clamp(9px,1.3vh,11px)] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{skill.focus}</span>
                     </div>
                   ))}
                 </div>
@@ -174,24 +174,24 @@ export function SkillsGrid() {
           {/* ── Card 3: Outro Finalizer ── */}
           <motion.div 
             style={{ y: y3, opacity: opacity3, pointerEvents: pointerEvents3 }}
-            className="absolute inset-0 w-full h-full pro-card rounded-sm p-8 md:p-14 flex flex-col justify-center items-center text-center corner-l"
+            className="absolute inset-0 w-full h-full pro-card rounded-sm p-[clamp(1rem,4vh,3rem)] flex flex-col justify-center items-center text-center corner-l"
           >
             <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
             <div 
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%)' }}
             />
-            <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-10">
+            <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-[clamp(1rem,3vh,2rem)]">
               Siguente Paso
             </span>
-            <h3 className="text-4xl md:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter mb-6">
+            <h3 className="text-[clamp(1.8rem,6vh,3.8rem)] md:text-[clamp(2.8rem,8vh,5rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter mb-[clamp(0.5rem,1.5vh,1rem)]">
               ¿Hablamos <span className="text-[var(--color-orange)]">de tu Proyecto?</span>
             </h3>
-            <p className="text-base md:text-xl text-[var(--color-text-secondary)] leading-relaxed font-sans max-w-2xl mb-4">
+            <p className="text-[clamp(12px,1.7vh,15px)] md:text-[clamp(14px,2vh,17px)] text-[var(--color-text-secondary)] leading-relaxed font-sans max-w-2xl mb-4">
               Si necesitas optimizar operaciones, modelar procesos o construir un gemelo digital, podemos construirlo juntos.
             </p>
-            <div className="flex items-center gap-2 text-xs font-mono text-[var(--color-text-muted)] animate-pulse mt-4">
-              <ArrowDown className="w-4 h-4 text-[var(--color-orange)]" />
+            <div className="flex items-center gap-2 text-[clamp(10px,1.4vh,12px)] font-mono text-[var(--color-text-muted)] animate-pulse mt-4">
+              <ArrowDown className="w-[clamp(12px,1.6vh,15px)] h-[clamp(12px,1.6vh,15px)] text-[var(--color-orange)]" />
               <span>CONTACTO A CONTINUACIÓN</span>
             </div>
           </motion.div>

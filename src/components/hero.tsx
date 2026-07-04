@@ -113,26 +113,26 @@ export function Hero() {
         </div>
 
         {/* ── Contenido de Primer Plano ── */}
-        <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center justify-center px-6 h-full text-center space-y-6 pt-10">
+        <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center justify-center px-[4vw] h-full text-center space-y-[clamp(0.5rem,2vh,1.5rem)] pt-[clamp(1rem,4vh,3rem)]">
           
           <motion.div style={{ opacity: tagOpacity, y: tagY }}>
-            <div className="flex items-center gap-3 justify-center">
+            <div className="flex items-center gap-[clamp(0.25rem,1vw,0.75rem)] justify-center">
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-orange)] animate-pulse inline-block" />
-              <span className="text-xs font-mono tracking-widest uppercase text-[var(--color-orange)] font-bold drop-shadow-md">
+              <span className="text-[clamp(10px,1.4vh,12px)] font-mono tracking-widest uppercase text-[var(--color-orange)] font-bold drop-shadow-md">
                 Perfil Profesional
               </span>
-              <span className="text-xs font-mono tracking-widest uppercase text-[var(--color-text-secondary)] drop-shadow-md">
+              <span className="text-[clamp(10px,1.4vh,12px)] font-mono tracking-widest uppercase text-[var(--color-text-secondary)] drop-shadow-md">
                 / Samuel Aguilera
               </span>
             </div>
           </motion.div>
 
-          <motion.h1 style={{ opacity: titleOpacity, y: titleY }} className="text-5xl sm:text-6xl md:text-8xl font-heading font-bold text-[var(--color-text-primary)] leading-none tracking-tight text-center w-full drop-shadow-xl flex flex-col gap-2">
+          <motion.h1 style={{ opacity: titleOpacity, y: titleY }} className="text-[clamp(2.4rem,8.5vh,5.8rem)] md:text-[clamp(4.5rem,11vh,7.5rem)] font-heading font-bold text-[var(--color-text-primary)] leading-none tracking-tight text-center w-full drop-shadow-xl flex flex-col gap-[clamp(0.25rem,1vh,0.5rem)]">
             <span>Samuel</span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-text-primary)] to-[var(--color-text-secondary)]">Aguilera</span>
           </motion.h1>
 
-          <motion.div style={{ opacity: roleOpacity, y: roleY }} className="flex flex-wrap gap-2 justify-center">
+          <motion.div style={{ opacity: roleOpacity, y: roleY }} className="flex flex-wrap gap-[clamp(0.25rem,1vh,0.5rem)] justify-center">
             {[
               { icon: Cpu, label: 'Ingeniería Industrial' },
               { icon: Layers, label: 'Lean Six Sigma' },
@@ -140,16 +140,16 @@ export function Hero() {
             ].map(({ icon: Icon, label }) => (
               <span
                 key={label}
-                className="inline-flex items-center gap-1.5 px-4 py-1.5 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 backdrop-blur-md text-xs font-mono text-[var(--color-text-secondary)] rounded-sm tracking-wider uppercase cursor-default shadow-lg transition-colors hover:border-[var(--color-orange)] hover:bg-[rgba(249,115,22,0.1)] hover:text-[var(--color-text-primary)] hover:scale-105"
+                className="inline-flex items-center gap-1.5 px-[clamp(0.5rem,1.2vw,1rem)] py-[clamp(0.25rem,0.6vh,0.5rem)] border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 backdrop-blur-md text-[clamp(9px,1.3vh,12px)] font-mono text-[var(--color-text-secondary)] rounded-sm tracking-wider uppercase cursor-default shadow-lg transition-colors hover:border-[var(--color-orange)] hover:bg-[rgba(249,115,22,0.1)] hover:text-[var(--color-text-primary)] hover:scale-105"
               >
-                <Icon className="w-3.5 h-3.5 text-[var(--color-orange)] shrink-0" />
+                <Icon className="w-[clamp(12px,1.6vh,15px)] h-[clamp(12px,1.6vh,15px)] text-[var(--color-orange)] shrink-0" />
                 {label}
               </span>
             ))}
           </motion.div>
 
           <motion.div style={{ opacity: bioOpacity, y: bioY }}>
-            <p className="text-sm md:text-lg text-[var(--color-text-secondary)] font-normal leading-relaxed max-w-2xl mx-auto text-center drop-shadow-md">
+            <p className="text-[clamp(11px,1.6vh,14px)] md:text-[clamp(14px,1.8vh,17px)] text-[var(--color-text-secondary)] font-normal leading-relaxed max-w-2xl mx-auto text-center drop-shadow-md">
               Estudiante de 3er año en la UCB &quot;San Pablo&quot;. Combino rigor de{' '}
               <strong className="text-[var(--color-text-primary)] font-semibold">Mejora Continua</strong> con{' '}
               <strong className="text-[var(--color-text-primary)] font-semibold">Análisis de Datos</strong>{' '}
@@ -157,45 +157,45 @@ export function Hero() {
             </p>
           </motion.div>
 
-          <motion.div style={{ opacity: linksOpacity, y: linksY }} className="flex items-center gap-4 justify-center mt-4">
+          <motion.div style={{ opacity: linksOpacity, y: linksY }} className="flex items-center gap-[clamp(0.5rem,1.5vw,1rem)] justify-center mt-[clamp(0.25rem,1vh,1rem)]">
             <a
               href="https://github.com/FosforoWork"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-3)] hover:border-[var(--color-text-secondary)]/60 backdrop-blur-md rounded-sm transition-all duration-200 group shadow-lg"
+              className="p-[clamp(0.5rem,1.2vh,0.75rem)] border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-3)] hover:border-[var(--color-text-secondary)]/60 backdrop-blur-md rounded-sm transition-all duration-200 group shadow-lg"
               aria-label="GitHub"
             >
-              <Github className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors" />
+              <Github className="w-[clamp(16px,2.2vh,20px)] h-[clamp(16px,2.2vh,20px)] text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors" />
             </a>
             <a
               href="https://www.linkedin.com/in/samuelaguileraaraujo"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-3)] hover:border-sky-500/60 backdrop-blur-md rounded-sm transition-all duration-200 group shadow-lg"
+              className="p-[clamp(0.5rem,1.2vh,0.75rem)] border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-3)] hover:border-sky-500/60 backdrop-blur-md rounded-sm transition-all duration-200 group shadow-lg"
               aria-label="LinkedIn"
             >
-              <Linkedin className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-orange)] transition-colors" />
+              <Linkedin className="w-[clamp(16px,2.2vh,20px)] h-[clamp(16px,2.2vh,20px)] text-[var(--color-text-secondary)] group-hover:text-[var(--color-orange)] transition-colors" />
             </a>
             <a
               href="https://mail.google.com/mail/?view=cm&fs=1&to=samuelagss1@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-3)] hover:border-sky-500/60 backdrop-blur-md rounded-sm transition-all duration-200 group shadow-lg"
+              className="p-[clamp(0.5rem,1.2vh,0.75rem)] border border-[var(--color-surface-4)] bg-[var(--color-surface-2)]/60 hover:bg-[var(--color-surface-3)] hover:border-sky-500/60 backdrop-blur-md rounded-sm transition-all duration-200 group shadow-lg"
               aria-label="Gmail"
             >
-              <Mail className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-orange)] transition-colors" />
+              <Mail className="w-[clamp(16px,2.2vh,20px)] h-[clamp(16px,2.2vh,20px)] text-[var(--color-text-secondary)] group-hover:text-[var(--color-orange)] transition-colors" />
             </a>
           </motion.div>
 
-          <motion.div style={{ opacity: certsOpacity, y: certsY }} className="border-t border-[var(--color-surface-4)]/60 pt-6 mt-6 w-full max-w-md flex flex-col items-center space-y-3">
-            <div className="text-xs font-mono uppercase tracking-widest text-[var(--color-text-muted)] drop-shadow-md">
+          <motion.div style={{ opacity: certsOpacity, y: certsY }} className="border-t border-[var(--color-surface-4)]/60 pt-[clamp(0.5rem,1.2vh,1rem)] mt-[clamp(0.5rem,1.2vh,1rem)] w-full max-w-md flex flex-col items-center space-y-[clamp(0.25rem,0.6vh,0.5rem)]">
+            <div className="text-[clamp(9px,1.3vh,11px)] font-mono uppercase tracking-widest text-[var(--color-text-muted)] drop-shadow-md">
               Certificaciones
             </div>
             <div className="flex flex-wrap gap-2 justify-center">
               {['LSS Black Belt (Cand.)'].map((cert) => (
                 <span
                   key={cert}
-                  className="px-3 py-1 border border-[var(--color-orange)]/40 bg-[var(--color-orange)]/10 backdrop-blur-sm rounded-sm text-xs font-mono text-[var(--color-orange)] uppercase tracking-wide shadow-lg"
+                  className="px-[clamp(0.5rem,1vw,0.75rem)] py-[clamp(0.2rem,0.4vh,0.3rem)] border border-[var(--color-orange)]/40 bg-[var(--color-orange)]/10 backdrop-blur-sm rounded-sm text-[clamp(9px,1.3vh,11px)] font-mono text-[var(--color-orange)] uppercase tracking-wide shadow-lg"
                 >
                   {cert}
                 </span>

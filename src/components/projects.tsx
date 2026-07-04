@@ -114,20 +114,20 @@ export function Projects() {
           {/* ── Card 0: Section Intro ── */}
           <motion.div 
             style={{ y: y0, scale: scale0, opacity: opacity0, pointerEvents: pointerEvents0 }} 
-            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center text-center p-8 md:p-14 pro-card rounded-sm corner-l"
+            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center text-center p-[clamp(1rem,4vh,3rem)] pro-card rounded-sm corner-l"
           >
             <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
-            <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-6 mx-auto">
+            <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-[clamp(0.5rem,2vh,1.5rem)] mx-auto">
               Casos de Estudio
             </span>
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[0.9] mb-8 text-center">
+            <h2 className="text-[clamp(2.2rem,8.5vh,5.8rem)] md:text-[clamp(4.2rem,11vh,7.2rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[0.9] mb-[clamp(1rem,3vh,2rem)] text-center">
               Hitos &<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
                 Proyectos
               </span>
             </h2>
-            <div className="flex items-center gap-2 justify-center text-xs font-mono text-[var(--color-text-muted)] animate-pulse">
-              <Compass className="w-4 h-4 text-[var(--color-orange)]" />
+            <div className="flex items-center gap-2 justify-center text-[clamp(10px,1.4vh,12px)] font-mono text-[var(--color-text-muted)] animate-pulse">
+              <Compass className="w-[clamp(12px,1.6vh,15px)] h-[clamp(12px,1.6vh,15px)] text-[var(--color-orange)]" />
               <span>SCROLL PARA EXPLORAR</span>
             </div>
           </motion.div>
@@ -138,35 +138,35 @@ export function Projects() {
             className="absolute inset-0 w-full h-full"
           >
             <TiltCard className="h-full w-full">
-              <div className="relative h-full w-full pro-card rounded-sm p-8 md:p-14 overflow-hidden flex flex-col items-center text-center justify-between corner-l group">
+              <div className="relative h-full w-full pro-card rounded-sm p-[clamp(1rem,3vh,2rem)] md:p-[clamp(1.5rem,4vh,3rem)] overflow-hidden flex flex-col items-center text-center justify-between corner-l group">
                 <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
-                <span className="absolute top-6 right-8 text-7xl md:text-9xl font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">01</span>
+                <span className="absolute top-[clamp(0.5rem,2vh,1.5rem)] right-[clamp(1rem,3vh,2rem)] text-[clamp(3.5rem,9vh,7rem)] font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">01</span>
 
-                <div className="flex flex-col items-center justify-center flex-1 relative z-10 mt-6">
-                  <h3 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-6 text-center">
+                <div className="flex flex-col items-center justify-center flex-1 relative z-10 mt-[clamp(0.5rem,2vh,1rem)]">
+                  <h3 className="text-[clamp(1.15rem,3.2vh,1.8rem)] md:text-[clamp(1.6rem,4.2vh,2.5rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-[clamp(0.25rem,0.8vh,0.5rem)] text-center">
                     {projectsData[0].title}
                   </h3>
-                  <p className="text-base md:text-2xl text-[var(--color-text-secondary)] font-sans max-w-4xl mb-8 leading-relaxed text-center">
+                  <p className="text-[clamp(11px,1.6vh,13px)] md:text-[clamp(13px,1.9vh,16px)] text-[var(--color-text-secondary)] font-sans max-w-4xl mb-[clamp(0.5rem,2vh,1.25rem)] leading-relaxed text-center">
                     {projectsData[0].description}
                   </p>
-                  <div className="flex flex-wrap gap-4 items-center justify-center">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-widest text-[var(--color-orange-vivid)] bg-[var(--color-orange-muted)] border border-[var(--color-orange-dim)]/30 px-3 py-1 rounded-sm animate-pulse">
-                      <Flame className="w-3.5 h-3.5" /> En Desarrollo
+                  <div className="flex flex-wrap gap-[clamp(0.25rem,1vh,0.5rem)] items-center justify-center">
+                    <span className="inline-flex items-center gap-1.5 text-[clamp(9px,1.3vh,11px)] font-mono font-bold uppercase tracking-widest text-[var(--color-orange-vivid)] bg-[var(--color-orange-muted)] border border-[var(--color-orange-dim)]/30 px-[clamp(0.4rem,1vw,0.6rem)] py-1 rounded-sm animate-pulse">
+                      <Flame className="w-[clamp(10px,1.4vh,13px)] h-[clamp(10px,1.4vh,13px)]" /> En Desarrollo
                     </span>
                     {projectsData[0].tags.map((tag) => (
-                      <span key={tag} className="px-3 py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wide">
+                      <span key={tag} className="px-[clamp(0.4rem,1vw,0.6rem)] py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-[clamp(9px,1.3vh,11px)] font-mono text-[var(--color-text-muted)] uppercase tracking-wide">
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="flex flex-wrap justify-center items-end gap-6 relative z-10 border-t border-[var(--color-surface-4)]/40 pt-6">
-                  <div className="flex gap-6">
+                <div className="flex flex-wrap justify-center items-end gap-[clamp(0.5rem,1.5vh,1rem)] relative z-10 border-t border-[var(--color-surface-4)]/40 pt-[clamp(0.5rem,1.5vh,1rem)] w-full">
+                  <div className="flex gap-[clamp(0.5rem,2vw,1rem)]">
                     {projectsData[0].metrics.map((m) => (
                       <div key={m.label} className="flex flex-col items-center text-center">
-                        <span className="text-2xl md:text-3xl font-heading font-bold text-[var(--color-orange)] tabular-nums leading-none mb-1 text-glow-subtle">{m.value}</span>
-                        <span className="text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{m.label}</span>
+                        <span className="text-[clamp(16px,2.8vh,26px)] font-heading font-bold text-[var(--color-orange)] tabular-nums leading-none mb-1 text-glow-subtle">{m.value}</span>
+                        <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{m.label}</span>
                       </div>
                     ))}
                   </div>
@@ -174,9 +174,9 @@ export function Projects() {
                     href={projectsData[0].link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm md:text-base font-mono tracking-widest uppercase font-bold text-[var(--color-text-primary)] hover:text-[var(--color-orange)] transition-colors border-b border-transparent hover:border-[var(--color-orange)] pb-0.5 group/link"
+                    className="inline-flex items-center gap-2 text-[clamp(10px,1.4vh,13px)] font-mono tracking-widest uppercase font-bold text-[var(--color-text-primary)] hover:text-[var(--color-orange)] transition-colors border-b border-transparent hover:border-[var(--color-orange)] pb-0.5 group/link"
                   >
-                    <Clock className="w-4 h-4" />
+                    <Clock className="w-[clamp(12px,1.6vh,14px)] h-[clamp(12px,1.6vh,14px)]" />
                     {projectsData[0].linkLabel}
                   </a>
                 </div>
@@ -190,35 +190,35 @@ export function Projects() {
             className="absolute inset-0 w-full h-full"
           >
             <TiltCard className="h-full w-full">
-              <div className="relative h-full w-full pro-card rounded-sm p-8 md:p-14 overflow-hidden flex flex-col items-center text-center justify-between corner-l group">
+              <div className="relative h-full w-full pro-card rounded-sm p-[clamp(1rem,3vh,2rem)] md:p-[clamp(1.5rem,4vh,3rem)] overflow-hidden flex flex-col items-center text-center justify-between corner-l group">
                 <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
-                <span className="absolute top-6 right-8 text-7xl md:text-9xl font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">02</span>
+                <span className="absolute top-[clamp(0.5rem,2vh,1.5rem)] right-[clamp(1rem,3vh,2rem)] text-[clamp(3.5rem,9vh,7rem)] font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">02</span>
 
-                <div className="flex flex-col items-center justify-center flex-1 relative z-10 mt-6">
-                  <h3 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-6 text-center">
+                <div className="flex flex-col items-center justify-center flex-1 relative z-10 mt-[clamp(0.5rem,2vh,1rem)]">
+                  <h3 className="text-[clamp(1.15rem,3.2vh,1.8rem)] md:text-[clamp(1.6rem,4.2vh,2.5rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-[clamp(0.25rem,0.8vh,0.5rem)] text-center">
                     {projectsData[1].title}
                   </h3>
-                  <p className="text-base md:text-2xl text-[var(--color-text-secondary)] font-sans max-w-4xl mb-8 leading-relaxed text-center">
+                  <p className="text-[clamp(11px,1.6vh,13px)] md:text-[clamp(13px,1.9vh,16px)] text-[var(--color-text-secondary)] font-sans max-w-4xl mb-[clamp(0.5rem,2vh,1.25rem)] leading-relaxed text-center">
                     {projectsData[1].description}
                   </p>
-                  <div className="flex flex-wrap gap-4 items-center justify-center">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-widest text-[var(--color-orange)] bg-[var(--color-orange-muted)] border border-[var(--color-orange-dim)]/30 px-3 py-1 rounded-sm">
-                      <CheckCircle className="w-3.5 h-3.5" /> Completado
+                  <div className="flex flex-wrap gap-[clamp(0.25rem,1vh,0.5rem)] items-center justify-center">
+                    <span className="inline-flex items-center gap-1.5 text-[clamp(9px,1.3vh,11px)] font-mono font-bold uppercase tracking-widest text-[var(--color-orange)] bg-[var(--color-orange-muted)] border border-[var(--color-orange-dim)]/30 px-[clamp(0.4rem,1vw,0.6rem)] py-1 rounded-sm">
+                      <CheckCircle className="w-[clamp(12px,1.6vh,14px)] h-[clamp(12px,1.6vh,14px)]" /> Completado
                     </span>
                     {projectsData[1].tags.map((tag) => (
-                      <span key={tag} className="px-3 py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wide">
+                      <span key={tag} className="px-[clamp(0.4rem,1vw,0.6rem)] py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-[clamp(9px,1.3vh,11px)] font-mono text-[var(--color-text-muted)] uppercase tracking-wide">
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="flex flex-wrap justify-center items-end gap-6 relative z-10 border-t border-[var(--color-surface-4)]/40 pt-6">
-                  <div className="flex gap-6">
+                <div className="flex flex-wrap justify-center items-end gap-[clamp(0.5rem,1.5vh,1rem)] relative z-10 border-t border-[var(--color-surface-4)]/40 pt-[clamp(0.5rem,1.5vh,1rem)] w-full">
+                  <div className="flex gap-[clamp(0.5rem,2vw,1rem)]">
                     {projectsData[1].metrics.map((m) => (
                       <div key={m.label} className="flex flex-col items-center text-center">
-                        <span className="text-2xl md:text-3xl font-heading font-bold text-[var(--color-orange)] tabular-nums leading-none mb-1 text-glow-subtle">{m.value}</span>
-                        <span className="text-[10px] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{m.label}</span>
+                        <span className="text-[clamp(16px,2.8vh,26px)] font-heading font-bold text-[var(--color-orange)] tabular-nums leading-none mb-1 text-glow-subtle">{m.value}</span>
+                        <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{m.label}</span>
                       </div>
                     ))}
                   </div>
@@ -226,9 +226,9 @@ export function Projects() {
                     href={projectsData[1].link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm md:text-base font-mono tracking-widest uppercase font-bold text-[var(--color-text-primary)] hover:text-[var(--color-orange)] transition-colors border-b border-transparent hover:border-[var(--color-orange)] pb-0.5 group/link"
+                    className="inline-flex items-center gap-2 text-[clamp(10px,1.4vh,13px)] font-mono tracking-widest uppercase font-bold text-[var(--color-text-primary)] hover:text-[var(--color-orange)] transition-colors border-b border-transparent hover:border-[var(--color-orange)] pb-0.5 group/link"
                   >
-                    {projectsData[1].linkLabel} <ArrowUpRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
+                    {projectsData[1].linkLabel} <ArrowUpRight className="w-[clamp(12px,1.6vh,14px)] h-[clamp(12px,1.6vh,14px)] transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
                   </a>
                 </div>
               </div>
@@ -238,29 +238,29 @@ export function Projects() {
           {/* ── Card 3: Outro Finalizer ── */}
           <motion.div 
             style={{ y: y3, opacity: opacity3, pointerEvents: pointerEvents3 }}
-            className="absolute inset-0 w-full h-full pro-card rounded-sm p-8 md:p-14 flex flex-col justify-center items-center text-center corner-l"
+            className="absolute inset-0 w-full h-full pro-card rounded-sm p-[clamp(1rem,4vh,3rem)] flex flex-col justify-center items-center text-center corner-l"
           >
             <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
             <div 
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%)' }}
             />
-            <span className="text-[10px] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-10">
+            <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-[clamp(1rem,3vh,2rem)]">
               Código Abierto
             </span>
-            <h3 className="text-4xl md:text-6xl font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter mb-6">
+            <h3 className="text-[clamp(1.8rem,6vh,3.8rem)] md:text-[clamp(2.8rem,8vh,5rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter mb-[clamp(0.5rem,1.5vh,1rem)]">
               Explora el <span className="text-[var(--color-orange)]">Código</span>
             </h3>
-            <p className="text-base md:text-xl text-[var(--color-text-secondary)] leading-relaxed font-sans max-w-2xl mb-10">
+            <p className="text-[clamp(12px,1.7vh,15px)] md:text-[clamp(14px,2vh,17px)] text-[var(--color-text-secondary)] leading-relaxed font-sans max-w-2xl mb-[clamp(1rem,3vh,2.5rem)]">
               Todos mis proyectos industriales, modelos termodinámicos y orquestaciones están documentados y disponibles en código abierto.
             </p>
             <a
               href="https://github.com/FosforoWork"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-[var(--color-surface-1)] hover:bg-[var(--color-orange)] hover:text-[var(--color-text-primary)] border border-[var(--color-surface-4)] hover:border-[var(--color-orange)] text-sm md:text-base font-mono font-bold uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_var(--orange-glow)]"
+              className="inline-flex items-center gap-[clamp(0.5rem,1.5vw,1rem)] px-[clamp(1.5rem,4vw,2.5rem)] py-[clamp(0.6rem,1.6vh,1.1rem)] bg-[var(--color-surface-1)] hover:bg-[var(--color-orange)] hover:text-[var(--color-text-primary)] border border-[var(--color-surface-4)] hover:border-[var(--color-orange)] text-[clamp(11px,1.6vh,14px)] font-mono font-bold uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_var(--orange-glow)]"
             >
-              <Github className="w-5 h-5" />
+              <Github className="w-[clamp(16px,2.2vh,20px)] h-[clamp(16px,2.2vh,20px)]" />
               Ver GitHub
             </a>
           </motion.div>
