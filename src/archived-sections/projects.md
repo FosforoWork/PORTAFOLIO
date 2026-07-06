@@ -1,0 +1,268 @@
+# Hitos & Proyectos
+
+Archivado desde `src/components/projects.tsx`.
+
+```tsx
+import React, { useRef, useEffect } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { ArrowUpRight, CheckCircle, Flame, Github, Compass, Clock } from 'lucide-react';
+import { TiltCard } from './tilt-card';
+
+interface ProjectMetric {
+  value: string;
+  label: string;
+}
+
+interface Project {
+  title: string;
+  description: string;
+  metrics: ProjectMetric[];
+  tags: string[];
+  time: string;
+  link: string;
+  linkLabel: string;
+  status: 'COMPLETED' | 'ACTIVE';
+}
+
+const projectsData: Project[] = [
+  {
+    title: 'Optimización de dosificado de tintas',
+    description: 'Reducción del desperdicio en dosificado mediante Lean Six Sigma y modelo predictivo.',
+    metrics: [
+      { value: '-53.3%', label: 'SMED Setup' },
+      { value: '+218.8k', label: 'Retorno (Bs/año)' },
+    ],
+    tags: ['Lean Six Sigma', 'Python'],
+    time: '2025',
+    link: '/proyecto-en-desarrollo.html',
+    linkLabel: 'Ver Estado',
+    status: 'ACTIVE',
+  },
+  {
+    title: 'Modelo digital fenomenológico de ISP',
+    description: 'Gemelo digital de evaporación con balances termodinámicos rigurosos y optimización estocástica.',
+    metrics: [
+      { value: '300k', label: 'Corridas Monte Carlo' },
+      { value: '-25%', label: 'Consumo Evaporación' },
+    ],
+    tags: ['Python', 'Monte Carlo', 'ASME BPE'],
+    time: '2026',
+    link: 'https://github.com/samuelthecreat/PROCESOS_UNITARIOS---PROYECTO_MOUNTAIN',
+    linkLabel: 'Repositorio',
+    status: 'COMPLETED',
+  },
+];
+
+export function Projects() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollYProgress = useMotionValue(0);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const rect = el.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const totalRange = rect.height + viewportHeight;
+      const currentScroll = viewportHeight - rect.top;
+      let progress = currentScroll / totalRange;
+      progress = Math.max(0, Math.min(1, progress));
+      scrollYProgress.set(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [scrollYProgress]);
+
+  // ── 4-card stack: Intro → P1 → P2 → Outro ──────────────────────────
+  const y0      = useTransform(scrollYProgress, [0, 0.25],           ['0px', '-40px']);
+  const scale0  = useTransform(scrollYProgress, [0.15, 0.25],        [1, 0.92]);
+  const opacity0 = useTransform(scrollYProgress, [0.15, 0.25],       [1, 0]);
+  const pointerEvents0 = useTransform(scrollYProgress, [0.15, 0.25], ['auto', 'none']);
+
+  const y1      = useTransform(scrollYProgress, [0.15, 0.35, 0.48], ['95vh', '0px', '-40px']);
+  const scale1  = useTransform(scrollYProgress, [0.40, 0.50],       [1, 0.92]);
+  const opacity1 = useTransform(scrollYProgress, [0.15, 0.35, 0.42, 0.50], [0, 1, 1, 0]);
+  const pointerEvents1 = useTransform(scrollYProgress, [0.15, 0.18, 0.42, 0.50], ['none', 'auto', 'auto', 'none']);
+
+  const y2      = useTransform(scrollYProgress, [0.40, 0.60, 0.73], ['95vh', '0px', '-40px']);
+  const scale2  = useTransform(scrollYProgress, [0.65, 0.75],       [1, 0.92]);
+  const opacity2 = useTransform(scrollYProgress, [0.40, 0.60, 0.67, 0.75], [0, 1, 1, 0]);
+  const pointerEvents2 = useTransform(scrollYProgress, [0.40, 0.43, 0.67, 0.75], ['none', 'auto', 'auto', 'none']);
+
+  const y3      = useTransform(scrollYProgress, [0.68, 0.88],  ['95vh', '0px']);
+  const opacity3 = useTransform(scrollYProgress, [0.68, 0.88], [0, 1]);
+  const pointerEvents3 = useTransform(scrollYProgress, [0.68, 0.72], ['none', 'auto']);
+
+  return (
+    <div ref={containerRef} className="relative h-[600vh] w-full bg-transparent">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center items-center">
+        <div className="relative w-[88vw] md:w-[70vw] h-[65vh] md:h-[68vh] flex items-center justify-center">
+
+          {/* Card 0: Section Intro */}
+          <motion.div
+            style={{ y: y0, scale: scale0, opacity: opacity0, pointerEvents: pointerEvents0 }}
+            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center text-center p-[clamp(1rem,4vh,3rem)] pro-card rounded-sm corner-l"
+          >
+            <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+            <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-[clamp(0.5rem,2vh,1.5rem)] mx-auto">
+              Casos de Estudio
+            </span>
+            <h2 className="text-[clamp(2.2rem,8.5vh,5.8rem)] md:text-[clamp(4.2rem,11vh,7.2rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[0.9] mb-[clamp(1rem,3vh,2rem)] text-center">
+              Hitos &<br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-orange)] to-[var(--color-orange-vivid)]">
+                Proyectos
+              </span>
+            </h2>
+            <div className="flex items-center gap-2 justify-center text-[clamp(10px,1.4vh,12px)] font-mono text-[var(--color-text-muted)] animate-pulse">
+              <Compass className="w-[clamp(12px,1.6vh,15px)] h-[clamp(12px,1.6vh,15px)] text-[var(--color-orange)]" />
+              <span>SCROLL PARA EXPLORAR</span>
+            </div>
+          </motion.div>
+
+          {/* Card 1: Project 1 */}
+          <motion.div
+            style={{ y: y1, scale: scale1, opacity: opacity1, pointerEvents: pointerEvents1 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <TiltCard className="h-full w-full">
+              <div className="relative h-full w-full pro-card rounded-sm p-[clamp(1rem,3vh,2rem)] md:p-[clamp(1.5rem,4vh,3rem)] overflow-hidden flex flex-col items-center text-center justify-between corner-l group">
+                <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+                <span className="absolute top-[clamp(0.5rem,2vh,1.5rem)] right-[clamp(1rem,3vh,2rem)] text-[clamp(3.5rem,9vh,7rem)] font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">01</span>
+
+                <div className="flex flex-col items-center justify-center flex-1 relative z-10 mt-[clamp(0.5rem,2vh,1rem)]">
+                  <h3 className="text-[clamp(1.15rem,3.2vh,1.8rem)] md:text-[clamp(1.6rem,4.2vh,2.5rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-[clamp(0.25rem,0.8vh,0.5rem)] text-center">
+                    {projectsData[0].title}
+                  </h3>
+                  <p className="text-[clamp(11px,1.6vh,13px)] md:text-[clamp(13px,1.9vh,16px)] text-[var(--color-text-secondary)] font-sans max-w-4xl mb-[clamp(0.5rem,2vh,1.25rem)] leading-relaxed text-center">
+                    {projectsData[0].description}
+                  </p>
+                  <div className="flex flex-wrap gap-[clamp(0.25rem,1vh,0.5rem)] items-center justify-center">
+                    <span className="inline-flex items-center gap-1.5 text-[clamp(9px,1.3vh,11px)] font-mono font-bold uppercase tracking-widest text-[var(--color-orange-vivid)] bg-[var(--color-orange-muted)] border border-[var(--color-orange-dim)]/30 px-[clamp(0.4rem,1vw,0.6rem)] py-1 rounded-sm animate-pulse">
+                      <Flame className="w-[clamp(10px,1.4vh,13px)] h-[clamp(10px,1.4vh,13px)]" /> En Desarrollo
+                    </span>
+                    {projectsData[0].tags.map((tag) => (
+                      <span key={tag} className="px-[clamp(0.4rem,1vw,0.6rem)] py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-[clamp(9px,1.3vh,11px)] font-mono text-[var(--color-text-muted)] uppercase tracking-wide">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap justify-center items-end gap-[clamp(0.5rem,1.5vh,1rem)] relative z-10 border-t border-[var(--color-surface-4)]/40 pt-[clamp(0.5rem,1.5vh,1rem)] w-full">
+                  <div className="flex gap-[clamp(0.5rem,2vw,1rem)]">
+                    {projectsData[0].metrics.map((m) => (
+                      <div key={m.label} className="flex flex-col items-center text-center">
+                        <span className="text-[clamp(16px,2.8vh,26px)] font-heading font-bold text-[var(--color-orange)] tabular-nums leading-none mb-1 text-glow-subtle">{m.value}</span>
+                        <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{m.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href={projectsData[0].link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-[clamp(10px,1.4vh,13px)] font-mono tracking-widest uppercase font-bold text-[var(--color-text-primary)] hover:text-[var(--color-orange)] transition-colors border-b border-transparent hover:border-[var(--color-orange)] pb-0.5 group/link"
+                  >
+                    <Clock className="w-[clamp(12px,1.6vh,14px)] h-[clamp(12px,1.6vh,14px)]" />
+                    {projectsData[0].linkLabel}
+                  </a>
+                </div>
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* Card 2: Project 2 */}
+          <motion.div
+            style={{ y: y2, scale: scale2, opacity: opacity2, pointerEvents: pointerEvents2 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <TiltCard className="h-full w-full">
+              <div className="relative h-full w-full pro-card rounded-sm p-[clamp(1rem,3vh,2rem)] md:p-[clamp(1.5rem,4vh,3rem)] overflow-hidden flex flex-col items-center text-center justify-between corner-l group">
+                <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+                <span className="absolute top-[clamp(0.5rem,2vh,1.5rem)] right-[clamp(1rem,3vh,2rem)] text-[clamp(3.5rem,9vh,7rem)] font-heading font-bold text-[var(--color-surface-4)]/10 select-none leading-none pointer-events-none">02</span>
+
+                <div className="flex flex-col items-center justify-center flex-1 relative z-10 mt-[clamp(0.5rem,2vh,1rem)]">
+                  <h3 className="text-[clamp(1.15rem,3.2vh,1.8rem)] md:text-[clamp(1.6rem,4.2vh,2.5rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter leading-[1.05] mb-[clamp(0.25rem,0.8vh,0.5rem)] text-center">
+                    {projectsData[1].title}
+                  </h3>
+                  <p className="text-[clamp(11px,1.6vh,13px)] md:text-[clamp(13px,1.9vh,16px)] text-[var(--color-text-secondary)] font-sans max-w-4xl mb-[clamp(0.5rem,2vh,1.25rem)] leading-relaxed text-center">
+                    {projectsData[1].description}
+                  </p>
+                  <div className="flex flex-wrap gap-[clamp(0.25rem,1vh,0.5rem)] items-center justify-center">
+                    <span className="inline-flex items-center gap-1.5 text-[clamp(9px,1.3vh,11px)] font-mono font-bold uppercase tracking-widest text-[var(--color-orange)] bg-[var(--color-orange-muted)] border border-[var(--color-orange-dim)]/30 px-[clamp(0.4rem,1vw,0.6rem)] py-1 rounded-sm">
+                      <CheckCircle className="w-[clamp(12px,1.6vh,14px)] h-[clamp(12px,1.6vh,14px)]" /> Completado
+                    </span>
+                    {projectsData[1].tags.map((tag) => (
+                      <span key={tag} className="px-[clamp(0.4rem,1vw,0.6rem)] py-1 border border-[var(--color-surface-4)] bg-[var(--color-surface-1)] rounded-sm text-[clamp(9px,1.3vh,11px)] font-mono text-[var(--color-text-muted)] uppercase tracking-wide">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap justify-center items-end gap-[clamp(0.5rem,1.5vh,1rem)] relative z-10 border-t border-[var(--color-surface-4)]/40 pt-[clamp(0.5rem,1.5vh,1rem)] w-full">
+                  <div className="flex gap-[clamp(0.5rem,2vw,1rem)]">
+                    {projectsData[1].metrics.map((m) => (
+                      <div key={m.label} className="flex flex-col items-center text-center">
+                        <span className="text-[clamp(16px,2.8vh,26px)] font-heading font-bold text-[var(--color-orange)] tabular-nums leading-none mb-1 text-glow-subtle">{m.value}</span>
+                        <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-text-muted)] uppercase tracking-widest">{m.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href={projectsData[1].link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-[clamp(10px,1.4vh,13px)] font-mono tracking-widest uppercase font-bold text-[var(--color-text-primary)] hover:text-[var(--color-orange)] transition-colors border-b border-transparent hover:border-[var(--color-orange)] pb-0.5 group/link"
+                  >
+                    {projectsData[1].linkLabel} <ArrowUpRight className="w-[clamp(12px,1.6vh,14px)] h-[clamp(12px,1.6vh,14px)] transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
+                  </a>
+                </div>
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* Card 3: Outro */}
+          <motion.div
+            style={{ y: y3, opacity: opacity3, pointerEvents: pointerEvents3 }}
+            className="absolute inset-0 w-full h-full pro-card rounded-sm p-[clamp(1rem,4vh,3rem)] flex flex-col justify-center items-center text-center corner-l"
+          >
+            <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%)' }}
+            />
+            <span className="text-[clamp(8px,1.3vh,10px)] font-mono text-[var(--color-orange)] tracking-widest uppercase block border-b border-[var(--color-surface-4)]/40 pb-2 w-fit mb-[clamp(1rem,3vh,2rem)]">
+              Código Abierto
+            </span>
+            <h3 className="text-[clamp(1.8rem,6vh,3.8rem)] md:text-[clamp(2.8rem,8vh,5rem)] font-heading font-bold text-[var(--color-text-primary)] uppercase tracking-tighter mb-[clamp(0.5rem,1.5vh,1rem)]">
+              Explora el <span className="text-[var(--color-orange)]">Código</span>
+            </h3>
+            <p className="text-[clamp(12px,1.7vh,15px)] md:text-[clamp(14px,2vh,17px)] text-[var(--color-text-secondary)] leading-relaxed font-sans max-w-2xl mb-[clamp(1rem,3vh,2.5rem)]">
+              Todos mis proyectos industriales, modelos termodinámicos y orquestaciones están documentados y disponibles en código abierto.
+            </p>
+            <a
+              href="https://github.com/FosforoWork"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[clamp(0.5rem,1.5vw,1rem)] px-[clamp(1.5rem,4vw,2.5rem)] py-[clamp(0.6rem,1.6vh,1.1rem)] bg-[var(--color-surface-1)] hover:bg-[var(--color-orange)] hover:text-[var(--color-text-primary)] border border-[var(--color-surface-4)] hover:border-[var(--color-orange)] text-[clamp(11px,1.6vh,14px)] font-mono font-bold uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_var(--orange-glow)]"
+            >
+              <Github className="w-[clamp(16px,2.2vh,20px)] h-[clamp(16px,2.2vh,20px)]" />
+              Ver GitHub
+            </a>
+          </motion.div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+```
