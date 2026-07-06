@@ -21,7 +21,7 @@ El portafolio está construido sobre una arquitectura moderna orientada a la má
 
 A continuación se detalla la progresión del código en orden cronológico inverso (desde el commit inicial hasta el último cambio confirmado en el repositorio):
 
-### 1. `0c01da7` — refact: remove skill tree from hero section and optimize scroll timeline
+### 1. `01a4dbe` — refact: remove skill tree from hero section and optimize scroll timeline
 *   **Autor:** Antigravity (AI Pair Programmer)
 *   **Detalles del cambio:**
     *   Eliminación del Árbol de Habilidades (PoE style skill tree) del componente `Hero`.
@@ -117,7 +117,7 @@ A continuación se detalla la progresión del código en orden cronológico inve
 
 | Hash del Commit | Tipo de Cambio | Mensaje de Confirmación / Objetivo |
 | :--- | :--- | :--- |
-| `0c01da7` | `refact` | Eliminación del árbol de habilidades y optimización del scroll en el Hero. |
+| `01a4dbe` | `refact` | Eliminación del árbol de habilidades y optimización del scroll en el Hero. |
 | `28f324c` | `feat` | Implementación final de componentes y sincronización de textos descriptivos. |
 | `22505cc` | `feat` | Estructuración del sistema de diseño en globals.css y agregado de fondos 3D. |
 | `1548b53` | `refact` | Optimización de despliegue en Vercel, agregado de reglas de agentes y limpieza. |
